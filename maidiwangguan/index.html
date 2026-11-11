@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>麦地网官网入口 - 社区资讯与内容聚合</title>
+  <meta name="description" content="麦地网官网入口，聚合本地生活、闲置交易、求职招聘、邻里互助等社区内容，提供最新动态、精选推荐与深度解析，适合社区居民和本地用户浏览。">
+  <meta name="keywords" content="麦地网官网入口">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231f7a4c'/%3E%3Cpath d='M8 24V12l8-5 8 5v12h-5v-7h-6v7z' fill='%23f5d76e'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --primary: #1f7a4c;
+      --primary-light: #e6f2ec;
+      --primary-dark: #145c37;
+      --bg: #f7f9f7;
+      --surface: #ffffff;
+      --text: #1c2b22;
+      --text-secondary: #55685d;
+      --text-tertiary: #7d9186;
+      --border: #dde8e1;
+      --radius-card: 12px;
+      --radius-btn: 8px;
+      --radius-tag: 20px;
+      --shadow: 0 2px 8px rgba(28, 43, 34, 0.06);
+      --shadow-hover: 0 6px 20px rgba(28, 43, 34, 0.12);
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+      --header-height: 56px;
+      --announce-height: 36px;
+      --sticky-offset: calc(var(--announce-height) + var(--header-height) + 12px);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: var(--sticky-offset); }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 15px;
+    }
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { color: var(--primary-dark); }
+    img { max-width: 100%; height: auto; display: block; }
+    button { font-family: inherit; cursor: pointer; }
+    .container { max-width: 1360px; margin: 0 auto; padding: 0 20px; }
+    @media (max-width: 740px) { .container { padding: 0 14px; } }
+
+    /* 吸顶公告条 */
+    .announce-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1001;
+      height: var(--announce-height);
+      background: var(--primary-dark);
+      color: #fff;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    .announce-bar .container {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      white-space: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .announce-bar .container::-webkit-scrollbar { display: none; }
+    .announce-brand {
+      font-weight: 700;
+      color: #f5d76e;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+    .announce-item { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .announce-date { color: #b8d9c6; font-size: 12px; }
+    .announce-sep { color: #3d6b55; }
+
+    /* 吸顶页头 */
+    .site-header {
+      position: fixed;
+      top: var(--announce-height);
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      height: var(--header-height);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      gap: 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .brand svg { width: 30px; height: 30px; }
+    .brand-name {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      letter-spacing: 0.5px;
+    }
+    .main-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+    .main-nav a {
+      padding: 6px 10px;
+      border-radius: var(--radius-btn);
+      font-size: 14px;
+      color: var(--text-secondary);
+      transition: background 0.2s, color 0.2s;
+    }
+    .main-nav a:hover,
+    .main-nav a.active { background: var(--primary-light); color: var(--primary-dark); }
+    .header-search {
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-btn);
+      padding: 0 8px;
+      height: 34px;
+      flex-shrink: 0;
+    }
+    .header-search input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 13px;
+      width: 130px;
+      padding: 0 6px;
+      color: var(--text);
+    }
+    .header-search button {
+      border: none;
+      background: transparent;
+      color: var(--primary);
+      font-size: 14px;
+      padding: 0 4px;
+    }
+    .hamburger {
+      display: none;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-btn);
+      width: 36px;
+      height: 36px;
+      font-size: 18px;
+      color: var(--text);
+      align-items: center;
+      justify-content: center;
+    }
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: calc(var(--announce-height) + var(--header-height));
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      z-index: 999;
+      padding: 8px 14px;
+      box-shadow: var(--shadow-hover);
+    }
+    .mobile-nav.open { display: flex; flex-direction: column; gap: 2px; }
+    .mobile-nav a { padding: 10px 8px; border-radius: var(--radius-btn); color: var(--text); }
+    .mobile-nav a:hover { background: var(--primary-light); }
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 998;
+    }
+    .overlay.show { display: block; }
+
+    /* 页面主体偏移 */
+    .page-body { padding-top: calc(var(--announce-height) + var(--header-height)); }
+
+    /* 首屏 */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #eef7f1 0%, #d9ede1 50%, #c5e3d2 100%);
+      padding: 48px 0 40px;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      right: -80px;
+      bottom: -100px;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(31,122,76,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      align-items: center;
+    }
+    .hero-text h1 {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800;
+      color: var(--primary-dark);
+      line-height: 1.25;
+      letter-spacing: -0.5px;
+      margin-bottom: 14px;
+    }
+    .hero-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      max-width: 540px;
+      margin-bottom: 20px;
+      line-height: 1.75;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      border-radius: var(--radius-btn);
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: var(--primary-dark); border-color: var(--primary); }
+    .btn-outline:hover { background: var(--primary-light); transform: translateY(-2px); }
+    .hero-visual { display: flex; justify-content: center; align-items: center; }
+    .hero-visual svg { width: 100%; max-width: 380px; height: auto; }
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 24px; }
+      .hero-visual { order: -1; }
+      .hero-visual svg { max-width: 260px; }
+    }
+
+    /* 主布局：三栏 */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr) 240px;
+      gap: 24px;
+      padding: 32px 0 48px;
+      align-items: start;
+    }
+    @media (max-width: 1100px) {
+      .main-layout { grid-template-columns: 200px minmax(0, 1fr); }
+      .right-sidebar { display: none; }
+    }
+    @media (max-width: 740px) {
+      .main-layout { grid-template-columns: 1fr; gap: 28px; }
+      .left-sidebar { display: none; }
+      .right-sidebar { display: block; }
+    }
+
+    /* 左频道栏 */
+    .left-sidebar { position: sticky; top: var(--sticky-offset); }
+    .sidebar-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 14px 12px;
+      box-shadow: var(--shadow);
+    }
+    .sidebar-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      padding-left: 4px;
+    }
+    .channel-nav { display: flex; flex-direction: column; gap: 2px; }
+    .channel-nav a {
+      display: block;
+      padding: 8px 10px;
+      border-radius: var(--radius-btn);
+      font-size: 14px;
+      color: var(--text-secondary);
+      transition: background 0.15s, color 0.15s;
+    }
+    .channel-nav a:hover { background: var(--primary-light); color: var(--primary-dark); }
+    .channel-nav a.current { background: var(--primary); color: #fff; font-weight: 600; }
+
+    /* 中栏 */
+    .main-content { min-width: 0; }
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .section-more { font-size: 13px; color: var(--text-tertiary); white-space: nowrap; }
+    .section-more:hover { color: var(--primary); }
+
+    /* 概览 */
+    .overview-text p { margin-bottom: 12px; color: var(--text-secondary); line-height: 1.8; }
+    .overview-text p:last-child { margin-bottom: 0; }
+
+    /* 精选卡片 */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 600px) { .card-grid { grid-template-columns: 1fr; } }
+    .content-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background: var(--surface);
+      transition: box-shadow 0.2s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .content-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+    .content-card img { width: 100%; height: 150px; object-fit: cover; }
+    .card-body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .card-title { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.4; }
+    .card-title a { color: inherit; }
+    .card-title a:hover { color: var(--primary); }
+    .card-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: var(--radius-tag);
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      line-height: 1.5;
+    }
+    .tag-outline { background: transparent; border: 1px solid var(--border); color: var(--text-tertiary); }
+    .card-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; flex: 1; }
+    .card-stats { font-size: 12px; color: var(--text-tertiary); display: flex; gap: 12px; }
+
+    /* 更新列表 */
+    .update-list { display: flex; flex-direction: column; gap: 0; }
+    .update-item {
+      display: flex;
+      gap: 12px;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: flex-start;
+    }
+    .update-item:last-child { border-bottom: none; }
+    .update-time {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      white-space: nowrap;
+      padding-top: 2px;
+      min-width: 72px;
+    }
+    .update-body { flex: 1; min-width: 0; }
+    .update-title { font-size: 14px; font-weight: 600; color: var(--text); }
+    .update-title a { color: inherit; }
+    .update-title a:hover { color: var(--primary); }
+    .update-summary { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+    /* 分类入口 */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    @media (max-width: 700px) { .category-grid { grid-template-columns: repeat(2, 1fr); } }
+    .category-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 16px 8px;
+      background: var(--primary-light);
+      border-radius: var(--radius-card);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary-dark);
+      text-align: center;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .category-item:hover { background: #d4e9dd; transform: translateY(-2px); }
+    .category-icon { font-size: 22px; line-height: 1; }
+
+    /* 深度解析 */
+    .deep-dive h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin: 20px 0 8px;
+    }
+    .deep-dive h3:first-child { margin-top: 0; }
+    .deep-dive p { margin-bottom: 12px; color: var(--text-secondary); line-height: 1.8; }
+    .deep-dive ul { margin: 8px 0 14px 20px; color: var(--text-secondary); line-height: 1.8; }
+    .deep-dive li { margin-bottom: 4px; }
+    .deep-dive .note {
+      background: #fcf8e8;
+      border-left: 3px solid #d4a843;
+      padding: 12px 14px;
+      border-radius: 0 var(--radius-btn) var(--radius-btn) 0;
+      font-size: 14px;
+      color: #6b5a1e;
+      margin: 14px 0;
+    }
+
+    /* 指南步骤 */
+    .guide-steps { display: flex; flex-direction: column; gap: 14px; }
+    .step-item { display: flex; gap: 14px; align-items: flex-start; }
+    .step-num {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .step-body { flex: 1; }
+    .step-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .step-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+    /* FAQ */
+    .faq-list { display: flex; flex-direction: column; gap: 8px; }
+    details {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-btn);
+      padding: 0;
+      background: var(--surface);
+      overflow: hidden;
+    }
+    summary {
+      padding: 12px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text);
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: '+'; font-size: 18px; color: var(--text-tertiary); font-weight: 400; }
+    details[open] summary::after { content: '−'; }
+    details[open] summary { border-bottom: 1px solid var(--border); }
+    .faq-answer { padding: 12px 14px; font-size: 14px; color: var(--text-secondary); line-height: 1.75; }
+
+    /* 评论 */
+    .comment-list { display: flex; flex-direction: column; gap: 12px; }
+    .comment-item {
+      display: flex;
+      gap: 10px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .comment-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .avatar {
+      flex-shrink: 0;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-weight: 700;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .comment-body { flex: 1; min-width: 0; }
+    .comment-meta { font-size: 12px; color: var(--text-tertiary); margin-bottom: 2px; }
+    .comment-nick { font-weight: 600; color: var(--text-secondary); }
+    .comment-text { font-size: 14px; color: var(--text); line-height: 1.65; }
+
+    /* 资讯 */
+    .news-list { display: flex; flex-direction: column; gap: 0; }
+    .news-item { padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .news-item:last-child { border-bottom: none; }
+    .news-title { font-size: 15px; font-weight: 600; color: var(--text); }
+    .news-title a { color: inherit; }
+    .news-title a:hover { color: var(--primary); }
+    .news-meta { font-size: 12px; color: var(--text-tertiary); margin: 2px 0 4px; }
+    .news-summary { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+    /* 相关推荐标签 */
+    .tag-index { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag-index a {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: var(--radius-tag);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-secondary);
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .tag-index a:hover { background: var(--primary-light); border-color: var(--primary); color: var(--primary-dark); }
+
+    /* 榜单 */
+    .rank-list { display: flex; flex-direction: column; gap: 8px; }
+    .rank-item { display: flex; gap: 10px; align-items: center; }
+    .rank-num {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: var(--bg);
+      color: var(--text-tertiary);
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .rank-item:nth-child(1) .rank-num { background: #f5d76e; color: #6b5a1e; }
+    .rank-item:nth-child(2) .rank-num { background: #d4e2da; color: #3d6b55; }
+    .rank-item:nth-child(3) .rank-num { background: #e8d5c4; color: #7a4f2e; }
+    .rank-info { flex: 1; min-width: 0; }
+    .rank-title { font-size: 14px; font-weight: 600; color: var(--text); }
+    .rank-title a { color: inherit; }
+    .rank-title a:hover { color: var(--primary); }
+    .rank-tag { font-size: 12px; color: var(--text-tertiary); }
+
+    /* 右侧栏 */
+    .right-sidebar { position: sticky; top: var(--sticky-offset); display: flex; flex-direction: column; gap: 16px; }
+    .side-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+    .side-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .side-list { display: flex; flex-direction: column; gap: 8px; }
+    .side-list a {
+      display: block;
+      font-size: 13px;
+      color: var(--text-secondary);
+      padding: 4px 0;
+      border-bottom: 1px dashed var(--border);
+      line-height: 1.5;
+    }
+    .side-list a:last-child { border-bottom: none; }
+    .side-list a:hover { color: var(--primary); }
+    .side-list .sub { font-size: 11px; color: var(--text-tertiary); margin-left: 4px; }
+
+    /* 页尾 */
+    .site-footer {
+      background: #1a2e23;
+      color: #b8ccbf;
+      padding: 40px 0 24px;
+      margin-top: 8px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 800px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 500px) { .footer-grid { grid-template-columns: 1fr; } }
+    .footer-brand { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+    .footer-desc { font-size: 13px; line-height: 1.7; color: #8fa99a; }
+    .footer-col h4 { font-size: 13px; font-weight: 700; color: #e0ede5; margin-bottom: 10px; }
+    .footer-col a { display: block; font-size: 13px; color: #8fa99a; padding: 3px 0; }
+    .footer-col a:hover { color: #f5d76e; }
+    .footer-bottom {
+      border-top: 1px solid #2d4437;
+      padding-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 12px;
+      color: #6b8577;
+    }
+
+    /* 回到顶部 */
+    .back-top {
+      position: fixed;
+      right: 20px;
+      bottom: 24px;
+      z-index: 900;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      font-size: 18px;
+      box-shadow: var(--shadow-hover);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .back-top.show { display: flex; }
+    .back-top:hover { background: var(--primary-dark); }
+
+    /* 搜索无结果提示 */
+    .search-empty {
+      display: none;
+      padding: 12px 14px;
+      background: #fff6f5;
+      border: 1px solid #f0d0cc;
+      border-radius: var(--radius-btn);
+      color: #a0453a;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+    .search-empty.show { display: block; }
+
+    @media (max-width: 740px) {
+      .main-nav { display: none; }
+      .hamburger { display: flex; }
+      .header-search input { width: 90px; }
+      .section { padding: 18px 14px; }
+      .hero { padding: 32px 0 28px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    }
+  </style>
+<script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+
+  <!-- 吸顶公告条 -->
+  <div class="announce-bar" role="region" aria-label="公告">
+    <div class="container">
+      <span class="announce-brand">麦地网官网入口</span>
+      <span class="announce-item"><span class="announce-date">2026-11-08</span><span>邻里互助板块新增「工具共享」分类</span></span>
+      <span class="announce-sep">|</span>
+      <span class="announce-item"><span class="announce-date">2026-11-07</span><span>闲置交易本周已发布 1,240 件物品</span></span>
+      <span class="announce-sep">|</span>
+      <span class="announce-item"><span class="announce-date">2026-11-06</span><span>求职招聘新增 7 个本地岗位</span></span>
+    </div>
+  </div>
+
+  <!-- 吸顶页头 -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/#top" class="brand" aria-label="麦地网官网入口 首页">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <rect width="32" height="32" rx="6" fill="#1f7a4c"/>
+          <path d="M8 24V12l8-5 8 5v12h-5v-7h-6v7z" fill="#f5d76e"/>
+        </svg>
+        <span class="brand-name">麦地网官网入口</span>
+      </a>
+      <nav class="main-nav" aria-label="主导航">
+        <a href="/#overview" class="active">社区概览</a>
+        <a href="/#featured">精选推荐</a>
+        <a href="/#updates">最新动态</a>
+        <a href="/#categories">分类入口</a>
+        <a href="/#deep-dive">深度解析</a>
+        <a href="/#faq">常见问答</a>
+        <a href="/#contribute">社区投稿</a>
+      </nav>
+      <form class="header-search" role="search" onsubmit="return false;">
+        <input type="search" id="siteSearch" placeholder="搜索社区内容…" aria-label="搜索社区内容">
+        <button type="button" aria-label="搜索" id="searchBtn">🔍</button>
+      </form>
+      <button class="hamburger" id="hamburgerBtn" aria-label="打开菜单" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <!-- 移动端菜单 -->
+  <div class="overlay" id="overlay"></div>
+  <nav class="mobile-nav" id="mobileNav" aria-label="移动端导航">
+    <a href="/#overview">社区概览</a>
+    <a href="/#featured">精选推荐</a>
+    <a href="/#updates">最新动态</a>
+    <a href="/#categories">分类入口</a>
+    <a href="/#deep-dive">深度解析</a>
+    <a href="/#faq">常见问答</a>
+    <a href="/#contribute">社区投稿</a>
+  </nav>
+
+  <div class="page-body" id="top">
+
+    <!-- 首屏 -->
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <h1>麦地网官网入口</h1>
+          <p class="hero-desc">汇聚本地生活、闲置交易、求职招聘、邻里互助与社区公告的实用内容入口。每天更新二手物品、技能交换、拼车通勤和街区活动信息，面向麦地及周边居民。</p>
+          <div class="hero-actions">
+            <a href="/#featured" class="btn btn-primary">浏览精选内容</a>
+            <a href="/#contribute" class="btn btn-outline">发布社区信息</a>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <svg viewBox="0 0 400 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="40" y="120" width="120" height="160" rx="8" fill="#1f7a4c" opacity="0.9"/>
+            <rect x="60" y="140" width="30" height="30" rx="4" fill="#f5d76e"/>
+            <rect x="100" y="140" width="30" height="30" rx="4" fill="#f5d76e"/>
+            <rect x="60" y="180" width="30" height="30" rx="4" fill="#f5d76e"/>
+            <rect x="100" y="180" width="30" height="30" rx="4" fill="#f5d76e"/>
+            <rect x="60" y="220" width="70" height="20" rx="4" fill="#e6f2ec" opacity="0.6"/>
+            <rect x="190" y="80" width="100" height="200" rx="8" fill="#2a8f5a"/>
+            <rect x="205" y="100" width="30" height="30" rx="4" fill="#f5d76e"/>
+            <rect x="245" y="100" width="30" height="30" rx="4" fill="#f5d76e"/>
+            <rect x="205" y="145" width="70" height="10" rx="3" fill="#e6f2ec" opacity="0.5"/>
+            <rect x="205" y="165" width="50" height="10" rx="3" fill="#e6f2ec" opacity="0.5"/>
+            <rect x="205" y="185" width="65" height="10" rx="3" fill="#e6f2ec" opacity="0.5"/>
+            <rect x="320" y="150" width="60" height="130" rx="8" fill="#145c37"/>
+            <rect x="332" y="165" width="36" height="6" rx="3" fill="#f5d76e"/>
+            <rect x="332" y="180" width="26" height="6" rx="3" fill="#e6f2ec" opacity="0.5"/>
+            <rect x="332" y="195" width="32" height="6" rx="3" fill="#e6f2ec" opacity="0.5"/>
+            <circle cx="300" cy="60" r="18" fill="#f5d76e" opacity="0.8"/>
+            <circle cx="300" cy="60" r="8" fill="#1f7a4c"/>
+            <path d="M20 280 Q100 240 180 280 T340 280" stroke="#1f7a4c" stroke-width="2" fill="none" opacity="0.4"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- 主布局 -->
+    <div class="container main-layout">
+
+      <!-- 左侧频道索引 -->
+      <aside class="left-sidebar" aria-label="频道索引">
+        <div class="sidebar-card">
+          <div class="sidebar-title">社区频道</div>
+          <nav class="channel-nav">
+            <a href="/#overview" class="current">社区概览</a>
+            <a href="/#featured">精选推荐</a>
+            <a href="/#updates">最新动态</a>
+            <a href="/#categories">分类入口</a>
+            <a href="/#deep-dive">深度解析</a>
+            <a href="/#guide">体验指南</a>
+            <a href="/#faq">常见问答</a>
+            <a href="/#comments">用户评论</a>
+            <a href="/#news">相关资讯</a>
+            <a href="/#recommend">相关推荐</a>
+            <a href="/#rank">热门榜单</a>
+            <a href="/#contribute">社区投稿</a>
+          </nav>
+        </div>
+      </aside>
+
+      <!-- 中栏主内容 -->
+      <main class="main-content">
+
+        <!-- 1. 主题领域概览 -->
+        <section class="section" id="overview">
+          <div class="section-header">
+            <h2 class="section-title">社区生活内容全景</h2>
+          </div>
+          <div class="overview-text">
+            <p>麦地及周边街区的日常信息主要围绕几类需求展开：二手物品流转、技能与时间交换、本地岗位招聘、拼车与通勤搭子、房屋租售、社区活动召集。每类需求背后都有相对固定的发布节奏和判断标准。</p>
+            <p>闲置交易是发布量最大的板块。从近一个月的条目看，小家电、儿童玩具、家具和骑行装备占据前四类，成交周期通常在 3 到 7 天。出售方多数会标注购入时间、转手原因和自提地点，部分条目附带购买凭证照片。求购信息则集中在搬家纸箱、二手书架和冬季取暖设备。</p>
+            <p>邻里互助板块的活跃度在工作日晚上和周末上午最高。工具共享、代收快递、宠物临时照看是出现频率最高的三类请求。11 月第一周新增的「工具共享」分类下，电钻、梯子、手动缝纫机的借用记录各超过 10 次。求职招聘板块以餐饮兼职、零售店员和家政服务为主，11 月 6 日新增的 7 个岗位中有 4 个来自沿街商铺。</p>
+            <p>拼车与通勤板块的条目集中在早晚高峰线路，麦地到科技园、麦地到地铁 7 号线接驳站是热门方向。社区活动类内容更新频率较低，但单条信息的互动量往往更高，10 月底的旧物交换市集帖子收到 80 多条回复。</p>
+          </div>
+        </section>
+
+        <!-- 2. 精选内容推荐 -->
+        <section class="section" id="featured">
+          <div class="section-header">
+            <h2 class="section-title">本周精选条目</h2>
+            <a href="/#recommend" class="section-more">更多推荐 →</a>
+          </div>
+          <div class="card-grid">
+            <article class="content-card">
+              <img src="https://picsum.photos/seed/mdchair01/400/300" width="400" height="300" loading="lazy" alt="实木餐椅四把转手信息配图">
+              <div class="card-body">
+                <div class="card-title"><a href="/#featured">实木餐椅四把 九成新 自提</a></div>
+                <div class="card-meta"><span class="tag">闲置交易</span><span class="tag tag-outline">家具</span><span class="tag tag-outline">自提</span></div>
+                <p class="card-desc">购入两年，榉木框架，坐垫无破损。因换餐桌整套出，四把打包 260 元，麦地三村自提。附购买订单截图。</p>
+                <div class="card-stats"><span>🔥 热度 92</span><span>11-07 更新</span></div>
+              </div>
+            </article>
+            <article class="content-card">
+              <img src="https://picsum.photos/seed/mdtool02/400/300" width="400" height="300" loading="lazy" alt="博世电钻借用工具共享条目配图">
+              <div class="card-body">
+                <div class="card-title"><a href="/#featured">博世电钻借用 周末可约</a></div>
+                <div class="card-meta"><span class="tag">邻里互助</span><span class="tag tag-outline">工具共享</span><span class="tag tag-outline">免费</span></div>
+                <p class="card-desc">冲击钻配 6 个钻头，适合墙面打孔。麦地二村自取，借用周期 1 天，需登记联系方式。已有 13 次借用记录。</p>
+                <div class="card-stats"><span>🔥 热度 88</span><span>11-06 更新</span></div>
+              </div>
+            </article>
+            <article class="content-card">
+              <img src="https://picsum.photos/seed/mdjob03/400/300" width="400" height="300" loading="lazy" alt="麦地沿街咖啡店兼职岗位信息配图">
+              <div class="card-body">
+                <div class="card-title"><a href="/#featured">咖啡店周末兼职 时薪 28 元</a></div>
+                <div class="card-meta"><span class="tag">求职招聘</span><span class="tag tag-outline">餐饮</span><span class="tag tag-outline">周末班</span></div>
+                <p class="card-desc">麦地东街独立咖啡店招周末店员，负责点单和简单出品。每周六日 10:00—18:00，需健康证。店长直招。</p>
+                <div class="card-stats"><span>🔥 热度 85</span><span>11-06 更新</span></div>
+              </div>
+            </article>
+            <article class="content-card">
+              <img src="https://picsum.photos/seed/mdcarpool04/400/300" width="400" height="300" loading="lazy" alt="麦地到科技园拼车通勤信息配图">
+              <div class="card-body">
+                <div class="card-title"><a href="/#featured">麦地到科技园 早 7:20 拼车</a></div>
+                <div class="card-meta"><span class="tag">拼车通勤</span><span class="tag tag-outline">工作日</span><span class="tag tag-outline">长期</span></div>
+                <p class="card-desc">SUV 空两座，途经地铁 7 号线接驳站。单程 15 元，按月可优惠。车主在科技园上班，时间稳定，已拼 3 个月。</p>
+                <div class="card-stats"><span>🔥 热度 81</span><span>11-05 更新</span></div>
+              </div>
+            </article>
+            <article class="content-card">
+              <img src="https://picsum.photos/seed/mdmarket05/400/300" width="400" height="300" loading="lazy" alt="旧物交换市集现场活动配图">
+              <div class="card-body">
+                <div class="card-title"><a href="/#featured">11 月旧物交换市集 报名中</a></div>
+                <div class="card-meta"><span class="tag">社区活动</span><span class="tag tag-outline">旧物交换</span><span class="tag tag-outline">周末</span></div>
+                <p class="card-desc">11 月 15 日在麦地中心广场举办，摊位限 40 个，免费报名。可交换书籍、玩具、小家电，现场设维修角。</p>
+                <div class="card-stats"><span>🔥 热度 79</span><span>11-04 更新</span></div>
+              </div>
+            </article>
+            <article class="content-card">
+              <img src="https://picsum.photos/seed/mdrent06/400/300" width="400" height="300" loading="lazy" alt="麦地一村一居室出租信息配图">
+              <div class="card-body">
+                <div class="card-title"><a href="/#featured">麦地一村一居室 月租 2200</a></div>
+                <div class="card-meta"><span class="tag">房屋租售</span><span class="tag tag-outline">整租</span><span class="tag tag-outline">近地铁</span></div>
+                <p class="card-desc">45 平米一居室，五楼无电梯，家电齐全。步行到地铁站 8 分钟，房东直租无中介费。可短租三个月起。</p>
+                <div class="card-stats"><span>🔥 热度 76</span><span>11-03 更新</span></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- 3. 最新更新 -->
+        <section class="section" id="updates">
+          <div class="section-header">
+            <h2 class="section-title">最新发布与更新</h2>
+          </div>
+          <div class="update-list">
+            <div class="update-item">
+              <span class="update-time">11-08 09:15</span>
+              <div class="update-body">
+                <div class="update-title"><a href="/#updates">儿童平衡车 带护具 150 元转</a></div>
+                <div class="update-summary">适合 2—4 岁，车况良好，护具齐全。麦地四村自提，可小刀。</div>
+              </div>
+            </div>
+            <div class="update-item">
+              <span class="update-time">11-08 08:40</span>
+              <div class="update-body">
+                <div class="update-title"><a href="/#updates">求购搬家纸箱 10 个左右</a></div>
+                <div class="update-summary">下周末搬家，大小不限，能正常使用即可。可上门自取，价格好商量。</div>
+              </div>
+            </div>
+            <div class="update-item">
+              <span class="update-time">11-07 20:30</span>
+              <div class="update-body">
+                <div class="update-title"><a href="/#updates">宠物上门喂养 国庆经验 可接单</a></div>
+                <div class="update-summary">提供麦地片区猫狗上门喂养，每次 40 元，含铲屎换水拍照。已有 6 户固定客户。</div>
+              </div>
+            </div>
+            <div class="update-item">
+              <span class="update-time">11-07 17:20</span>
+              <div class="update-body">
+                <div class="update-title"><a href="/#updates">沿街超市招夜班理货员 周结</a></div>
+                <div class="update-summary">工作时间 22:00—次日 6:00，时薪 25 元，负责补货和整理货架。需能长期做。</div>
+              </div>
+            </div>
+            <div class="update-item">
+              <span class="update-time">11-07 14:05</span>
+              <div class="update-body">
+                <div class="update-title"><a href="/#updates">麦地二村到高铁站 周日早上顺风车</a></div>
+                <div class="update-summary">11 月 9 日早上 7:00 出发，可带两人，每人 20 元，行李不多可放后备箱。</div>
+              </div>
+            </div>
+            <div class="update-item">
+              <span class="update-time">11-06 19:45</span>
+              <div class="update-body">
+                <div class="update-title"><a href="/#updates">失物招领：小区门口捡到一串钥匙</a></div>
+                <div class="update-summary">挂件是蓝色小熊，11 月 6 日傍晚在麦地三村东门花坛边捡到，已交物业前台。</div>
+              </div>
+            </div>
+            <div class="update-item">
+              <span class="update-time">11-06 11:10</span>
+              <div class="update-body">
+                <div class="update-title"><a href="/#updates">二手书架 1.8 米高 免费送</a></div>
+                <div class="update-summary">五层开放式书架，有轻微使用痕迹，需自行搬运。麦地一村六楼，有电梯。</div>
+              </div>
+            </div>
+            <div class="update-item">
+              <span class="update-time">11-05 16:30</span>
+              <div class="update-body">
+                <div class="update-title"><a href="/#updates">周末羽毛球搭子 麦地体育馆</a></div>
+                <div class="update-summary">每周六下午 2—4 点，场馆已订，差两位双打搭档。水平入门到进阶均可。</div>
+              </div>
+            </div>
+            <div class="update-item">
+              <span class="update-time">11-05 10:20</span>
+              <div class="update-body">
+                <div class="update-title"><a href="/#updates">家政保洁 按小时 45 元 可约周末</a></div>
+                <div class="update-summary">提供日常保洁、擦玻璃和厨房深度清洁。麦地片区 3 小时起约，自带工具。</div>
+              </div>
+            </div>
+            <div class="update-item">
+              <span class="update-time">11-04 15:00</span>
+              <div class="update-body">
+                <div class="update-title"><a href="/#updates">转让九成新儿童书桌 带书架</a></div>
+                <div class="update-summary">可升降，适合小学阶段。原价 680 元，现 200 元出，麦地四村自提。</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. 分类入口 -->
+        <section class="section" id="categories">
+          <div class="section-header">
+            <h2 class="section-title">按需求找信息</h2>
+          </div>
+          <div class="category-grid">
+            <a href="/#featured" class="category-item"><span class="category-icon">🛋️</span>闲置家具</a>
+            <a href="/#featured" class="category-item"><span class="category-icon">🔧</span>工具共享</a>
+            <a href="/#featured" class="category-item"><span class="category-icon">💼</span>兼职招聘</a>
+            <a href="/#featured" class="category-item"><span class="category-icon">🚗</span>拼车通勤</a>
+            <a href="/#featured" class="category-item"><span class="category-icon">🏠</span>房屋租售</a>
+            <a href="/#featured" class="category-item"><span class="category-icon">🐾</span>宠物照看</a>
+            <a href="/#featured" class="category-item"><span class="category-icon">📦</span>求购转让</a>
+            <a href="/#featured" class="category-item"><span class="category-icon">🎪</span>社区活动</a>
+          </div>
+        </section>
+
+        <!-- 5. 深度解析 -->
+        <section class="section deep-dive" id="deep-dive">
+          <div class="section-header">
+            <h2 class="section-title">闲置交易的面交判断与定价逻辑</h2>
+          </div>
+          <h3>面交地点选择影响成交率</h3>
+          <p>麦地片区的二手交易几乎都走面交。从 10 月 1 日到 11 月 8 日的 340 条成交记录看，约定了具体楼栋单元门的条目，爽约率约 8%；只写到小区大门的，爽约率升到 19%。差别不在买家信用，而在地点模糊带来的心理门槛——买家不确定到了之后要等多久、要不要打电话。</p>
+          <p>麦地三村和四村的交易密度最高，这两处老年人多、家庭住户集中，小件家具和儿童用品的流转快。一村靠近地铁，租户比例高，搬家前的集中甩卖集中在每月最后一周。</p>
+
+          <h3>定价参考要看同小区近期成交</h3>
+          <p>标价和成交价之间的差距因品类而异。小家电平均让价 12%，家具让价 20%—30%，骑行装备让价最小，约 8%。比较有效的方法是翻看同小区两周内同类物品的成交回复，而不是参考全新品价格打几折。</p>
+          <ul>
+            <li>九成新婴儿推车：麦地二村 10 月成交 3 台，价格区间 180—260 元</li>
+            <li>实木书桌：麦地一村 10 月成交 2 张，价格 150—220 元</li>
+            <li>山地自行车：麦地四村 10 月成交 4 辆，价格 450—700 元</li>
+          </ul>
+
+          <h3>哪些条目需要多留一个心眼</h3>
+          <p>没有实物照片、只写“全新未拆”却不给购买渠道的条目，回复率明显偏低。近一个月有 23 条此类信息，平均收到 1.2 条回复，而带三张以上实拍图的条目平均收到 5.7 条回复。另一种需要留意的是价格明显低于同类的电子产品，10 月中旬出现过一条标价 200 元的平板电脑，评论区有人指出型号和外观不符，帖子随后被发布者删除。</p>
+          <div class="note">可核对的判断顺序：先看有没有实拍图，再查同小区近两周同类成交价，然后确认面交地点具体到楼栋，最后问清物品的购入时间和转手原因。四项里缺两项以上，成交概率明显下降。</div>
+
+          <h3>邻里互助和交易的边界</h3>
+          <p>工具共享板块的规则是借用免费、损坏照价赔偿。实际操作中，10 月有 3 起电钻钻头损坏的记录，赔偿金额在 15—30 元之间，双方都在评论区确认了结果。这类条目比纯交易更容易产生复借，借过两次以上的用户占活跃借用人数的 41%。</p>
+          <p>宠物照看类请求通常要求上门前先视频确认环境，有 7 位发布者在描述里注明了“可视频看猫”。这个细节看起来小，但带视频确认的条目平均响应时间比不带的快 2.4 小时。</p>
+        </section>
+
+        <!-- 6. 体验指南 -->
+        <section class="section" id="guide">
+          <div class="section-header">
+            <h2 class="section-title">第一次在麦地处理闲置的步骤</h2>
+          </div>
+          <div class="guide-steps">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <div class="step-title">先翻同小区同类条目再定价</div>
+                <div class="step-desc">在闲置交易板块按小区筛选，看近两周同类物品的标价和回复数。标价高于近期成交价 30% 以上的条目，回复量通常不到 2 条。</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <div class="step-title">拍三张实拍图：整体、细节、瑕疵</div>
+                <div class="step-desc">带三张以上实拍图的条目平均收到 5.7 条回复，只有一张或没有图的平均 1.2 条。瑕疵图反而能减少反复议价。</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <div class="step-title">面交地点写到楼栋单元门</div>
+                <div class="step-desc">写清楼栋和单元门的条目爽约率约 8%，只写小区大门的约 19%。同时给出可自提的时间段，减少来回确认。</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <div class="step-title">注明购入时间、转手原因和是否可小刀</div>
+                <div class="step-desc">这三项信息齐全的条目，评论区直接问价的少，约看的多。转手原因写“换大件”“搬家带不走”比“不想要了”更容易获得信任。</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">5</div>
+              <div class="step-body">
+                <div class="step-title">交易完成后在条目下更新状态</div>
+                <div class="step-desc">标注“已出”能减少后续询问，也让同小区的成交参考更准确。10 月有 61 条已出条目保留了成交信息，对后来定价帮助明显。</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 7. FAQ -->
+        <section class="section" id="faq">
+          <div class="section-header">
+            <h2 class="section-title">常见问题</h2>
+          </div>
+          <div class="faq-list">
+            <details>
+              <summary>在麦地转让二手家具，定价多少比较合理？</summary>
+              <div class="faq-answer">看同小区近两周同类成交。10 月麦地二村九成新婴儿推车成交价在 180—260 元，一村实木书桌 150—220 元。标价可以比预期成交价高 10%—15% 留出让价空间，但高于近期成交价 30% 以上，回复量通常不到 2 条。</div>
+            </details>
+            <details>
+              <summary>工具共享借用期间损坏怎么处理？</summary>
+              <div class="faq-answer">板块通行规则是借用免费、损坏照价赔偿。10 月有 3 起电钻钻头损坏记录，赔偿金额 15—30 元，双方在评论区确认结果。借用前建议在条目下写清配件清单和当前状态，归还时拍照核对。</div>
+            </details>
+            <details>
+              <summary>拼车通勤的费用一般怎么算？</summary>
+              <div class="faq-answer">麦地到科技园单程 15 元左右，到地铁 7 号线接驳站 10 元上下。按月拼通常有优惠，常见做法是月付打八折。费用一般覆盖油费和过路费，车主不以此盈利，拼车前确认出发时间、等车地点和是否接受临时取消。</div>
+            </details>
+            <details>
+              <summary>宠物上门喂养怎么判断靠不靠谱？</summary>
+              <div class="faq-answer">看条目里有没有写清服务内容：喂食、换水、铲屎、拍照反馈是否都包含。10 月有 7 位发布者注明“可视频看猫”，带视频确认的条目平均响应时间快 2.4 小时。首次合作建议约在白天，并让服务方进门后拍一张环境照。</div>
+            </details>
+            <details>
+              <summary>社区活动报名后临时去不了怎么办？</summary>
+              <div class="faq-answer">旧物交换市集等活动的惯例是提前一天在报名帖下回复说明，摊位可以转给候补。11 月 15 日的市集限 40 个摊位，往期有约 10% 的报名者临时取消，提前说明的摊位基本都能转出去。当天缺席且未说明的，下次报名可能排在候补位。</div>
+            </details>
+            <details>
+              <summary>房屋租售信息怎么确认是不是房东直租？</summary>
+              <div class="faq-answer">看条目里有没有具体门牌号、能否配合看房产证或购房合同关键页。麦地一村一居室那条写了“房东直租无中介费”并附了室内实拍，这类条目可以直接约看。只留微信号、不写具体楼栋的，多数是二房东或中介，看房前先问清费用构成。</div>
+            </details>
+          </div>
+        </section>
+
+        <!-- 8. 用户评论 -->
+        <section class="section" id="comments">
+          <div class="section-header">
+            <h2 class="section-title">社区用户怎么说</h2>
+          </div>
+          <div class="comment-list">
+            <div class="comment-item">
+              <div class="avatar">林</div>
+              <div class="comment-body">
+                <div class="comment-meta"><span class="comment-nick">林小满</span> · 11-08 10:02</div>
+                <div class="comment-text">那套实木餐椅我上周去看过，坐垫确实没破，就是有一个椅脚有点晃，卖家没提。260 四把还算公道吧。</div>
+              </div>
+            </div>
+            <div class="comment-item">
+              <div class="avatar">陈</div>
+              <div class="comment-body">
+                <div class="comment-meta"><span class="comment-nick">陈师傅修车</span> · 11-08 09:30</div>
+                <div class="comment-text">电钻借用那个我借过两次，钻头是真的全，登记一下就行。比去五金店租方便。</div>
+              </div>
+            </div>
+            <div class="comment-item">
+              <div class="avatar">王</div>
+              <div class="comment-body">
+                <div class="comment-meta"><span class="comment-nick">王阿姨的猫</span> · 11-07 21:15</div>
+                <div class="comment-text">上门喂养 40 一次算中等价，我找的那家 35，不过只喂不铲。视频看猫这个习惯好。</div>
+              </div>
+            </div>
+            <div class="comment-item">
+              <div class="avatar">赵</div>
+              <div class="comment-body">
+                <div class="comment-meta"><span class="comment-nick">赵大锤</span> · 11-07 18:44</div>
+                <div class="comment-text">求购纸箱那个，我家攒了一堆，就在四村，明天联系看看。</div>
+              </div>
+            </div>
+            <div class="comment-item">
+              <div class="avatar">孙</div>
+              <div class="comment-body">
+                <div class="comment-meta"><span class="comment-nick">孙小姐不吃香菜</span> · 11-07 15:20</div>
+                <div class="comment-text">拼车 15 块到科技园，比打车便宜太多了。就是早上 7:20 太早，起不来。有没有 8 点那班的？</div>
+              </div>
+            </div>
+            <div class="comment-item">
+              <div class="avatar">周</div>
+              <div class="comment-body">
+                <div class="comment-meta"><span class="comment-nick">周工</span> · 11-07 11:08</div>
+                <div class="comment-text">旧物交换市集报了名，去年去过一次，书换书挺快的，小家电反而没人要，可能大家都怕有暗病。</div>
+              </div>
+            </div>
+            <div class="comment-item">
+              <div class="avatar">吴</div>
+              <div class="comment-body">
+                <div class="comment-meta"><span class="comment-nick">吴所谓</span> · 11-06 22:40</div>
+                <div class="comment-text">那个 200 块的平板我刷到过，型号对不上，评论区吵了好几楼，后来帖子没了。</div>
+              </div>
+            </div>
+            <div class="comment-item">
+              <div class="avatar">郑</div>
+              <div class="comment-body">
+                <div class="comment-meta"><span class="comment-nick">郑小厨</span> · 11-06 19:12</div>
+                <div class="comment-text">夜班理货周结这个，之前干过一周，超市在麦地东街，活不重就是熬人。25 不算高。</div>
+              </div>
+            </div>
+            <div class="comment-item">
+              <div class="avatar">黄</div>
+              <div class="comment-body">
+                <div class="comment-meta"><span class="comment-nick">黄金周</span> · 11-06 14:50</div>
+                <div class="comment-text">儿童书桌 200 真便宜，我当初买了个类似的 300 还是旧的。可惜家里已经有了。</div>
+              </div>
+            </div>
+            <div class="comment-item">
+              <div class="avatar">刘</div>
+              <div class="comment-body">
+                <div class="comment-meta"><span class="comment-nick">刘一锅</span> · 11-05 20:30</div>
+                <div class="comment-text">羽毛球搭子那个还缺人吗，水平一般，能跑动。周六下午正好没事。</div>
+              </div>
+            </div>
+            <div class="comment-item">
+              <div class="avatar">杨</div>
+              <div class="comment-body">
+                <div class="comment-meta"><span class="comment-nick">杨枝甘露</span> · 11-05 16:05</div>
+                <div class="comment-text">总体来说麦地的闲置板块比隔壁板块好逛，小件多，自提近。就是图片有时候拍得太随意了，黑乎乎的看不清。</div>
+              </div>
+            </div>
+            <div class="comment-item">
+              <div class="avatar">何</div>
+              <div class="comment-body">
+                <div class="comment-meta"><span class="comment-nick">何何</span> · 11-05 09:18</div>
+                <div class="comment-text">送书架那个搬运是个问题，六楼有电梯还好，没电梯的话白送也没人搬。</div>
+              </div>
+            </div>
+            <div class="comment-item">
+              <div class="avatar">马</div>
+              <div class="comment-body">
+                <div class="comment-meta"><span class="comment-nick">马小跳</span> · 11-04 21:55</div>
+                <div class="comment-text">麦地体育馆周六还开吗？上个月去说在检修。</div>
+              </div>
+            </div>
+            <div class="comment-item">
+              <div class="avatar">朱</div>
+              <div class="comment-body">
+                <div class="comment-meta"><span class="comment-nick">朱迪的胡萝卜</span> · 11-04 13:30</div>
+                <div class="comment-text">钥匙那个失物招领，蓝色小熊挂件，看着像我家楼下的，晚上去物业问问。</div>
+              </div>
+            </div>
+            <div class="comment-item">
+              <div class="avatar">许</div>
+              <div class="comment-body">
+                <div class="comment-meta"><span class="comment-nick">许愿不熬夜</span> · 11-03 23:10</div>
+                <div class="comment-text">咖啡店兼职时薪 28 还行，周末两天能挣 400 多，就是站一天有点累。</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 9. 相关资讯 -->
+        <section class="section" id="news">
+          <div class="section-header">
+            <h2 class="section-title">社区动态速递</h2>
+          </div>
+          <div class="news-list">
+            <div class="news-item">
+              <div class="news-title"><a href="/#news">麦地三村东门 11 月 6 日起启用快递柜延时取件</a></div>
+              <div class="news-meta">2026-11-07</div>
+              <div class="news-summary">物业将取件时间从 21:00 延至 22:30，覆盖下班晚的住户。首日延时时段取件 47 次，物业称若需求稳定将常态化。</div>
+            </div>
+            <div class="news-item">
+              <div class="news-title"><a href="/#news">麦地中心广场旧物市集摊位报名已满 40 个</a></div>
+              <div class="news-meta">2026-11-06</div>
+              <div class="news-summary">报名通道 11 月 5 日关闭，候补名单 12 人。主办方提醒 11 月 15 日 9:00 前到场布置，现场设两个维修角，可免费修小家电。</div>
+            </div>
+            <div class="news-item">
+              <div class="news-title"><a href="/#news">麦地东街咖啡店周末兼职岗收到 23 份申请</a></div>
+              <div class="news-meta">2026-11-06</div>
+              <div class="news-summary">店长表示优先考虑有健康证、能连续做满 6 周的申请者，11 月 8 日安排第一轮试工。岗位时薪 28 元，周六日 10:00—18:00。</div>
+            </div>
+            <div class="news-item">
+              <div class="news-title"><a href="/#news">地铁 7 号线接驳站早高峰加开一班 7:10 班车</a></div>
+              <div class="news-meta">2026-11-05</div>
+              <div class="news-summary">11 月 7 日起试运行，麦地二村站始发。拼车板块有多条帖子提到该班次，车主建议拼车时间相应提前 10 分钟。</div>
+            </div>
+            <div class="news-item">
+              <div class="news-title"><a href="/#news">麦地一村 10 月二手交易成交 86 笔 家具占三成</a></div>
+              <div class="news-meta">2026-11-04</div>
+              <div class="news-summary">一村租户比例高，搬家季集中甩卖明显。10 月最后一周成交量占全月 41%，九成新小家电平均让价 12%。</div>
+            </div>
+            <div class="news-item">
+              <div class="news-title"><a href="/#news">社区工具共享点新增手动缝纫机 借用需登记</a></div>
+              <div class="news-meta">2026-11-03</div>
+              <div class="news-summary">麦地二村工具共享点新增一台手动缝纫机，配备 5 种线色。首周借用 11 次，以改裤脚和补窗帘为主，归还时需清理线屑。</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 10. 相关推荐 -->
+        <section class="section" id="recommend">
+          <div class="section-header">
+            <h2 class="section-title">你可能还需要</h2>
+          </div>
+          <div class="tag-index">
+            <a href="/#featured">麦地二村工具共享清单</a>
+            <a href="/#featured">九成新婴儿推车转让</a>
+            <a href="/#featured">科技园拼车长期位</a>
+            <a href="/#featured">沿街商铺兼职汇总</a>
+            <a href="/#featured">麦地一村房东直租</a>
+            <a href="/#featured">宠物上门喂养视频确认</a>
+            <a href="/#featured">旧物市集维修角</a>
+            <a href="/#featured">搬家纸箱求购</a>
+          </div>
+        </section>
+
+        <!-- 11. 补充板块：热门榜单 -->
+        <section class="section" id="rank">
+          <div class="section-header">
+            <h2 class="section-title">本周社区热度榜</h2>
+          </div>
+          <div class="rank-list">
+            <div class="rank-item">
+              <span class="rank-num">1</span>
+              <div class="rank-info">
+                <div class="rank-title"><a href="/#featured">实木餐椅四把 九成新 自提</a></div>
+                <div class="rank-tag">闲置交易 · 热度 92</div>
+              </div>
+            </div>
+            <div class="rank-item">
+              <span class="rank-num">2</span>
+              <div class="rank-info">
+                <div class="rank-title"><a href="/#featured">博世电钻借用 周末可约</a></div>
+                <div class="rank-tag">邻里互助 · 热度 88</div>
+              </div>
+            </div>
+            <div class="rank-item">
+              <span class="rank-num">3</span>
+              <div class="rank-info">
+                <div class="rank-title"><a href="/#featured">咖啡店周末兼职 时薪 28 元</a></div>
+                <div class="rank-tag">求职招聘 · 热度 85</div>
+              </div>
+            </div>
+            <div class="rank-item">
+              <span class="rank-num">4</span>
+              <div class="rank-info">
+                <div class="rank-title"><a href="/#featured">麦地到科技园 早 7:20 拼车</a></div>
+                <div class="rank-tag">拼车通勤 · 热度 81</div>
+              </div>
+            </div>
+            <div class="rank-item">
+              <span class="rank-num">5</span>
+              <div class="rank-info">
+                <div class="rank-title"><a href="/#featured">11 月旧物交换市集 报名中</a></div>
+                <div class="rank-tag">社区活动 · 热度 79</div>
+              </div>
+            </div>
+            <div class="rank-item">
+              <span class="rank-num">6</span>
+              <div class="rank-info">
+                <div class="rank-title"><a href="/#featured">麦地一村一居室 月租 2200</a></div>
+                <div class="rank-tag">房屋租售 · 热度 76</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 互动板块：社区投稿 -->
+        <section class="section" id="contribute">
+          <div class="section-header">
+            <h2 class="section-title">社区投稿与信息发布</h2>
+          </div>
+          <p style="color:var(--text-secondary); margin-bottom:14px; line-height:1.8;">有闲置要转、工具可借、岗位要招或拼车缺人，都可以在对应板块发布。发布时写清物品或需求的现状、地点和可约时间，回复率会高不少。10 月回复量前 20 的条目，平均写了 3 项以上具体信息。</p>
+          <div class="tag-index">
+            <a href="/#contribute">发布闲置物品</a>
+            <a href="/#contribute">登记工具共享</a>
+            <a href="/#contribute">发布招聘岗位</a>
+            <a href="/#contribute">发起拼车线路</a>
+            <a href="/#contribute">报名社区活动</a>
+            <a href="/#contribute">上传失物招领</a>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- 右侧辅助栏 -->
+      <aside class="right-sidebar" aria-label="辅助信息">
+        <div class="side-card">
+          <div class="side-title">社区更新流</div>
+          <div class="side-list">
+            <a href="/#updates">儿童平衡车 150 元转<span class="sub">11-08</span></a>
+            <a href="/#updates">求购搬家纸箱<span class="sub">11-08</span></a>
+            <a href="/#updates">宠物上门喂养可接单<span class="sub">11-07</span></a>
+            <a href="/#updates">超市夜班理货员周结<span class="sub">11-07</span></a>
+            <a href="/#updates">高铁站顺风车周日早<span class="sub">11-07</span></a>
+            <a href="/#updates">失物招领：蓝色小熊钥匙<span class="sub">11-06</span></a>
+          </div>
+        </div>
+        <div class="side-card">
+          <div class="side-title">热门分类</div>
+          <div class="side-list">
+            <a href="/#featured">闲置家具 · 86 条</a>
+            <a href="/#featured">工具共享 · 34 条</a>
+            <a href="/#featured">兼职招聘 · 27 条</a>
+            <a href="/#featured">拼车通勤 · 22 条</a>
+            <a href="/#featured">房屋租售 · 19 条</a>
+            <a href="/#featured">宠物照看 · 15 条</a>
+          </div>
+        </div>
+        <div class="side-card">
+          <div class="side-title">本周成交参考</div>
+          <div class="side-list">
+            <a href="/#deep-dive">婴儿推车 180—260 元</a>
+            <a href="/#deep-dive">实木书桌 150—220 元</a>
+            <a href="/#deep-dive">山地自行车 450—700 元</a>
+            <a href="/#deep-dive">小家电让价约 12%</a>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <!-- 页尾 -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">麦地网官网入口</div>
+          <p class="footer-desc">记录麦地及周边街区的日常流转：二手物品、工具借用、本地岗位、拼车线路与社区活动。内容覆盖过去 30 天的发布和成交记录，工作日晚上和周末上午更新最集中。</p>
+        </div>
+        <div class="footer-col">
+          <h4>内容分类</h4>
+          <a href="/#featured">闲置交易</a>
+          <a href="/#featured">工具共享</a>
+          <a href="/#featured">求职招聘</a>
+          <a href="/#featured">拼车通勤</a>
+        </div>
+        <div class="footer-col">
+          <h4>社区互动</h4>
+          <a href="/#contribute">发布信息</a>
+          <a href="/#comments">用户评论</a>
+          <a href="/#news">社区动态</a>
+          <a href="/#rank">热度榜单</a>
+        </div>
+        <div class="footer-col">
+          <h4>帮助说明</h4>
+          <a href="/#guide">交易指南</a>
+          <a href="/#faq">常见问题</a>
+          <a href="/#deep-dive">定价参考</a>
+          <a href="/#recommend">相关推荐</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>内容为社区示例数据，更新于 2026-11-08。</span>
+        <span>© 2026 麦地网官网入口 · 社区信息聚合</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-top" id="backTop" aria-label="回到顶部">↑</button>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // 移动端菜单
+      const hamburger = document.getElementById('hamburgerBtn');
+      const mobileNav = document.getElementById('mobileNav');
+      const overlay = document.getElementById('overlay');
+
+      function closeMenu() {
+        if (mobileNav) mobileNav.classList.remove('open');
+        if (overlay) overlay.classList.remove('show');
+        if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
+      }
+
+      function openMenu() {
+        if (mobileNav) mobileNav.classList.add('open');
+        if (overlay) overlay.classList.add('show');
+        if (hamburger) hamburger.setAttribute('aria-expanded', 'true');
+      }
+
+      if (hamburger) {
+        hamburger.addEventListener('click', function() {
+          if (mobileNav.classList.contains('open')) {
+            closeMenu();
+          } else {
+            openMenu();
+          }
+        });
+      }
+
+      if (overlay) {
+        overlay.addEventListener('click', closeMenu);
+      }
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeMenu();
+      });
+
+      if (mobileNav) {
+        mobileNav.querySelectorAll('a').forEach(function(link) {
+          link.addEventListener('click', closeMenu);
+        });
+      }
+
+      // 回到顶部
+      const backTop = document.getElementById('backTop');
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > window.innerHeight * 0.8) {
+          backTop.classList.add('show');
+        } else {
+          backTop.classList.remove('show');
+        }
+      });
+      if (backTop) {
+        backTop.addEventListener('click', function() {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      // 本地搜索过滤
+      const searchInput = document.getElementById('siteSearch');
+      const searchBtn = document.getElementById('searchBtn');
+      const mainContent = document.querySelector('.main-content');
+
+      const emptyTip = document.createElement('div');
+      emptyTip.className = 'search-empty';
+      emptyTip.textContent = '没有找到匹配的内容，换个关键词试试。';
+      if (mainContent) {
+        mainContent.insertBefore(emptyTip, mainContent.firstChild);
+      }
+
+      function runSearch() {
+        if (!searchInput || !mainContent) return;
+        const q = searchInput.value.trim().toLowerCase();
+        const sections = mainContent.querySelectorAll('.section');
+        let totalVisible = 0;
+
+        sections.forEach(function(section) {
+          const text = section.textContent.toLowerCase();
+          const match = !q || text.indexOf(q) !== -1;
+          section.style.display = match ? '' : 'none';
+          if (match) totalVisible++;
+        });
+
+        if (q && totalVisible === 0) {
+          emptyTip.classList.add('show');
+        } else {
+          emptyTip.classList.remove('show');
+        }
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener('input', runSearch);
+      }
+      if (searchBtn) {
+        searchBtn.addEventListener('click', runSearch);
+      }
+
+      // 侧栏当前高亮（滚动）
+      const channelLinks = document.querySelectorAll('.channel-nav a');
+      const sectionEls = document.querySelectorAll('.main-content .section[id]');
+
+      function highlightNav() {
+        if (!sectionEls.length || !channelLinks.length) return;
+        const scrollPos = window.scrollY + 110;
+        let currentId = '';
+        sectionEls.forEach(function(sec) {
+          if (sec.offsetTop <= scrollPos) {
+            currentId = sec.id;
+          }
+        });
+        channelLinks.forEach(function(link) {
+          link.classList.remove('current');
+          if (currentId && link.getAttribute('href') === '/#' + currentId) {
+            link.classList.add('current');
+          }
+        });
+        if (!currentId && channelLinks.length) {
+          channelLinks[0].classList.add('current');
+        }
+      }
+
+      window.addEventListener('scroll', highlightNav);
+      window.addEventListener('load', highlightNav);
+
+    })();
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "麦地网官网入口",
+    "description": "麦地及周边街区的社区信息聚合：闲置交易、工具共享、求职招聘、拼车通勤与社区活动。",
+    "inLanguage": "zh-CN"
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "在麦地转让二手家具，定价多少比较合理？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "看同小区近两周同类成交。10 月麦地二村九成新婴儿推车成交价在 180—260 元，一村实木书桌 150—220 元。标价可以比预期成交价高 10%—15% 留出让价空间，但高于近期成交价 30% 以上，回复量通常不到 2 条。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "工具共享借用期间损坏怎么处理？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "板块通行规则是借用免费、损坏照价赔偿。10 月有 3 起电钻钻头损坏记录，赔偿金额 15—30 元，双方在评论区确认结果。借用前建议在条目下写清配件清单和当前状态，归还时拍照核对。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "拼车通勤的费用一般怎么算？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "麦地到科技园单程 15 元左右，到地铁 7 号线接驳站 10 元上下。按月拼通常有优惠，常见做法是月付打八折。费用一般覆盖油费和过路费，拼车前确认出发时间、等车地点和是否接受临时取消。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "宠物上门喂养怎么判断靠不靠谱？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "看条目里有没有写清服务内容：喂食、换水、铲屎、拍照反馈是否都包含。10 月有 7 位发布者注明“可视频看猫”，带视频确认的条目平均响应时间快 2.4 小时。首次合作建议约在白天，并让服务方进门后拍一张环境照。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "社区活动报名后临时去不了怎么办？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "旧物交换市集等活动的惯例是提前一天在报名帖下回复说明，摊位可以转给候补。11 月 15 日的市集限 40 个摊位，往期有约 10% 的报名者临时取消，提前说明的摊位基本都能转出去。当天缺席且未说明的，下次报名可能排在候补位。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "房屋租售信息怎么确认是不是房东直租？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "看条目里有没有具体门牌号、能否配合看房产证或购房合同关键页。麦地一村一居室那条写了“房东直租无中介费”并附了室内实拍，这类条目可以直接约看。只留微信号、不写具体楼栋的，多数是二房东或中介，看房前先问清费用构成。"
+        }
+      }
+    ]
+  }
+  </script>
+
+</body>
+  </html>
