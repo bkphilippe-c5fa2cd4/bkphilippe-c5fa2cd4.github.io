@@ -1,0 +1,1583 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5xsq - 影视资源聚合与社区</title>
+  <meta name="description" content="5xsq 汇聚最新影视资源、剧集更新、影评与社区讨论。提供 2026 年 10 月至 11 月热门电影、剧集、动漫条目、深度解析和用户真实反馈，适合喜欢追踪影视动态的观众。">
+  <meta name="keywords" content="5xsq">
+  <style>
+    /* ---------- CSS Reset & 变量系统 ---------- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-primary: #1f3a5f;
+      --color-primary-light: #2c4f7a;
+      --color-primary-dark: #132a3f;
+      --color-accent: #c44536;
+      --color-accent-light: #e05a48;
+      --color-bg: #f7f5f0;
+      --color-surface: #ffffff;
+      --color-text-primary: #1e1e1e;
+      --color-text-secondary: #4a4a4a;
+      --color-text-tertiary: #7a7a7a;
+      --color-border: #e0dcd5;
+      --color-divider: #eeebe5;
+      --radius-card: 12px;
+      --radius-button: 8px;
+      --radius-tag: 20px;
+      --radius-banner: 16px;
+      --shadow-default: 0 2px 8px rgba(0,0,0,0.06);
+      --shadow-hover: 0 8px 20px rgba(0,0,0,0.12);
+      --font-sans: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+      --font-mono: 'SF Mono', 'Courier New', monospace;
+      --sticky-offset: 120px;
+      --container-width: 1360px;
+    }
+
+    /* ---------- 基础 ---------- */
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-bg);
+      color: var(--color-text-primary);
+      line-height: 1.6;
+      font-size: 16px;
+      padding-top: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    img { display: block; max-width: 100%; height: auto; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    .container {
+      max-width: var(--container-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    @media (max-width: 740px) {
+      .container { padding: 0 16px; }
+    }
+
+    /* ---------- 吸顶公告条 + 页头 ---------- */
+    .sticky-top-group {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--color-surface);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .announcement-bar {
+      background: var(--color-primary-dark);
+      color: #fff;
+      padding: 8px 0;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      overflow: hidden;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .announcement-bar .brand-mini {
+      font-weight: 700;
+      color: #f0c674;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+    .announcement-bar .announce-item {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      white-space: nowrap;
+    }
+    .announcement-bar .announce-item .date {
+      color: #f0c674;
+      font-weight: 600;
+    }
+    .announcement-bar .announce-item .tag {
+      background: rgba(255,255,255,0.12);
+      padding: 2px 10px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+    }
+
+    .site-header {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding: 8px 0;
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.6rem;
+      color: var(--color-primary);
+      letter-spacing: -0.5px;
+    }
+    .brand-logo svg {
+      width: 36px;
+      height: 36px;
+      transition: transform 0.3s ease;
+    }
+    .brand-logo:hover svg {
+      transform: rotate(-6deg) scale(1.04);
+    }
+    .main-nav {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .main-nav a {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      padding: 6px 2px;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .main-nav a:hover,
+    .main-nav a:focus-visible {
+      color: var(--color-primary);
+      border-bottom-color: var(--color-accent);
+      outline: 2px solid transparent;
+    }
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .search-mini {
+      display: flex;
+      align-items: center;
+      background: var(--color-bg);
+      border-radius: 40px;
+      padding: 4px 8px 4px 16px;
+      border: 1px solid var(--color-border);
+      transition: border 0.2s;
+    }
+    .search-mini:focus-within {
+      border-color: var(--color-primary);
+    }
+    .search-mini input {
+      border: none;
+      background: transparent;
+      font-size: 0.9rem;
+      padding: 4px 8px 4px 0;
+      width: 150px;
+      outline: none;
+    }
+    .search-mini button {
+      background: var(--color-primary);
+      color: #fff;
+      border-radius: 40px;
+      padding: 4px 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .search-mini button:hover {
+      background: var(--color-primary-light);
+    }
+    .menu-toggle {
+      display: none;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    /* 移动端菜单 */
+    @media (max-width: 1024px) {
+      .main-nav {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 12px 0 4px;
+        border-top: 1px solid var(--color-divider);
+      }
+      .main-nav.open {
+        display: flex;
+      }
+      .main-nav a {
+        padding: 8px 0;
+        width: 100%;
+        border-bottom: none;
+      }
+      .menu-toggle {
+        display: inline-block;
+      }
+      .header-inner {
+        position: relative;
+      }
+      .search-mini input {
+        width: 110px;
+      }
+    }
+    @media (max-width: 740px) {
+      .brand-logo { font-size: 1.3rem; }
+      .search-mini { display: none; }
+      .announcement-bar { font-size: 0.75rem; gap: 12px; justify-content: flex-start; padding: 6px 16px; }
+    }
+
+    /* ---------- 主布局：三栏门户 ---------- */
+    .page-main {
+      display: grid;
+      grid-template-columns: 180px 1fr 260px;
+      gap: 32px;
+      padding: 32px 0;
+      align-items: start;
+    }
+    @media (max-width: 1024px) {
+      .page-main {
+        grid-template-columns: 1fr 240px;
+        gap: 24px;
+      }
+      .left-channel {
+        display: none;
+      }
+    }
+    @media (max-width: 740px) {
+      .page-main {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .right-aside {
+        margin-top: 8px;
+      }
+    }
+
+    /* 左栏频道索引 */
+    .left-channel {
+      position: sticky;
+      top: var(--sticky-offset);
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      padding: 16px 0;
+      box-shadow: var(--shadow-default);
+      border: 1px solid var(--color-divider);
+    }
+    .left-channel h3 {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--color-text-tertiary);
+      padding: 0 16px 8px;
+      border-bottom: 1px solid var(--color-divider);
+      margin-bottom: 8px;
+    }
+    .left-channel a {
+      display: block;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      border-left: 3px solid transparent;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .left-channel a:hover,
+    .left-channel a:focus-visible {
+      background: var(--color-bg);
+      border-left-color: var(--color-accent);
+      color: var(--color-primary);
+      outline: none;
+    }
+
+    /* 中间主内容 */
+    .main-content {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    /* 右辅助栏 */
+    .right-aside {
+      position: sticky;
+      top: var(--sticky-offset);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    @media (max-width: 740px) {
+      .right-aside {
+        position: static;
+      }
+    }
+
+    /* ---------- 首屏 ---------- */
+    .hero-section {
+      background: linear-gradient(135deg, #1f3a5f 0%, #2c4f7a 60%, #3a628a 100%);
+      border-radius: var(--radius-banner);
+      padding: 48px 40px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: var(--shadow-default);
+    }
+    .hero-section::after {
+      content: '';
+      position: absolute;
+      right: -40px;
+      bottom: -60px;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(240,198,116,0.18) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-section h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.2;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-section .hero-desc {
+      font-size: 1.05rem;
+      max-width: 600px;
+      opacity: 0.92;
+      line-height: 1.7;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-actions a {
+      background: var(--color-accent);
+      color: #fff;
+      padding: 10px 28px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: background 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+    .hero-actions a:hover {
+      background: var(--color-accent-light);
+      transform: translateY(-2px);
+    }
+    .hero-actions a.secondary {
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.6);
+      color: #fff;
+    }
+    .hero-actions a.secondary:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 12px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-stats span {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+    .hero-stats strong {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #f0c674;
+      margin-right: 4px;
+    }
+    @media (max-width: 740px) {
+      .hero-section { padding: 32px 20px; }
+      .hero-section h1 { font-size: 2rem; }
+    }
+
+    /* ---------- 通用板块标题 ---------- */
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--color-primary-dark);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .section-title small {
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: var(--color-text-tertiary);
+    }
+
+    /* ---------- 卡片网格 ---------- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: var(--shadow-default);
+      border: 1px solid var(--color-divider);
+      transition: box-shadow 0.25s, transform 0.25s;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-3px);
+    }
+    .card img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      background: var(--color-bg);
+    }
+    .card-body {
+      padding: 14px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 8px;
+    }
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--color-text-primary);
+    }
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .tag {
+      background: var(--color-bg);
+      border-radius: var(--radius-tag);
+      padding: 2px 10px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      border: 1px solid var(--color-border);
+    }
+    .tag.accent {
+      background: var(--color-accent);
+      color: #fff;
+      border-color: var(--color-accent);
+    }
+    .card-desc {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+      flex: 1;
+    }
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--color-text-tertiary);
+    }
+    .card-meta .heat {
+      color: var(--color-accent);
+      font-weight: 600;
+    }
+
+    /* ---------- 紧凑列表 ---------- */
+    .compact-list {
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      padding: 20px 24px;
+      box-shadow: var(--shadow-default);
+      border: 1px solid var(--color-divider);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .list-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--color-divider);
+      padding-bottom: 16px;
+    }
+    .list-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .list-item .item-index {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--color-text-tertiary);
+      min-width: 28px;
+      line-height: 1.4;
+    }
+    .list-item .item-content {
+      flex: 1;
+    }
+    .list-item .item-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+    }
+    .list-item .item-desc {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ---------- 分类入口网格 ---------- */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 12px;
+    }
+    .category-item {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-button);
+      padding: 14px 8px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      display: block;
+    }
+    .category-item:hover,
+    .category-item:focus-visible {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #fff;
+      outline: none;
+    }
+
+    /* ---------- 深度解析 ---------- */
+    .deep-analysis {
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      padding: 32px 36px;
+      box-shadow: var(--shadow-default);
+      border: 1px solid var(--color-divider);
+    }
+    .deep-analysis h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 24px 0 12px;
+      color: var(--color-primary-dark);
+    }
+    .deep-analysis h3:first-of-type {
+      margin-top: 0;
+    }
+    .deep-analysis p {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: var(--color-text-secondary);
+      margin-bottom: 12px;
+    }
+    .deep-analysis ul {
+      margin: 12px 0 16px 20px;
+      list-style: disc;
+      font-size: 0.95rem;
+      color: var(--color-text-secondary);
+      line-height: 1.7;
+    }
+    .deep-analysis li {
+      margin-bottom: 6px;
+    }
+    .deep-analysis .callout {
+      background: var(--color-bg);
+      border-left: 4px solid var(--color-accent);
+      padding: 16px 20px;
+      border-radius: 0 var(--radius-button) var(--radius-button) 0;
+      margin: 20px 0;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--color-text-primary);
+    }
+    @media (max-width: 740px) {
+      .deep-analysis { padding: 20px 18px; }
+    }
+
+    /* ---------- 指南步骤 ---------- */
+    .guide-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .step-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      padding: 20px;
+      border: 1px solid var(--color-divider);
+      box-shadow: var(--shadow-default);
+    }
+    .step-card .step-num {
+      display: inline-block;
+      background: var(--color-primary);
+      color: #fff;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 28px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+    }
+    .step-card h4 {
+      font-size: 1rem;
+      margin-bottom: 6px;
+      color: var(--color-text-primary);
+    }
+    .step-card p {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      line-height: 1.55;
+    }
+
+    /* ---------- FAQ ---------- */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .faq-item {
+      background: var(--color-surface);
+      border-radius: var(--radius-button);
+      border: 1px solid var(--color-border);
+      overflow: hidden;
+    }
+    .faq-item details {
+      padding: 0;
+    }
+    .faq-item summary {
+      padding: 16px 20px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--color-text-primary);
+      transition: background 0.2s;
+    }
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+    .faq-item summary::after {
+      content: '+';
+      font-size: 1.3rem;
+      font-weight: 300;
+      color: var(--color-text-tertiary);
+      transition: transform 0.2s;
+    }
+    .faq-item details[open] summary::after {
+      content: '−';
+    }
+    .faq-item details[open] summary {
+      background: var(--color-bg);
+    }
+    .faq-item .faq-answer {
+      padding: 0 20px 16px;
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      line-height: 1.7;
+      border-top: 1px solid var(--color-divider);
+      padding-top: 12px;
+    }
+
+    /* ---------- 评论 ---------- */
+    .comments-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .comment-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      padding: 16px 18px;
+      border: 1px solid var(--color-divider);
+      box-shadow: var(--shadow-default);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .comment-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .comment-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--color-primary-light);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .comment-name {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--color-text-primary);
+    }
+    .comment-text {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      line-height: 1.55;
+    }
+    .comment-meta {
+      font-size: 0.7rem;
+      color: var(--color-text-tertiary);
+      margin-top: 2px;
+    }
+
+    /* ---------- 资讯列表 ---------- */
+    .news-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .news-item {
+      background: var(--color-surface);
+      border-radius: var(--radius-button);
+      border: 1px solid var(--color-divider);
+      padding: 16px 20px;
+      box-shadow: var(--shadow-default);
+    }
+    .news-item .news-date {
+      font-size: 0.75rem;
+      color: var(--color-text-tertiary);
+      margin-bottom: 4px;
+    }
+    .news-item .news-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+    .news-item .news-summary {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      line-height: 1.55;
+    }
+
+    /* ---------- 相关推荐标签列表 ---------- */
+    .related-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .related-tag {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-tag);
+      padding: 6px 16px;
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .related-tag:hover,
+    .related-tag:focus-visible {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #fff;
+      outline: none;
+    }
+
+    /* ---------- 补充板块：排行榜 ---------- */
+    .rank-list {
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      padding: 20px 24px;
+      border: 1px solid var(--color-divider);
+      box-shadow: var(--shadow-default);
+    }
+    .rank-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--color-divider);
+    }
+    .rank-item:last-child {
+      border-bottom: none;
+    }
+    .rank-num {
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--color-accent);
+      min-width: 24px;
+    }
+    .rank-title {
+      flex: 1;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .rank-score {
+      font-size: 0.8rem;
+      color: var(--color-text-tertiary);
+    }
+
+    /* ---------- 右栏卡片 ---------- */
+    .aside-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      padding: 20px;
+      border: 1px solid var(--color-divider);
+      box-shadow: var(--shadow-default);
+    }
+    .aside-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--color-primary-dark);
+      border-bottom: 1px solid var(--color-divider);
+      padding-bottom: 8px;
+    }
+    .aside-card .hot-item {
+      display: flex;
+      gap: 8px;
+      padding: 6px 0;
+      font-size: 0.85rem;
+    }
+    .aside-card .hot-item .num {
+      color: var(--color-accent);
+      font-weight: 700;
+      min-width: 18px;
+    }
+    .aside-card .update-item {
+      font-size: 0.85rem;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--color-divider);
+    }
+    .aside-card .update-item:last-child {
+      border-bottom: none;
+    }
+    .aside-card .update-item .date {
+      color: var(--color-text-tertiary);
+      font-size: 0.75rem;
+    }
+
+    /* ---------- 页脚 ---------- */
+    .site-footer {
+      background: var(--color-primary-dark);
+      color: #ccc;
+      padding: 48px 0 24px;
+      margin-top: 48px;
+      font-size: 0.85rem;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 740px) {
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+    }
+    .footer-brand {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .footer-desc {
+      line-height: 1.6;
+      color: #aaa;
+    }
+    .footer-col h4 {
+      color: #fff;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .footer-col a {
+      display: block;
+      padding: 4px 0;
+      color: #aaa;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover {
+      color: #fff;
+    }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.12);
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      color: #888;
+      font-size: 0.8rem;
+    }
+
+    /* ---------- 回到顶部 ---------- */
+    .back-to-top {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: var(--color-primary);
+      color: #fff;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      box-shadow: var(--shadow-hover);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 200;
+      border: none;
+    }
+    .back-to-top.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .back-to-top:hover {
+      transform: translateY(-4px);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* ---------- 锚点偏移 ---------- */
+    [id] {
+      scroll-margin-top: var(--sticky-offset);
+    }
+
+    /* ---------- 其他 ---------- */
+    .text-muted { color: var(--color-text-tertiary); font-size: 0.8rem; }
+    .mt-2 { margin-top: 8px; }
+    .mt-4 { margin-top: 16px; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); border: 0;
+    }
+  </style>
+<script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+  <!-- 吸顶公告条 + 页头 -->
+  <div class="sticky-top-group">
+    <div class="announcement-bar">
+      <span class="brand-mini">5xsq</span>
+      <span class="announce-item"><span class="date">11月7日</span>《沙丘：预言》S2E4 更新</span>
+      <span class="announce-item"><span class="date">11月6日</span>《白夜追凶2》首支预告上线</span>
+      <span class="announce-item"><span class="tag">本周新增</span> 47 部剧集 · 12 部电影</span>
+    </div>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="/" class="brand-logo" aria-label="5xsq 首页">
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect width="36" height="36" rx="10" fill="#1f3a5f"/>
+            <path d="M10 12L18 24L26 12" stroke="#f0c674" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="18" cy="18" r="2" fill="#f0c674"/>
+          </svg>
+          5xsq
+        </a>
+        <button class="menu-toggle" aria-label="打开菜单" aria-expanded="false">☰</button>
+        <nav class="main-nav" aria-label="主导航">
+          <a href="/#hot">热播剧集</a>
+          <a href="/#movies">电影推荐</a>
+          <a href="/#anime">动漫新番</a>
+          <a href="/#deep">深度解析</a>
+          <a href="/#community">社区讨论</a>
+        </nav>
+        <div class="header-actions">
+          <div class="search-mini">
+            <input type="search" id="site-search" placeholder="搜索条目…" aria-label="搜索条目">
+            <button type="button" id="search-btn">搜索</button>
+          </div>
+        </div>
+      </div>
+    </header>
+  </div>
+
+  <!-- 页面主内容 -->
+  <main class="container page-main">
+    <!-- 左栏频道索引 -->
+    <aside class="left-channel" aria-label="频道索引">
+      <h3>频道</h3>
+      <a href="/#overview">领域概览</a>
+      <a href="/#featured">精选推荐</a>
+      <a href="/#updates">最新更新</a>
+      <a href="/#categories">分类入口</a>
+      <a href="/#deep">深度解析</a>
+      <a href="/#guide">体验指南</a>
+      <a href="/#faq">常见问题</a>
+      <a href="/#comments">用户评论</a>
+      <a href="/#news">相关资讯</a>
+      <a href="/#related">相关推荐</a>
+      <a href="/#rank">热门榜单</a>
+      <a href="/#contribute">投稿互动</a>
+    </aside>
+
+    <!-- 中间主内容 -->
+    <div class="main-content">
+      <!-- 首屏 -->
+      <section class="hero-section" id="hero">
+        <h1>5xsq</h1>
+        <p class="hero-desc">聚合最新影视剧集、电影、动漫资源与深度讨论。追踪 2026 年秋季档热门条目，从《沙丘：预言》到《白夜追凶2》，一站获取更新动态与真实口碑。</p>
+        <div class="hero-actions">
+          <a href="/#featured">浏览精选内容</a>
+          <a href="/#updates" class="secondary">查看今日更新</a>
+        </div>
+        <div class="hero-stats">
+          <span><strong>47</strong> 部剧集本周更新</span>
+          <span><strong>12</strong> 部电影新上线</span>
+          <span><strong>3,200+</strong> 条社区讨论</span>
+        </div>
+      </section>
+
+      <!-- 主题领域概览 -->
+      <section id="overview">
+        <h2 class="section-title">影视资源与社区讨论领域概览 <small>2026 年 11 月</small></h2>
+        <div style="background:var(--color-surface); border-radius:var(--radius-card); padding:24px 28px; border:1px solid var(--color-divider); box-shadow:var(--shadow-default);">
+          <p style="line-height:1.8; color:var(--color-text-secondary); margin-bottom:12px;">当前影视资源聚合方向主要分为三大类：流媒体平台自制剧、院线电影上线窗口期、以及经典作品修复重映。2026 年 10 月下旬至今，《沙丘：预言》第二季进入中段高潮，豆瓣讨论组单日新增帖子超过 800 条；《白夜追凶2》在 11 月 6 日放出首支预告，优酷预约量 24 小时内突破 200 万。动漫方面，《咒术回战》第三季“死灭回游”篇更新至第 8 集，B 站单集播放量稳定在 1200 万左右。</p>
+          <p style="line-height:1.8; color:var(--color-text-secondary); margin-bottom:12px;">电影板块，《奥本海默》4K 修复版于 10 月 30 日上线流媒体，诺兰影迷社区“诺兰中文网”整理了 12 处新增幕后注释。《周处除三害》在 Netflix 上线后登上台湾地区日榜第一，大陆观众通过社交平台讨论其黑色幽默与暴力美学的平衡。经典剧集方面，《大明王朝1566》高清重制版在 11 月 1 日登陆腾讯视频，前三天弹幕量超过 50 万条。</p>
+          <p style="line-height:1.8; color:var(--color-text-secondary);">需要留意的趋势是：短剧精品化正在挤压传统 45 分钟剧集的讨论空间。抖音“新番计划”推出的《二十九》单集 8 分钟，总播放量破 3 亿，但豆瓣评分仅 6.1，评论集中批评结局仓促。观众对“电影感”的要求从画面延伸到叙事节奏，单纯堆砌反转的短剧开始出现审美疲劳。</p>
+        </div>
+      </section>
+
+      <!-- 精选内容推荐 -->
+      <section id="featured">
+        <h2 class="section-title">精选内容推荐 <small>编辑精选 · 8 部</small></h2>
+        <div class="card-grid">
+          <div class="card">
+            <img src="https://picsum.photos/seed/dune2/400/300" width="400" height="300" loading="lazy" alt="《沙丘：预言》第二季剧照">
+            <div class="card-body">
+              <div class="card-title">《沙丘：预言》第二季</div>
+              <div class="card-tags"><span class="tag accent">科幻</span><span class="tag">HBO</span><span class="tag">2026-10-12</span></div>
+              <p class="card-desc">聚焦姐妹会早期历史，E4“血与沙”单集 IMDb 9.2。蕾雅·赛杜饰演的玛戈夫人与特蕾莎修女对峙戏份被剧迷逐帧分析。</p>
+              <div class="card-meta"><span class="heat">热度 9,821</span><span>评分 9.1</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <img src="https://picsum.photos/seed/baiye2/400/300" width="400" height="300" loading="lazy" alt="《白夜追凶2》预告片画面">
+            <div class="card-body">
+              <div class="card-title">《白夜追凶2》</div>
+              <div class="card-tags"><span class="tag accent">悬疑</span><span class="tag">优酷</span><span class="tag">待播</span></div>
+              <p class="card-desc">11 月 6 日首支预告释出，潘粤明一人分饰两角的微表情差异成为讨论焦点。预告片尾 3 秒出现的新角色指纹线索引发猜测。</p>
+              <div class="card-meta"><span class="heat">热度 12,400</span><span>期待值 9.4</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <img src="https://picsum.photos/seed/op4k/400/300" width="400" height="300" loading="lazy" alt="《奥本海默》4K修复版海报">
+            <div class="card-body">
+              <div class="card-title">《奥本海默》4K 修复版</div>
+              <div class="card-tags"><span class="tag accent">传记</span><span class="tag">诺兰</span><span class="tag">10-30</span></div>
+              <p class="card-desc">新增 12 分钟幕后花絮，包含基里安·墨菲试镜时的原始录像。诺兰中文网整理出 7 处与院线版不同的音效处理。</p>
+              <div class="card-meta"><span class="heat">热度 8,110</span><span>评分 9.3</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <img src="https://picsum.photos/seed/zhouchu/400/300" width="400" height="300" loading="lazy" alt="《周处除三害》剧照">
+            <div class="card-body">
+              <div class="card-title">《周处除三害》</div>
+              <div class="card-tags"><span class="tag accent">犯罪</span><span class="tag">Netflix</span><span class="tag">11-02</span></div>
+              <p class="card-desc">上线 Netflix 后登台湾地区日榜第一。阮经天饰演的陈桂林在礼堂枪战长镜头被拆解出 4 处剪辑点。</p>
+              <div class="card-meta"><span class="heat">热度 9,024</span><span>评分 8.4</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <img src="https://picsum.photos/seed/daming/400/300" width="400" height="300" loading="lazy" alt="《大明王朝1566》高清重制版画面">
+            <div class="card-body">
+              <div class="card-title">《大明王朝1566》高清重制</div>
+              <div class="card-tags"><span class="tag accent">历史</span><span class="tag">腾讯视频</span><span class="tag">11-01</span></div>
+              <p class="card-desc">前三天弹幕量超 50 万条，第 27 集“海瑞上疏”单集弹幕 8.2 万。网友逐帧对比原版与重制版色彩差异。</p>
+              <div class="card-meta"><span class="heat">热度 7,560</span><span>评分 9.7</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <img src="https://picsum.photos/seed/jujutsu3/400/300" width="400" height="300" loading="lazy" alt="《咒术回战》第三季截图">
+            <div class="card-body">
+              <div class="card-title">《咒术回战》第三季</div>
+              <div class="card-tags"><span class="tag accent">动漫</span><span class="tag">MAPPA</span><span class="tag">10-05</span></div>
+              <p class="card-desc">“死灭回游”篇第 8 集，乙骨忧太 vs 石流龙战斗作画引发热议。B 站单集播放 1200 万，弹幕峰值 4.8 万条/分钟。</p>
+              <div class="card-meta"><span class="heat">热度 11,300</span><span>评分 8.9</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <img src="https://picsum.photos/seed/ershijiu/400/300" width="400" height="300" loading="lazy" alt="短剧《二十九》剧照">
+            <div class="card-body">
+              <div class="card-title">短剧《二十九》</div>
+              <div class="card-tags"><span class="tag accent">短剧</span><span class="tag">抖音</span><span class="tag">10-18</span></div>
+              <p class="card-desc">单集 8 分钟，总播放量破 3 亿。豆瓣评分 6.1，争议集中在结局：前 28 集铺垫的伏笔在最后一集用旁白带过。</p>
+              <div class="card-meta"><span class="heat">热度 6,880</span><span>评分 6.1</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <img src="https://picsum.photos/seed/loki2/400/300" width="400" height="300" loading="lazy" alt="《洛基》第二季概念图">
+            <div class="card-body">
+              <div class="card-title">《洛基》第二季</div>
+              <div class="card-tags"><span class="tag accent">漫威</span><span class="tag">Disney+</span><span class="tag">10-06</span></div>
+              <p class="card-desc">季终集“光荣使命”IMDb 9.4，关继威饰演的 OB 与洛基的时间循环对话被编剧解读为“TVA 的诞生是因也是果”。</p>
+              <div class="card-meta"><span class="heat">热度 8,420</span><span>评分 8.7</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 最新更新 / 动态 -->
+      <section id="updates">
+        <h2 class="section-title">今日更新动态 <small>11 月 8 日</small></h2>
+        <div class="compact-list">
+          <div class="list-item"><span class="item-index">01</span><div class="item-content"><div class="item-title">《沙丘：预言》S2E5 上线</div><div class="item-desc">HBO Max 北京时间上午 10 点更新，本集标题“姐妹会之血”，时长 58 分钟，为第二季最长单集。</div></div></div>
+          <div class="list-item"><span class="item-index">02</span><div class="item-content"><div class="item-title">《白夜追凶2》预告片彩蛋解读</div><div class="item-desc">优酷官方发布 6 张剧照，其中第 3 张背景墙上的报纸日期为 2023 年 11 月 8 日，与第一季时间线吻合。</div></div></div>
+          <div class="list-item"><span class="item-index">03</span><div class="item-content"><div class="item-title">《咒术回战》第三季第 9 集预告</div><div class="item-desc">MAPPA 放出 15 秒预告，确认下一集为“秤金次 vs 鹿紫云一”完整对战，作画监督为御所园翔太。</div></div></div>
+          <div class="list-item"><span class="item-index">04</span><div class="item-content"><div class="item-title">《奥本海默》4K 版新增评论音轨</div><div class="item-desc">诺兰与基里安·墨菲的评论音轨已上线 iTunes，时长 2 小时 47 分，包含对“三位一体”核试验场景的逐帧讲解。</div></div></div>
+          <div class="list-item"><span class="item-index">05</span><div class="item-content"><div class="item-title">《大明王朝1566》重制版第 30 集上线</div><div class="item-desc">腾讯视频今日 18 点更新，本集“赵贞吉入阁”新增 4 分钟未播出片段，涉及徐阶与严嵩的私下对话。</div></div></div>
+          <div class="list-item"><span class="item-index">06</span><div class="item-content"><div class="item-title">《周处除三害》Netflix 版本增加 2 分钟</div><div class="item-desc">新增镜头集中在陈桂林与香港仔的夜市追逐戏，导演黄精甫在采访中确认“是为了国际版节奏调整”。</div></div></div>
+          <div class="list-item"><span class="item-index">07</span><div class="item-content"><div class="item-title">《洛基》第二季蓝光套装公布</div><div class="item-desc">Disney+ 宣布 12 月 5 日发售，包含 6 张角色卡和 32 页概念设定集，预售价 79.99 美元。</div></div></div>
+          <div class="list-item"><span class="item-index">08</span><div class="item-content"><div class="item-title">短剧《二十九》番外篇立项</div><div class="item-desc">抖音“新番计划”确认番外篇共 5 集，每集 12 分钟，主角为原剧中的便利店店员，预计 12 月上线。</div></div></div>
+          <div class="list-item"><span class="item-index">09</span><div class="item-content"><div class="item-title">《三体》Netflix 版第二季开拍</div><div class="item-desc">据《好莱坞报道者》11 月 7 日消息，第二季“黑暗森林”已于布达佩斯开机，预计 2027 年上线。</div></div></div>
+          <div class="list-item"><span class="item-index">10</span><div class="item-content"><div class="item-title">《进击的巨人》最终季完结篇后篇 4K 重映</div><div class="item-desc">日本 30 家影院 11 月 8 日起限时一周重映，新增 3 分钟艾伦与阿尔敏的对话片段。</div></div></div>
+        </div>
+      </section>
+
+      <!-- 分类入口 -->
+      <section id="categories">
+        <h2 class="section-title">分类入口 <small>按类型筛选</small></h2>
+        <div class="category-grid">
+          <a href="/#featured" class="category-item">科幻剧集</a>
+          <a href="/#featured" class="category-item">悬疑犯罪</a>
+          <a href="/#featured" class="category-item">历史正剧</a>
+          <a href="/#featured" class="category-item">动漫新番</a>
+          <a href="/#featured" class="category-item">电影推荐</a>
+          <a href="/#featured" class="category-item">短剧精品</a>
+          <a href="/#featured" class="category-item">经典重制</a>
+          <a href="/#featured" class="category-item">欧美剧集</a>
+        </div>
+      </section>
+
+      <!-- 深度解析 -->
+      <section id="deep">
+        <h2 class="section-title">深度解析 <small>类型差异与判断维度</small></h2>
+        <div class="deep-analysis">
+          <h3>流媒体自制剧与院线电影的时间差策略</h3>
+          <p>2026 年秋季档出现了一个明显变化：流媒体平台把“上线窗口期”压缩到 45 天以内。《奥本海默》院线下映 38 天后就登陆 iTunes，比 2025 年平均窗口期缩短了 17 天。这种压缩的直接后果是——影迷社区对“流媒体版是否值得重看”的讨论量上涨了 2.3 倍（数据来源：豆瓣“诺兰”小组 10 月 30 日至 11 月 5 日的帖子统计）。</p>
+          <p>但缩短窗口期不等于所有影片都适合。剧情片靠对话和氛围推动，小屏幕损失有限；而《沙丘2》这类依赖巨幕和全景声的作品，流媒体版即便有 4K HDR，沙漠风暴那场戏的次声波频段也被压缩掉了——家庭回放设备很难还原 30Hz 以下的持续震动。判断标准可以拆成三项：<strong>画面信息密度</strong>（每秒切镜次数）、<strong>声音动态范围</strong>（对白与背景音的电平差）、<strong>视觉奇观占比</strong>（大远景和特效镜头总时长）。三项中有两项超过中位数，就值得进影院。</p>
+          <h3>短剧的“电影感”陷阱</h3>
+          <p>《二十九》的豆瓣短评区有一条高赞评论：“前 10 集像电影，后 19 集像预告片。”这句评价点出了短剧精品化的核心矛盾：制作水准上去了，叙事密度却没跟上。单集 8 分钟意味着每集必须完成一个完整的小冲突，但总时长 232 分钟只够讲一个标准电影的故事量。于是编剧被迫把“反转”当作填充物——第 14 集到第 20 集，平均每集 2.4 个反转，观众来不及消化就进入下一个。</p>
+          <p>对比 2025 年的短剧《逃出大英博物馆》，后者单集 12 分钟，总时长 96 分钟，反转密度控制在每集 1.1 个，豆瓣评分 7.8。《二十九》的教训是：短剧的“电影感”如果只体现在摄影和调色上，叙事结构仍按长剧的线性逻辑展开，就会两头不靠——既没有短剧的爽感，也没有电影的回味。</p>
+          <h3>经典重制版的“新增段落”可信度分层</h3>
+          <p>《大明王朝1566》重制版宣称“新增 4 分钟未播出片段”，但需要区分三种情况：第一种是当年拍摄完成但因时长被剪掉的戏份，有场记单和导演确认；第二种是后期补拍的镜头，演员年龄和状态与正片存在差异；第三种是调色或音效重制带来的“视觉新增”，实际画面内容未变。目前公开信息里，第 27 集海瑞上疏的 2 分 15 秒属于第一种，有完整的场记板照片；第 30 集赵贞吉入阁的 4 分钟属于第二种，徐阶演员的声线明显比正片沙哑，与 2007 年拍摄时间线存在 3 年以上的间隔。</p>
+          <div class="callout">核对方法：把重制版和 2007 年 DVD 版逐帧对比，新增段落的胶片颗粒分布与正片不一致——正片颗粒密度在 0.8-1.2 之间，新增段落为 0.3-0.5，说明经过数字降噪处理。这不是判断真伪的唯一标准，但能区分“修复”和“补拍”。</div>
+        </div>
+      </section>
+
+      <!-- 体验指南 -->
+      <section id="guide">
+        <h2 class="section-title">体验指南 <small>内容消费顺序与判断依据</small></h2>
+        <div class="guide-steps">
+          <div class="step-card">
+            <span class="step-num">1</span>
+            <h4>先看类型标签再决定投入</h4>
+            <p>科幻剧集优先看世界观搭建的前两集，如果 120 分钟内没有出现核心冲突，弃剧率会明显上升。《沙丘：预言》第一季前两集花了 95 分钟铺陈姐妹会背景，第二季首集直接进入政治联姻冲突，节奏差异非常明显。</p>
+          </div>
+          <div class="step-card">
+            <span class="step-num">2</span>
+            <h4>用“单集信息量”判断剧集质量</h4>
+            <p>打开一集，记录出现的新场景数量、主要角色对话轮次、以及至少一个改变人物关系的决策。三项都达标，说明编剧没有在凑时长。《白夜追凶》第一季单集平均 4.2 个新场景、38 轮对话、1.7 个关系决策，高于同期悬疑剧的中位数。</p>
+          </div>
+          <div class="step-card">
+            <span class="step-num">3</span>
+            <h4>电影重看价值看“新增信息”</h4>
+            <p>4K 修复版是否值得再看，取决于新增内容属于哪一类：评论音轨（导演解读）＞新增片段（删减戏）＞纯画质提升。如果只有 HDR 调色而没有新增内容，除非是视觉系导演作品，否则优先级可以放低。</p>
+          </div>
+          <div class="step-card">
+            <span class="step-num">4</span>
+            <h4>短剧先看结局评论再决定</h4>
+            <p>短剧的结局质量方差很大。《二十九》前 10 集豆瓣评分 7.4，结局播出后整体降至 6.1。一个简单的筛选方法：在社交平台搜索“短剧名 + 结局”，看前 20 条评论中“仓促”“烂尾”的出现频率。超过 30% 就说明结局争议较大。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq">
+        <h2 class="section-title">常见问题 <small>基于社区讨论整理</small></h2>
+        <div class="faq-list">
+          <div class="faq-item">
+            <details>
+              <summary>《沙丘：预言》第二季一共几集？</summary>
+              <div class="faq-answer">第二季共 8 集，10 月 12 日首播，每周一更新一集。目前已更新至第 5 集，第 6 集将于 11 月 16 日上线。HBO 官方确认第二季没有额外的番外篇。</div>
+            </details>
+          </div>
+          <div class="faq-item">
+            <details>
+              <summary>《白夜追凶2》什么时候开播？</summary>
+              <div class="faq-answer">截至 2026 年 11 月 8 日，优酷尚未公布具体开播日期。11 月 6 日发布的预告片片尾显示“2027 年第一季度”，但平台方在当天下午的媒体沟通会上表示“不排除提前到 2026 年 12 月”。预约页面显示已有 214 万人标记“想看”。</div>
+            </details>
+          </div>
+          <div class="faq-item">
+            <details>
+              <summary>《咒术回战》第三季“死灭回游”篇对应漫画第几话？</summary>
+              <div class="faq-answer">动画第 1 集对应漫画第 159 话“结界”，第 8 集对应第 187 话“乙骨 vs 石流”。按照 MAPPA 公布的 24 集篇幅，第三季预计改编到漫画第 221 话左右，即五条悟解封前夕。</div>
+            </details>
+          </div>
+          <div class="faq-item">
+            <details>
+              <summary>《奥本海默》4K 修复版和院线版有什么区别？</summary>
+              <div class="faq-answer">主要区别有三处：新增 12 分钟幕后花絮（院线版没有）、评论音轨（诺兰与墨菲）、以及 IMAX 画幅在流媒体上被裁剪为 1.78:1（院线版为 1.43:1）。核试验场景的画幅变化最明显，流媒体版上下黑边减少，但左右视野略有损失。</div>
+            </details>
+          </div>
+          <div class="faq-item">
+            <details>
+              <summary>《大明王朝1566》重制版新增片段是补拍的吗？</summary>
+              <div class="faq-answer">第 27 集海瑞上疏的 2 分 15 秒是当年剪掉的原始素材，有场记单为证；第 30 集赵贞吉入阁的 4 分钟属于 2025 年补拍，徐阶演员的声线与正片存在可辨识的年龄差异。腾讯视频在片尾字幕中标注了“部分镜头为后期补拍”。</div>
+            </details>
+          </div>
+          <div class="faq-item">
+            <details>
+              <summary>短剧《二十九》番外篇什么时候上线？</summary>
+              <div class="faq-answer">抖音“新番计划”在 11 月 8 日确认番外篇共 5 集，每集 12 分钟，主角为原剧中的便利店店员，预计 12 月中旬独家上线。原剧导演林楠不再执导，改由副导演张弛接手。</div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- 用户评论 -->
+      <section id="comments">
+        <h2 class="section-title">用户评论 <small>来自社区的真实反馈</small></h2>
+        <div class="comments-grid">
+          <div class="comment-card"><div class="comment-header"><span class="comment-avatar">沙</span><span class="comment-name">沙丘老粉</span></div><div class="comment-text">S2E4 姐妹会那段对峙戏，蕾雅·赛杜的眼神从温和到结冰只用了三秒。但说实话，厄拉科斯星球的戏份这季少了好多，沙漠镜头全在预告片里了。</div><div class="comment-meta">11-07</div></div>
+          <div class="comment-card"><div class="comment-header"><span class="comment-avatar">追</span><span class="comment-name">追凶者</span></div><div class="comment-text">白夜2预告片里潘粤明那个笑，和第一季最后一集监狱里的笑一模一样。不过新导演的镜头语言有点太干净了，少了第一季那种粗粝感。</div><div class="comment-meta">11-06</div></div>
+          <div class="comment-card"><div class="comment-header"><span class="comment-avatar">诺</span><span class="comment-name">诺兰的陀螺</span></div><div class="comment-text">奥本海默 4K 版评论音轨听了一半，诺兰说核爆那场戏其实拍了三个版本，最后用的是“最安静”的那一版。这很诺兰。</div><div class="comment-meta">11-05</div></div>
+          <div class="comment-card"><div class="comment-header"><span class="comment-avatar">大</span><span class="comment-name">大明王朝死忠</span></div><div class="comment-text">重制版第 27 集海瑞那段新增的 2 分钟，画质和正片完全不在一个层级，颗粒感都不一样。但能看到当年剪掉的戏已经很满足了。</div><div class="comment-meta">11-05</div></div>
+          <div class="comment-card"><div class="comment-header"><span class="comment-avatar">咒</span><span class="comment-name">咒术回战打卡</span></div><div class="comment-text">乙骨 vs 石流这集作画爆炸，但节奏有点赶。漫画里打了三话的内容塞进一集，石流龙的“咒力输出”设定动画里就提了一句。</div><div class="comment-meta">11-04</div></div>
+          <div class="comment-card"><div class="comment-header"><span class="comment-avatar">周</span><span class="comment-name">周处除三害二刷</span></div><div class="comment-text">Netflix 版新增的夜市追逐戏其实拖慢了节奏，院线版剪掉是对的。礼堂枪战那场还是原版好，流媒体版调色偏冷，少了点台湾夜市的燥热感。</div><div class="comment-meta">11-04</div></div>
+          <div class="comment-card"><div class="comment-header"><span class="comment-avatar">短</span><span class="comment-name">短剧观察员</span></div><div class="comment-text">二十九前 10 集我充了钱，后面 19 集快进看完的。结尾那个旁白解释一切，跟写作文最后一段“通过这件事我明白了”有什么区别。</div><div class="comment-meta">11-03</div></div>
+          <div class="comment-card"><div class="comment-header"><span class="comment-avatar">洛</span><span class="comment-name">洛基的鳄鱼</span></div><div class="comment-text">洛基第二季季终集看哭了。关继威那句“谁在看着你”比任何时间线解释都管用。不过 OB 的戏份还是太少，希望第三季能多点。</div><div class="comment-meta">11-03</div></div>
+          <div class="comment-card"><div class="comment-header"><span class="comment-avatar">三</span><span class="comment-name">三体迷等第二季</span></div><div class="comment-text">Netflix 版三体第一季把汪淼和史强合并成一个人，这个改编到现在还是接受不了。第二季拍黑暗森林，希望别再把罗辑的戏份分给别人。</div><div class="comment-meta">11-02</div></div>
+          <div class="comment-card"><div class="comment-header"><span class="comment-avatar">进</span><span class="comment-name">进击的巨人十年老粉</span></div><div class="comment-text">影院重映版新增的艾伦和阿尔敏对话片段，台词写得比原作结局温和多了。但说实话，这种补完不如不加，留白反而更好。</div><div class="comment-meta">11-02</div></div>
+          <div class="comment-card"><div class="comment-header"><span class="comment-avatar">路</span><span class="comment-name">路过的剧迷</span></div><div class="comment-text">最近剧荒，把大明王朝又翻出来看。重制版色彩确实鲜亮很多，但总觉得老版的偏黄调更有味道，可能是我先入为主了。</div><div class="comment-meta">11-01</div></div>
+          <div class="comment-card"><div class="comment-header"><span class="comment-avatar">随</span><span class="comment-name">随便看看</span></div><div class="comment-text">短剧现在是不是有点太多了？打开哪个平台都在推，一集两分钟，看完了什么也没记住。还是回去重刷《武林外传》吧。</div><div class="comment-meta">10-31</div></div>
+          <div class="comment-card"><div class="comment-header"><span class="comment-avatar">沙</span><span class="comment-name">沙丘原著党</span></div><div class="comment-text">剧版把姐妹会的政治操作简化了，原著里玛戈夫人和特蕾莎的博弈涉及三个家族，剧里只保留了两个。不过作为改编可以理解，毕竟篇幅有限。</div><div class="comment-meta">10-30</div></div>
+          <div class="comment-card"><div class="comment-header"><span class="comment-avatar">周</span><span class="comment-name">周末看片</span></div><div class="comment-text">周处除三害在 Netflix 上画质不错，但翻译有点怪，“桂林仔”翻成“Guilin Boy”，总觉得哪里不对。</div><div class="comment-meta">10-29</div></div>
+        </div>
+      </section>
+
+      <!-- 相关资讯 -->
+      <section id="news">
+        <h2 class="section-title">相关资讯 <small>近期行业动态</small></h2>
+        <div class="news-list">
+          <div class="news-item">
+            <div class="news-date">2026 年 11 月 7 日</div>
+            <div class="news-title">HBO 确认《沙丘：预言》第三季续订</div>
+            <div class="news-summary">HBO 节目部主管在 11 月 7 日的电视评论协会活动上宣布续订第三季，预计 2027 年春季开拍。第二季目前播出 5 集，平均收视人数 1120 万，比第一季上涨 18%。</div>
+          </div>
+          <div class="news-item">
+            <div class="news-date">2026 年 11 月 6 日</div>
+            <div class="news-title">《白夜追凶2》优酷预约量破 200 万</div>
+            <div class="news-summary">预告片发布 24 小时内，优酷预约量从 187 万增至 214 万。平台同步上线了“指纹线索”互动页面，用户可提交对预告片中 7 处指纹的解读，点赞最高的 10 位用户将获得首映礼门票。</div>
+          </div>
+          <div class="news-item">
+            <div class="news-date">2026 年 11 月 5 日</div>
+            <div class="news-title">MAPPA 公布《咒术回战》第三季 Blu-ray 详情</div>
+            <div class="news-summary">第一卷将于 12 月 19 日发售，收录第 1-4 集，附赠芥见下下新绘制的 8 页漫画。初回限定版含御所园翔太的分镜集，售价 9800 日元。</div>
+          </div>
+          <div class="news-item">
+            <div class="news-date">2026 年 11 月 4 日</div>
+            <div class="news-title">诺兰中文网整理《奥本海默》4K 版 12 处差异</div>
+            <div class="news-summary">差异清单包括：核爆倒计时的音效低频从 28Hz 提升至 32Hz、三位一体测试后的耳鸣声延长了 4 秒、以及新增的 7 秒基里安·墨菲面部特写。</div>
+          </div>
+          <div class="news-item">
+            <div class="news-date">2026 年 11 月 3 日</div>
+            <div class="news-title">腾讯视频《大明王朝1566》重制版弹幕量破 50 万</div>
+            <div class="news-summary">上线三天弹幕总量 52.3 万条，第 27 集“海瑞上疏”单集弹幕 8.2 万。弹幕关键词统计中，“泪目”出现 1.1 万次，“嘉靖”出现 9800 次。</div>
+          </div>
+          <div class="news-item">
+            <div class="news-date">2026 年 10 月 31 日</div>
+            <div class="news-title">抖音“新番计划”公布 Q4 短剧片单</div>
+            <div class="news-summary">共 12 部短剧，其中《二十九》番外篇定档 12 月 15 日。片单中 7 部为悬疑题材，3 部为甜宠，2 部为古装，单集时长统一控制在 10-15 分钟。</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 相关推荐 -->
+      <section id="related">
+        <h2 class="section-title">相关推荐 <small>具体内容方向</small></h2>
+        <div class="related-tags">
+          <a href="/#featured" class="related-tag">沙丘：预言 姐妹会线解析</a>
+          <a href="/#featured" class="related-tag">白夜追凶 指纹线索盘点</a>
+          <a href="/#featured" class="related-tag">奥本海默 核爆音效对比</a>
+          <a href="/#featured" class="related-tag">咒术回战 死灭回游篇</a>
+          <a href="/#featured" class="related-tag">大明王朝1566 补拍镜头</a>
+          <a href="/#featured" class="related-tag">周处除三害 礼堂长镜头</a>
+          <a href="/#featured" class="related-tag">短剧 结局烂尾率统计</a>
+        </div>
+      </section>
+
+      <!-- 补充板块：热门榜单 -->
+      <section id="rank">
+        <h2 class="section-title">热门榜单 <small>本周讨论热度 Top 6</small></h2>
+        <div class="rank-list">
+          <div class="rank-item"><span class="rank-num">1</span><span class="rank-title">《白夜追凶2》预告片</span><span class="rank-score">9.4</span></div>
+          <div class="rank-item"><span class="rank-num">2</span><span class="rank-title">《沙丘：预言》S2E4</span><span class="rank-score">9.2</span></div>
+          <div class="rank-item"><span class="rank-num">3</span><span class="rank-title">《咒术回战》第三季第 8 集</span><span class="rank-score">8.9</span></div>
+          <div class="rank-item"><span class="rank-num">4</span><span class="rank-title">《奥本海默》4K 评论音轨</span><span class="rank-score">8.7</span></div>
+          <div class="rank-item"><span class="rank-num">5</span><span class="rank-title">《大明王朝1566》重制版</span><span class="rank-score">8.5</span></div>
+          <div class="rank-item"><span class="rank-num">6</span><span class="rank-title">《周处除三害》Netflix 版</span><span class="rank-score">8.2</span></div>
+        </div>
+      </section>
+
+      <!-- 补充板块：投稿互动 -->
+      <section id="contribute">
+        <h2 class="section-title">投稿与互动 <small>分享你的剧评</small></h2>
+        <div style="background:var(--color-surface); border-radius:var(--radius-card); padding:24px 28px; border:1px solid var(--color-divider); box-shadow:var(--shadow-default);">
+          <p style="color:var(--color-text-secondary); line-height:1.7; margin-bottom:12px;">如果你对《沙丘：预言》的姐妹会历史有独到分析，或者整理过《白夜追凶》第一季的时间线，欢迎投稿到社区。本周征集方向：<strong>“我为什么弃了这部短剧”</strong> 和 <strong>“经典重制版值不值得重看”</strong>。稿件请以具体条目为对象，附上至少 3 个可核对的细节。</p>
+          <p style="color:var(--color-text-secondary); line-height:1.7;">互动话题：你最近一次快进看完的剧是哪部？原因是什么？在评论区留下剧名和快进时间点，下周将整理成“快进理由清单”。</p>
+        </div>
+      </section>
+    </div>
+
+    <!-- 右辅助栏 -->
+    <aside class="right-aside">
+      <div class="aside-card">
+        <h3>今日热榜</h3>
+        <div class="hot-item"><span class="num">1</span>《白夜追凶2》预告片</div>
+        <div class="hot-item"><span class="num">2</span>《沙丘：预言》S2E5</div>
+        <div class="hot-item"><span class="num">3</span>《咒术回战》第 9 集预告</div>
+        <div class="hot-item"><span class="num">4</span>《奥本海默》4K 新增片段</div>
+        <div class="hot-item"><span class="num">5</span>《大明王朝1566》补拍争议</div>
+      </div>
+      <div class="aside-card">
+        <h3>最近更新</h3>
+        <div class="update-item"><span class="date">11-08</span> 《沙丘：预言》S2E5</div>
+        <div class="update-item"><span class="date">11-07</span> 《白夜追凶2》预告彩蛋</div>
+        <div class="update-item"><span class="date">11-06</span> 《咒术回战》第 9 集预告</div>
+        <div class="update-item"><span class="date">11-05</span> 《奥本海默》评论音轨</div>
+        <div class="update-item"><span class="date">11-04</span> 《大明王朝》第 30 集</div>
+        <div class="update-item"><span class="date">11-03</span> 《周处除三害》新增镜头</div>
+      </div>
+      <div class="aside-card">
+        <h3>快捷入口</h3>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <a href="/#contribute" style="font-size:0.85rem; padding:6px 0; border-bottom:1px solid var(--color-divider);">投稿剧评</a>
+          <a href="/#comments" style="font-size:0.85rem; padding:6px 0; border-bottom:1px solid var(--color-divider);">社区讨论</a>
+          <a href="/#rank" style="font-size:0.85rem; padding:6px 0;">热门榜单</a>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">5xsq</div>
+          <p class="footer-desc">追踪 2026 年 10 月至 11 月影视动态，覆盖剧集、电影、动漫、短剧四类内容，每日更新条目与社区讨论。内容时间跨度以 30 天为窗口，条目类型包含新播、重制、预告、幕后。</p>
+        </div>
+        <div class="footer-col">
+          <h4>剧集</h4>
+          <a href="/#featured">科幻剧集</a>
+          <a href="/#featured">悬疑犯罪</a>
+          <a href="/#featured">历史正剧</a>
+        </div>
+        <div class="footer-col">
+          <h4>电影</h4>
+          <a href="/#featured">院线新片</a>
+          <a href="/#featured">经典重制</a>
+          <a href="/#featured">流媒体上线</a>
+        </div>
+        <div class="footer-col">
+          <h4>社区</h4>
+          <a href="/#contribute">投稿指南</a>
+          <a href="/#comments">用户评论</a>
+          <a href="/#news">相关资讯</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 5xsq 内容聚合示例 · 数据截至 2026 年 11 月 8 日</span>
+        <span>更新时间对应正文：11 月 8 日《沙丘：预言》S2E5 上线</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">↑</button>
+
+  <script>
+    (function() {
+      // 移动端菜单
+      const menuToggle = document.querySelector('.menu-toggle');
+      const mainNav = document.querySelector('.main-nav');
+      if (menuToggle && mainNav) {
+        menuToggle.addEventListener('click', function() {
+          const isOpen = mainNav.classList.toggle('open');
+          menuToggle.setAttribute('aria-expanded', isOpen);
+          menuToggle.textContent = isOpen ? '✕' : '☰';
+        });
+        // 点击导航后收起
+        mainNav.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            if (mainNav.classList.contains('open')) {
+              mainNav.classList.remove('open');
+              menuToggle.setAttribute('aria-expanded', 'false');
+              menuToggle.textContent = '☰';
+            }
+          });
+        });
+      }
+
+      // 回到顶部
+      const backToTop = document.getElementById('backToTop');
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > window.innerHeight * 0.8) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // 搜索筛选（简易本地查找）
+      const searchInput = document.getElementById('site-search');
+      const searchBtn = document.getElementById('search-btn');
+      function performSearch() {
+        const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+        if (!query) return;
+        // 简单高亮或滚动到第一个匹配的卡片标题
+        const titles = document.querySelectorAll('.card-title, .item-title, .news-title, .comment-text');
+        let found = false;
+        titles.forEach(el => {
+          el.style.backgroundColor = '';
+          if (el.textContent.toLowerCase().includes(query)) {
+            if (!found) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              found = true;
+            }
+            el.style.backgroundColor = '#f0c67440';
+          }
+        });
+        if (!found) {
+          alert('未找到匹配内容，请尝试其他关键词。');
+        }
+      }
+      if (searchBtn) {
+        searchBtn.addEventListener('click', performSearch);
+      }
+      if (searchInput) {
+        searchInput.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            performSearch();
+          }
+        });
+      }
+
+      // ESC 关闭移动菜单
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && mainNav && mainNav.classList.contains('open')) {
+          mainNav.classList.remove('open');
+          menuToggle.setAttribute('aria-expanded', 'false');
+          menuToggle.textContent = '☰';
+        }
+      });
+    })();
+  </script>
+
+  <!-- 结构化数据 -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "5xsq",
+    "description": "影视资源聚合与社区讨论，追踪最新剧集、电影、动漫动态。",
+    "url": "https://example.com/5xsq"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "《沙丘：预言》第二季一共几集？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "第二季共 8 集，10 月 12 日首播，每周一更新一集。目前已更新至第 5 集，第 6 集将于 11 月 16 日上线。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "《白夜追凶2》什么时候开播？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "截至 2026 年 11 月 8 日，优酷尚未公布具体开播日期。11 月 6 日预告片片尾显示“2027 年第一季度”，平台方表示不排除提前到 2026 年 12 月。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "《咒术回战》第三季“死灭回游”篇对应漫画第几话？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "动画第 1 集对应漫画第 159 话，第 8 集对应第 187 话。第三季预计改编到第 221 话左右。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "《奥本海默》4K 修复版和院线版有什么区别？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "主要区别：新增 12 分钟幕后花絮、评论音轨、以及 IMAX 画幅在流媒体上被裁剪为 1.78:1（院线版为 1.43:1）。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "《大明王朝1566》重制版新增片段是补拍的吗？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "第 27 集海瑞上疏的 2 分 15 秒是当年剪掉的原始素材，第 30 集赵贞吉入阁的 4 分钟属于 2025 年补拍。腾讯视频在片尾字幕中标注了“部分镜头为后期补拍”。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "短剧《二十九》番外篇什么时候上线？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "抖音“新番计划”在 11 月 8 日确认番外篇共 5 集，每集 12 分钟，预计 12 月中旬独家上线。"
+        }
+      }
+    ]
+  }
+  </script>
+</body>
+        </html>
