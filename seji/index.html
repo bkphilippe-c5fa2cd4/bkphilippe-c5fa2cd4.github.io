@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sejiejie - 内容聚合与精选导航</title>
+<meta name="description" content="sejiejie 汇聚近期热门条目、深度解析与真实评论，覆盖类型片单、更新动态、规则辨析与消费指南，适合想快速筛选内容、判断条目质量的读者查阅。">
+<meta name="keywords" content="sejiejie">
+<style>
+:root {
+  --c-primary: #d94f2b;
+  --c-primary-light: #fef0eb;
+  --c-primary-dark: #a83a1c;
+  --c-bg: #fcfaf8;
+  --c-surface: #ffffff;
+  --c-text-1: #1e1b1a;
+  --c-text-2: #5c5552;
+  --c-text-3: #8c8480;
+  --c-border: #e8e3df;
+  --radius-card: 12px;
+  --radius-btn: 8px;
+  --radius-tag: 4px;
+  --radius-banner: 16px;
+  --shadow-default: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-hover: 0 6px 20px rgba(0,0,0,0.10);
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-serif: "Noto Serif SC", "Songti SC", "SimSun", serif;
+  --sticky-height: 96px;
+  --max-width: 1320px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: var(--sticky-height); }
+body {
+  font-family: var(--font-sans);
+  background: var(--c-bg);
+  color: var(--c-text-1);
+  line-height: 1.7;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+button { font-family: inherit; cursor: pointer; }
+
+/* ===== 吸顶公告条 ===== */
+.notice-bar {
+  background: var(--c-primary-dark);
+  color: #fff;
+  font-size: 13px;
+  padding: 6px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  overflow-x: auto;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.notice-bar .brand-mini {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+  color: #ffd9cc;
+}
+.notice-bar .notice-items {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+.notice-bar .notice-item { display: inline-flex; gap: 8px; align-items: center; }
+.notice-bar .notice-date { color: #ffc9b5; font-variant-numeric: tabular-nums; }
+.notice-bar .notice-name { color: #fff; font-weight: 500; }
+.notice-bar .notice-sep { color: rgba(255,255,255,0.3); }
+
+/* ===== 吸顶页头 ===== */
+.site-header {
+  position: sticky;
+  top: 32px;
+  z-index: 99;
+  background: rgba(252,250,248,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--c-border);
+}
+.header-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  height: 64px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.logo-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-primary-dark) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 16px;
+  font-family: var(--font-serif);
+  letter-spacing: -1px;
+  box-shadow: 0 2px 8px rgba(217,79,43,0.35);
+}
+.logo-text {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--c-text-1);
+}
+.header-nav {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.header-nav::-webkit-scrollbar { display: none; }
+.header-nav a {
+  padding: 6px 12px;
+  border-radius: var(--radius-btn);
+  font-size: 14px;
+  color: var(--c-text-2);
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+.header-nav a:hover { background: var(--c-primary-light); color: var(--c-primary-dark); }
+.header-actions { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--c-border);
+  border-radius: 20px;
+  padding: 0 12px;
+  height: 36px;
+  width: 200px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-box:focus-within {
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 3px rgba(217,79,43,0.12);
+}
+.search-box input {
+  border: none;
+  outline: none;
+  font-size: 13px;
+  width: 100%;
+  background: transparent;
+  color: var(--c-text-1);
+}
+.search-box input::placeholder { color: var(--c-text-3); }
+.btn-submit {
+  background: var(--c-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-btn);
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.15s, transform 0.15s;
+  white-space: nowrap;
+}
+.btn-submit:hover { background: var(--c-primary-dark); transform: translateY(-1px); }
+.menu-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--c-border);
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--c-text-1);
+}
+
+/* ===== 首屏 ===== */
+.hero {
+  position: relative;
+  background: linear-gradient(150deg, #fdf6f2 0%, #fcfaf8 45%, #f9f2ec 100%);
+  overflow: hidden;
+}
+.hero-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 56px 24px 64px;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 48px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+.hero-content h1 {
+  font-size: 44px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  color: var(--c-text-1);
+  margin-bottom: 18px;
+  font-family: var(--font-serif);
+}
+.hero-content h1 .accent { color: var(--c-primary); }
+.hero-desc {
+  font-size: 16px;
+  color: var(--c-text-2);
+  line-height: 1.8;
+  max-width: 540px;
+  margin-bottom: 28px;
+}
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 32px; }
+.hero-actions .btn-primary {
+  background: var(--c-primary);
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: var(--radius-btn);
+  font-weight: 600;
+  font-size: 15px;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 14px rgba(217,79,43,0.3);
+}
+.hero-actions .btn-primary:hover {
+  background: var(--c-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(217,79,43,0.4);
+}
+.hero-actions .btn-ghost {
+  border: 1.5px solid var(--c-border);
+  padding: 12px 24px;
+  border-radius: var(--radius-btn);
+  font-weight: 500;
+  color: var(--c-text-2);
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.hero-actions .btn-ghost:hover { border-color: var(--c-primary); color: var(--c-primary-dark); background: #fff; }
+.hero-stats { display: flex; gap: 36px; }
+.hero-stat .num { font-size: 26px; font-weight: 800; color: var(--c-primary-dark); font-variant-numeric: tabular-nums; }
+.hero-stat .lbl { font-size: 12px; color: var(--c-text-3); margin-top: 2px; }
+.hero-visual { position: relative; height: 320px; }
+.hero-visual .orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(2px);
+}
+.hero-visual .orb-1 {
+  width: 200px; height: 200px;
+  background: radial-gradient(circle at 35% 35%, #f4a58a, #d94f2b 70%);
+  top: 30px; right: 60px;
+  opacity: 0.9;
+  animation: float 7s ease-in-out infinite;
+}
+.hero-visual .orb-2 {
+  width: 120px; height: 120px;
+  background: radial-gradient(circle at 40% 40%, #ffd9c9, #e8845e 70%);
+  bottom: 20px; left: 30px;
+  opacity: 0.75;
+  animation: float 9s ease-in-out infinite reverse;
+}
+.hero-visual .card-float {
+  position: absolute;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: var(--shadow-hover);
+  padding: 14px 18px;
+  font-size: 13px;
+  min-width: 140px;
+}
+.hero-visual .card-float.a { top: 60px; left: 10px; border-left: 3px solid var(--c-primary); animation: float 6s ease-in-out infinite; }
+.hero-visual .card-float.b { bottom: 50px; right: 0; border-left: 3px solid #e8a04e; animation: float 8s ease-in-out infinite reverse; }
+.hero-visual .card-float .cf-label { color: var(--c-text-3); font-size: 11px; margin-bottom: 4px; }
+.hero-visual .card-float .cf-value { font-weight: 700; color: var(--c-text-1); font-size: 14px; }
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+.hero-deco-line {
+  position: absolute;
+  width: 120%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--c-border), transparent);
+  bottom: 0; left: -10%;
+}
+
+/* ===== 主布局 ===== */
+.main-wrap {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 178px minmax(0, 1fr) 248px;
+  gap: 32px;
+  align-items: start;
+}
+.main-content { min-width: 0; }
+.sidebar-left, .sidebar-right { position: sticky; top: calc(var(--sticky-height) + 16px); }
+.sidebar-left { padding-top: 40px; }
+.sidebar-right { padding-top: 40px; }
+
+/* 左频道导航 */
+.channel-nav {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-card);
+  padding: 16px 0;
+  box-shadow: var(--shadow-default);
+}
+.channel-nav h3 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--c-text-3);
+  padding: 0 18px 10px;
+  border-bottom: 1px solid var(--c-border);
+  margin-bottom: 8px;
+}
+.channel-nav a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  font-size: 13.5px;
+  color: var(--c-text-2);
+  transition: background 0.15s, color 0.15s, padding-left 0.15s;
+  border-left: 3px solid transparent;
+}
+.channel-nav a:hover, .channel-nav a.active {
+  background: var(--c-primary-light);
+  color: var(--c-primary-dark);
+  border-left-color: var(--c-primary);
+  padding-left: 20px;
+}
+.channel-nav .ch-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--c-primary);
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+/* 右辅助栏 */
+.side-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-card);
+  padding: 20px;
+  box-shadow: var(--shadow-default);
+  margin-bottom: 20px;
+}
+.side-card h3 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--c-border);
+  color: var(--c-text-1);
+}
+.rank-list { list-style: none; }
+.rank-list li {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  padding: 8px 0;
+  font-size: 13px;
+  border-bottom: 1px dashed var(--c-border);
+}
+.rank-list li:last-child { border-bottom: none; }
+.rank-list .rank-num {
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--c-text-3);
+  font-variant-numeric: tabular-nums;
+  min-width: 18px;
+}
+.rank-list li:nth-child(1) .rank-num { color: var(--c-primary); }
+.rank-list li:nth-child(2) .rank-num { color: #e8845e; }
+.rank-list li:nth-child(3) .rank-num { color: #e8a04e; }
+.rank-list .rank-title { flex: 1; color: var(--c-text-1); line-height: 1.4; }
+.rank-list .rank-meta { font-size: 11px; color: var(--c-text-3); white-space: nowrap; }
+.tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag-cloud a {
+  font-size: 12px;
+  padding: 5px 12px;
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: 20px;
+  color: var(--c-text-2);
+  transition: all 0.15s;
+}
+.tag-cloud a:hover { background: var(--c-primary); color: #fff; border-color: var(--c-primary); }
+
+/* 通用板块 */
+.section { padding: 44px 0 0; }
+.section:first-child { padding-top: 40px; }
+.section-head { margin-bottom: 22px; }
+.section-head h2 {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--c-text-1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-head h2::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 22px;
+  border-radius: 2px;
+  background: var(--c-primary);
+}
+.section-head .sub {
+  font-size: 13px;
+  color: var(--c-text-3);
+  margin-top: 6px;
+  padding-left: 14px;
+}
+
+/* 概览 */
+.overview-text {
+  font-size: 14.5px;
+  line-height: 1.9;
+  color: var(--c-text-2);
+  background: var(--c-surface);
+  border-radius: var(--radius-card);
+  padding: 28px 32px;
+  border: 1px solid var(--c-border);
+  box-shadow: var(--shadow-default);
+}
+.overview-text p { margin-bottom: 14px; }
+.overview-text p:last-child { margin-bottom: 0; }
+.overview-text strong { color: var(--c-text-1); }
+
+/* 精选卡片 */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+.content-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  box-shadow: var(--shadow-default);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+.content-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+.content-card .cc-img-wrap { position: relative; overflow: hidden; aspect-ratio: 4/3; background: #f0ece9; }
+.content-card .cc-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+.content-card:hover .cc-img-wrap img { transform: scale(1.04); }
+.cc-type {
+  position: absolute;
+  top: 10px; left: 10px;
+  background: rgba(30,27,26,0.78);
+  color: #fff;
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: var(--radius-tag);
+  backdrop-filter: blur(4px);
+}
+.cc-body { padding: 16px 18px 18px; flex: 1; display: flex; flex-direction: column; }
+.cc-title { font-size: 15.5px; font-weight: 700; line-height: 1.45; margin-bottom: 8px; color: var(--c-text-1); }
+.cc-desc { font-size: 13px; color: var(--c-text-2); line-height: 1.65; margin-bottom: 12px; flex: 1; }
+.cc-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.cc-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  background: var(--c-primary-light);
+  color: var(--c-primary-dark);
+  border-radius: var(--radius-tag);
+}
+.cc-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--c-text-3);
+  border-top: 1px solid var(--c-border);
+  padding-top: 10px;
+}
+.cc-meta .heat { color: var(--c-primary); font-weight: 600; }
+.cc-meta .score { font-weight: 700; color: #e8a04e; }
+
+/* 最新更新列表 */
+.update-list { display: flex; flex-direction: column; gap: 0; background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-default); }
+.update-item {
+  display: flex;
+  gap: 18px;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--c-border);
+  transition: background 0.15s;
+  align-items: baseline;
+}
+.update-item:last-child { border-bottom: none; }
+.update-item:hover { background: #fdfaf8; }
+.update-date { font-size: 12px; color: var(--c-text-3); font-variant-numeric: tabular-nums; white-space: nowrap; min-width: 64px; }
+.update-main { flex: 1; min-width: 0; }
+.update-title { font-size: 14.5px; font-weight: 600; color: var(--c-text-1); margin-bottom: 3px; }
+.update-summary { font-size: 13px; color: var(--c-text-2); line-height: 1.6; }
+.update-badge {
+  font-size: 11px;
+  background: var(--c-primary-light);
+  color: var(--c-primary-dark);
+  padding: 2px 8px;
+  border-radius: var(--radius-tag);
+  white-space: nowrap;
+  align-self: center;
+}
+
+/* 分类入口 */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 14px;
+}
+.cat-item {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  padding: 18px 16px;
+  text-align: center;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  box-shadow: var(--shadow-default);
+}
+.cat-item:hover { border-color: var(--c-primary); box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+.cat-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+  display: block;
+}
+.cat-name { font-size: 14px; font-weight: 600; color: var(--c-text-1); margin-bottom: 4px; }
+.cat-count { font-size: 11px; color: var(--c-text-3); }
+
+/* 深度解析 */
+.article-body {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-card);
+  padding: 36px 40px;
+  box-shadow: var(--shadow-default);
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--c-text-2);
+}
+.article-body h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--c-text-1);
+  margin: 30px 0 12px;
+  padding-left: 12px;
+  border-left: 3px solid var(--c-primary);
+}
+.article-body h3:first-child { margin-top: 0; }
+.article-body p { margin-bottom: 14px; }
+.article-body strong { color: var(--c-text-1); }
+.article-body ul, .article-body ol { margin: 10px 0 16px 20px; }
+.article-body li { margin-bottom: 7px; }
+.article-body .note-box {
+  background: var(--c-bg);
+  border-left: 3px solid #e8a04e;
+  padding: 14px 18px;
+  border-radius: 0 8px 8px 0;
+  font-size: 14px;
+  margin: 18px 0;
+}
+.article-body .compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  margin: 14px 0 20px;
+}
+.article-body .compare-table th, .article-body .compare-table td {
+  border: 1px solid var(--c-border);
+  padding: 9px 12px;
+  text-align: left;
+}
+.article-body .compare-table th { background: var(--c-bg); font-weight: 600; color: var(--c-text-1); }
+.article-body .compare-table td { color: var(--c-text-2); }
+
+/* 指南步骤 */
+.guide-steps { display: flex; flex-direction: column; gap: 0; background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-default); }
+.guide-step { display: flex; gap: 18px; padding: 20px 24px; border-bottom: 1px solid var(--c-border); }
+.guide-step:last-child { border-bottom: none; }
+.step-num {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--c-primary-light);
+  color: var(--c-primary-dark);
+  font-weight: 800;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.step-content h4 { font-size: 15px; font-weight: 700; margin-bottom: 5px; color: var(--c-text-1); }
+.step-content p { font-size: 13.5px; color: var(--c-text-2); line-height: 1.7; }
+
+/* FAQ */
+.faq-list { display: flex; flex-direction: column; gap: 10px; }
+.faq-list details {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.faq-list details[open] { border-color: var(--c-primary); }
+.faq-list summary {
+  padding: 15px 20px;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--c-text-1);
+}
+.faq-list summary::-webkit-details-marker { display: none; }
+.faq-list summary::before {
+  content: '+';
+  font-size: 18px;
+  color: var(--c-primary);
+  font-weight: 400;
+  width: 18px;
+  flex-shrink: 0;
+  text-align: center;
+  transition: transform 0.2s;
+}
+.faq-list details[open] summary::before { content: '−'; }
+.faq-list .faq-answer {
+  padding: 0 20px 16px 48px;
+  font-size: 14px;
+  color: var(--c-text-2);
+  line-height: 1.8;
+}
+
+/* 评论 */
+.comment-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.comment-item {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--c-text-2);
+  box-shadow: var(--shadow-default);
+}
+.comment-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.avatar {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f4a58a, #d94f2b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+.comment-name { font-weight: 600; font-size: 12.5px; color: var(--c-text-1); }
+.comment-time { font-size: 11px; color: var(--c-text-3); margin-left: auto; }
+
+/* 资讯 */
+.news-list { display: flex; flex-direction: column; gap: 0; background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-default); }
+.news-item { padding: 18px 24px; border-bottom: 1px solid var(--c-border); transition: background 0.15s; }
+.news-item:last-child { border-bottom: none; }
+.news-item:hover { background: #fdfaf8; }
+.news-title { font-size: 15px; font-weight: 700; color: var(--c-text-1); margin-bottom: 5px; }
+.news-meta { font-size: 12px; color: var(--c-text-3); margin-bottom: 6px; }
+.news-summary { font-size: 13.5px; color: var(--c-text-2); line-height: 1.7; }
+
+/* 相关推荐 */
+.related-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+.related-tags a {
+  font-size: 13px;
+  padding: 8px 16px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 20px;
+  color: var(--c-text-2);
+  transition: all 0.15s;
+  box-shadow: var(--shadow-default);
+}
+.related-tags a:hover { border-color: var(--c-primary); color: var(--c-primary-dark); background: var(--c-primary-light); }
+
+/* 补充板块-时间线 */
+.timeline { position: relative; padding-left: 24px; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px; top: 6px; bottom: 6px;
+  width: 2px;
+  background: var(--c-border);
+}
+.timeline-item { position: relative; padding-bottom: 20px; }
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -21px; top: 6px;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--c-primary);
+}
+.timeline-date { font-size: 12px; color: var(--c-text-3); margin-bottom: 3px; font-variant-numeric: tabular-nums; }
+.timeline-text { font-size: 13.5px; color: var(--c-text-2); line-height: 1.65; }
+.timeline-text strong { color: var(--c-text-1); }
+
+/* 互动栏目 */
+.interact-banner {
+  background: linear-gradient(135deg, #2e2825 0%, #4a3b34 100%);
+  border-radius: var(--radius-banner);
+  padding: 32px 36px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 44px;
+}
+.interact-banner h3 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+.interact-banner p { font-size: 13.5px; color: rgba(255,255,255,0.75); max-width: 480px; line-height: 1.7; }
+.interact-banner .btn-submit { background: var(--c-primary); padding: 12px 28px; font-size: 14px; }
+.interact-banner .btn-submit:hover { background: #e8845e; }
+
+/* 搜索结果反馈 */
+.search-feedback {
+  display: none;
+  padding: 14px 18px;
+  background: var(--c-primary-light);
+  border: 1px solid #f4c4b4;
+  border-radius: 8px;
+  font-size: 13.5px;
+  color: var(--c-primary-dark);
+  margin-bottom: 20px;
+}
+
+/* 回到顶部 */
+.back-top {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--c-primary);
+  color: #fff;
+  border: none;
+  font-size: 18px;
+  box-shadow: 0 4px 14px rgba(217,79,43,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.2s;
+  z-index: 90;
+}
+.back-top.show { opacity: 1; pointer-events: auto; }
+.back-top:hover { transform: translateY(-3px); background: var(--c-primary-dark); }
+
+/* 页脚 */
+.site-footer {
+  margin-top: 60px;
+  background: #1e1b1a;
+  color: #b5aca6;
+  padding: 48px 24px 28px;
+}
+.footer-inner { max-width: var(--max-width); margin: 0 auto; }
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.footer-brand .logo-text { color: #fff; font-size: 20px; margin-bottom: 12px; display: block; }
+.footer-brand p { font-size: 13px; line-height: 1.8; color: #8c8480; max-width: 300px; }
+.footer-col h4 { font-size: 13px; color: #fff; font-weight: 600; margin-bottom: 14px; letter-spacing: 0.5px; }
+.footer-col a { display: block; font-size: 13px; color: #8c8480; padding: 4px 0; transition: color 0.15s; }
+.footer-col a:hover { color: var(--c-primary); }
+.footer-bottom {
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: #6b635e;
+}
+.footer-bottom .footer-links { display: flex; gap: 18px; flex-wrap: wrap; }
+.footer-bottom a { color: #6b635e; }
+.footer-bottom a:hover { color: #b5aca6; }
+
+/* 响应式 */
+@media (max-width: 1024px) {
+  .main-wrap { grid-template-columns: 160px minmax(0, 1fr); }
+  .sidebar-right { display: none; }
+  .hero-inner { grid-template-columns: 1fr; gap: 32px; }
+  .hero-visual { height: 240px; }
+  .hero-content h1 { font-size: 36px; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 28px; }
+}
+@media (max-width: 740px) {
+  .main-wrap { grid-template-columns: 1fr; padding: 0 16px; }
+  .sidebar-left { display: none; }
+  .header-inner { padding: 0 16px; gap: 12px; height: 56px; }
+  .header-nav { display: none; }
+  .header-actions .search-box { width: 140px; }
+  .header-actions .btn-submit { display: none; }
+  .menu-toggle { display: flex; }
+  .hero-inner { padding: 32px 16px 40px; }
+  .hero-content h1 { font-size: 30px; }
+  .hero-visual { display: none; }
+  .hero-stats { gap: 24px; }
+  .hero-stat .num { font-size: 22px; }
+  .section { padding-top: 32px; }
+  .card-grid { grid-template-columns: 1fr; }
+  .comment-grid { grid-template-columns: 1fr; }
+  .article-body { padding: 24px 20px; }
+  .footer-top { grid-template-columns: 1fr; gap: 24px; }
+  .interact-banner { padding: 24px 20px; }
+  .notice-bar { font-size: 12px; padding: 5px 12px; gap: 10px; }
+  .notice-bar .notice-items { gap: 14px; }
+  .back-top { bottom: 16px; right: 16px; width: 40px; height: 40px; }
+}
+@media (max-width: 400px) {
+  .hero-content h1 { font-size: 26px; }
+  .header-actions .search-box { width: 110px; }
+  .category-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+<script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+
+<!-- 吸顶公告条 -->
+<div class="notice-bar" id="noticeBar">
+  <span class="brand-mini">sejiejie</span>
+  <div class="notice-items">
+    <span class="notice-item">
+      <span class="notice-date">2026-11-08</span>
+      <span class="notice-name">《暗河漂流》第4集上线</span>
+    </span>
+    <span class="notice-sep">|</span>
+    <span class="notice-item">
+      <span class="notice-date">2026-11-07</span>
+      <span class="notice-name">「城市漫游」系列新增12条路线</span>
+    </span>
+    <span class="notice-sep">|</span>
+    <span class="notice-item">
+      <span class="notice-date">2026-11-06</span>
+      <span class="notice-name">读者评分榜更新，前三名换位</span>
+    </span>
+  </div>
+</div>
+
+<!-- 吸顶页头 -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/#hero" class="logo" aria-label="sejiejie 首页">
+      <span class="logo-mark">S</span>
+      <span class="logo-text">sejiejie</span>
+    </a>
+    <nav class="header-nav" aria-label="主题导航">
+      <a href="/#overview">领域概览</a>
+      <a href="/#featured">精选推荐</a>
+      <a href="/#updates">最新更新</a>
+      <a href="/#categories">分类索引</a>
+      <a href="/#deep-dive">深度解析</a>
+      <a href="/#guide">体验指南</a>
+      <a href="/#faq">常见问答</a>
+      <a href="/#comments">读者评论</a>
+      <a href="/#news">相关资讯</a>
+      <a href="/#related">相关推荐</a>
+    </nav>
+    <div class="header-actions">
+      <div class="search-box">
+        <input type="search" id="searchInput" placeholder="搜索条目…" aria-label="搜索条目">
+      </div>
+      <button class="btn-submit" type="button">投稿</button>
+      <button class="menu-toggle" id="menuToggle" aria-label="打开菜单" aria-expanded="false">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- 首屏 -->
+<section class="hero" id="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <h1>sejiejie</h1>
+      <p class="hero-desc">围绕近期剧集、城市漫游路线与独立出版物，汇集可核对的条目信息、评分走势和读者说法。每一条都标注来源渠道与更新节点，适合在决定投入时间之前快速比对。</p>
+      <div class="hero-actions">
+        <a href="/#featured" class="btn-primary">浏览精选条目</a>
+        <a href="/#updates" class="btn-ghost">查看今日更新</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="num">86</div><div class="lbl">本周收录条目</div></div>
+        <div class="hero-stat"><div class="num">12</div><div class="lbl">分类频道</div></div>
+        <div class="hero-stat"><div class="num">3</div><div class="lbl">今日新增</div></div>
+      </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="card-float a">
+        <div class="cf-label">本周评分最高</div>
+        <div class="cf-value">《暗河漂流》9.1</div>
+      </div>
+      <div class="card-float b">
+        <div class="cf-label">路线更新</div>
+        <div class="cf-value">城市漫游·苏州河段</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-deco-line"></div>
+</section>
+
+<!-- 主内容区 -->
+<div class="main-wrap">
+
+  <!-- 左频道索引 -->
+  <aside class="sidebar-left" aria-label="频道索引">
+    <nav class="channel-nav">
+      <h3>频道索引</h3>
+      <a href="/#overview"><span class="ch-dot"></span>领域概览</a>
+      <a href="/#featured"><span class="ch-dot"></span>精选推荐</a>
+      <a href="/#updates"><span class="ch-dot"></span>最新更新</a>
+      <a href="/#categories"><span class="ch-dot"></span>分类索引</a>
+      <a href="/#deep-dive"><span class="ch-dot"></span>深度解析</a>
+      <a href="/#guide"><span class="ch-dot"></span>体验指南</a>
+      <a href="/#faq"><span class="ch-dot"></span>常见问答</a>
+      <a href="/#comments"><span class="ch-dot"></span>读者评论</a>
+      <a href="/#news"><span class="ch-dot"></span>相关资讯</a>
+      <a href="/#related"><span class="ch-dot"></span>相关推荐</a>
+      <a href="/#timeline"><span class="ch-dot"></span>条目时间线</a>
+      <a href="/#interact"><span class="ch-dot"></span>投稿交流</a>
+    </nav>
+  </aside>
+
+  <!-- 中间主内容 -->
+  <main class="main-content">
+
+    <div class="search-feedback" id="searchFeedback"></div>
+
+    <!-- 1. 领域概览 -->
+    <section class="section" id="overview">
+      <div class="section-head">
+        <h2>近期内容生态一览</h2>
+        <div class="sub">剧集、城市漫游、独立出版三个方向构成主要收录面</div>
+      </div>
+      <div class="overview-text">
+        <p>当前内容池集中在三个方向。<strong>剧集与短片</strong>方面，2026年秋季档共有14部新剧开播，其中《暗河漂流》《雾港来信》《第七个夏天》三部在豆瓣与站内评分均超过8.5，类型上分属悬疑、家庭与青春群像。短剧赛道本月新增6部竖屏作品，单集时长集中在8—12分钟，适合通勤场景。</p>
+        <p><strong>城市漫游路线</strong>是另一个增长点。上海苏州河段、成都锦江绿道、广州荔枝湾三条路线在10月完成新一轮实地更新，每条路线标注了12—18个具体点位，附带步行时长和周边补给信息。路线的价值在于把“去哪里”拆解成可执行的节点，而不是笼统的区域推荐。</p>
+        <p><strong>独立出版物</strong>方向收录了11本近期印制的杂志书与摄影集，其中《白夜行路》《河岸手记》《南方褶皱》三本在读者评论中被反复提及。这类出版物的共同点是印量小、流通渠道窄，购买前需要确认印次和剩余库存。三个方向之外，播客与线下放映活动作为补充条目不定期出现。</p>
+      </div>
+    </section>
+
+    <!-- 2. 精选内容推荐 -->
+    <section class="section" id="featured">
+      <div class="section-head">
+        <h2>本周值得展开的六个条目</h2>
+        <div class="sub">按当前评分与讨论密度筛选，附具体看点与更新节点</div>
+      </div>
+      <div class="card-grid">
+
+        <article class="content-card">
+          <div class="cc-img-wrap">
+            <img src="https://picsum.photos/seed/anhe-drift01/400/300" alt="《暗河漂流》剧中雨夜河岸场景" width="400" height="300" loading="lazy">
+            <span class="cc-type">剧集 · 悬疑</span>
+          </div>
+          <div class="cc-body">
+            <h3 class="cc-title">暗河漂流</h3>
+            <p class="cc-desc">一桩沉船旧案牵出小镇三代人的利益链。第4集开始把叙事重心从查案转向家庭内部的沉默交易，节奏比前三集慢，但信息密度更高。</p>
+            <div class="cc-tags"><span class="cc-tag">犯罪调查</span><span class="cc-tag">小镇群像</span><span class="cc-tag">2026秋季档</span></div>
+            <div class="cc-meta"><span class="heat">热度 9.2</span><span class="score">评分 9.1</span></div>
+          </div>
+        </article>
+
+        <article class="content-card">
+          <div class="cc-img-wrap">
+            <img src="https://picsum.photos/seed/suzhouhe-route02/400/300" alt="苏州河沿岸步道与桥梁" width="400" height="300" loading="lazy">
+            <span class="cc-type">城市漫游</span>
+          </div>
+          <div class="cc-body">
+            <h3 class="cc-title">苏州河·河口到昌化路段</h3>
+            <p class="cc-desc">全长约5.6公里，标注17个点位，包含4座可进入的历史建筑。10月更新后补充了沿线公厕与饮水点的具体位置，适合半天步行。</p>
+            <div class="cc-tags"><span class="cc-tag">步行路线</span><span class="cc-tag">历史建筑</span><span class="cc-tag">上海</span></div>
+            <div class="cc-meta"><span class="heat">收藏 1.4k</span><span class="score">评分 8.8</span></div>
+          </div>
+        </article>
+
+        <article class="content-card">
+          <div class="cc-img-wrap">
+            <img src="https://picsum.photos/seed/wugang-letter03/400/300" alt="《雾港来信》港口雾气弥漫的剧照" width="400" height="300" loading="lazy">
+            <span class="cc-type">剧集 · 家庭</span>
+          </div>
+          <div class="cc-body">
+            <h3 class="cc-title">雾港来信</h3>
+            <p class="cc-desc">母亲去世后留下的十二封信，按收信人不同拆成三条时间线。第6集之前需要自己梳理人物关系，编剧没有给提示，这是被讨论最多的观看门槛。</p>
+            <div class="cc-tags"><span class="cc-tag">家庭伦理</span><span class="cc-tag">多时间线</span><span class="cc-tag">12集短剧</span></div>
+            <div class="cc-meta"><span class="heat">热度 8.7</span><span class="score">评分 8.6</span></div>
+          </div>
+        </article>
+
+        <article class="content-card">
+          <div class="cc-img-wrap">
+            <img src="https://picsum.photos/seed/baiye-road04/400/300" alt="《白夜行路》摄影集内页" width="400" height="300" loading="lazy">
+            <span class="cc-type">独立出版</span>
+          </div>
+          <div class="cc-body">
+            <h3 class="cc-title">白夜行路：夜班司机影像集</h3>
+            <p class="cc-desc">摄影师跟拍夜班出租车司机14个月，收录62张照片和9段口述。第二印次调整了开本和纸张，图片对比度比首印更高，但部分暗部细节被压缩。</p>
+            <div class="cc-tags"><span class="cc-tag">纪实摄影</span><span class="cc-tag">城市夜间</span><span class="cc-tag">第二印次</span></div>
+            <div class="cc-meta"><span class="heat">想读 860</span><span class="score">评分 8.9</span></div>
+          </div>
+        </article>
+
+        <article class="content-card">
+          <div class="cc-img-wrap">
+            <img src="https://picsum.photos/seed/qi-tian05/400/300" alt="《第七个夏天》海边场景" width="400" height="300" loading="lazy">
+            <span class="cc-type">剧集 · 青春</span>
+          </div>
+          <div class="cc-body">
+            <h3 class="cc-title">第七个夏天</h3>
+            <p class="cc-desc">四个高中同学在毕业七年后重聚海岛，每一集用一个人的视角重述同一周。第3集开始出现叙述矛盾，观众在评论区按细节分成了两派。</p>
+            <div class="cc-tags"><span class="cc-tag">群像叙事</span><span class="cc-tag">多视角</span><span class="cc-tag">海岛取景</span></div>
+            <div class="cc-meta"><span class="heat">热度 8.4</span><span class="score">评分 8.5</span></div>
+          </div>
+        </article>
+
+        <article class="content-card">
+          <div class="cc-img-wrap">
+            <img src="https://picsum.photos/seed/jinjiang-green06/400/300" alt="成都锦江绿道骑行道" width="400" height="300" loading="lazy">
+            <span class="cc-type">城市漫游</span>
+          </div>
+          <div class="cc-body">
+            <h3 class="cc-title">锦江绿道·东湖到江滩公园段</h3>
+            <p class="cc-desc">骑行与步行分道的完整段落，约8.2公里。10月25日更新后标注了3个补给点和2处施工绕行提示，施工预计持续到11月下旬。</p>
+            <div class="cc-tags"><span class="cc-tag">骑行路线</span><span class="cc-tag">滨水绿道</span><span class="cc-tag">成都</span></div>
+            <div class="cc-meta"><span class="heat">收藏 2.1k</span><span class="score">评分 8.7</span></div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- 3. 最新更新 -->
+    <section class="section" id="updates">
+      <div class="section-head">
+        <h2>11月6日至8日新增与变更</h2>
+        <div class="sub">条目上线、路线调整、评分变动按时间倒序</div>
+      </div>
+      <div class="update-list">
+        <div class="update-item">
+          <span class="update-date">2026-11-08</span>
+          <div class="update-main">
+            <div class="update-title">《暗河漂流》第4集上线，片尾彩蛋标注了下一集的关键证人</div>
+            <div class="update-summary">第4集时长47分钟，比前三集平均短6分钟。片尾字幕后的30秒画面出现了第2集被忽略的加油站监控时间戳。</div>
+          </div>
+          <span class="update-badge">新上线</span>
+        </div>
+        <div class="update-item">
+          <span class="update-date">2026-11-08</span>
+          <div class="update-main">
+            <div class="update-title">《白夜行路》第二印次到货，电商页面标注剩余库存约200册</div>
+            <div class="update-summary">第二印次定价从168元调整为188元，页数增加16页，新增一篇摄影师后记。</div>
+          </div>
+          <span class="update-badge">库存</span>
+        </div>
+        <div class="update-item">
+          <span class="update-date">2026-11-07</span>
+          <div class="update-main">
+            <div class="update-title">苏州河路线新增昌化路桥下穿通道说明，此前标注的绕行方案已失效</div>
+            <div class="update-summary">该通道于11月5日恢复通行，路线总长据此缩短约400米，17个点位顺序做了微调。</div>
+          </div>
+          <span class="update-badge">路线变更</span>
+        </div>
+        <div class="update-item">
+          <span class="update-date">2026-11-07</span>
+          <div class="update-main">
+            <div class="update-title">《雾港来信》第7集释出，三条时间线首次出现同一场景的不同结局</div>
+            <div class="update-summary">第7集用同一段对话拍了三个版本，分别对应三个子女的记忆。观众需要自行判断哪个版本更接近事实。</div>
+          </div>
+          <span class="update-badge">新上线</span>
+        </div>
+        <div class="update-item">
+          <span class="update-date">2026-11-06</span>
+          <div class="update-main">
+            <div class="update-title">读者评分榜前三名换位，《第七个夏天》从第5升至第3</div>
+            <div class="update-summary">过去一周新增评分1240条，第3集的多视角争议反而推高了讨论量，评分从8.2升至8.5。</div>
+          </div>
+          <span class="update-badge">评分</span>
+        </div>
+        <div class="update-item">
+          <span class="update-date">2026-11-06</span>
+          <div class="update-main">
+            <div class="update-title">锦江绿道施工绕行提示更新，东湖至九眼桥段预计11月25日恢复</div>
+            <div class="update-summary">施工方公告显示，绕行路线增加约1.1公里，沿途两个补给点正常开放。</div>
+          </div>
+          <span class="update-badge">路线变更</span>
+        </div>
+        <div class="update-item">
+          <span class="update-date">2026-11-05</span>
+          <div class="update-main">
+            <div class="update-title">独立出版频道新增《河岸手记》条目，附首印与第二印的纸张对比</div>
+            <div class="update-summary">《河岸手记》首印1500册已售罄，第二印改用轻涂纸，图片色彩饱和度比首印低约一档。</div>
+          </div>
+          <span class="update-badge">新条目</span>
+        </div>
+        <div class="update-item">
+          <span class="update-date">2026-11-05</span>
+          <div class="update-main">
+            <div class="update-title">竖屏短剧《电梯间》全8集上线，单集平均9分钟</div>
+            <div class="update-summary">全剧在一个电梯间内完成拍摄，第5集开始出现时间循环设定，第8集收束。</div>
+          </div>
+          <span class="update-badge">新上线</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 分类入口 -->
+    <section class="section" id="categories">
+      <div class="section-head">
+        <h2>按内容形态与场景分类</h2>
+        <div class="sub">八个入口对应实际收录的条目类型</div>
+      </div>
+      <div class="category-grid">
+        <a href="/#featured" class="cat-item"><span class="cat-icon">🎬</span><div class="cat-name">悬疑剧集</div><div class="cat-count">14部</div></a>
+        <a href="/#featured" class="cat-item"><span class="cat-icon">🏠</span><div class="cat-name">家庭伦理剧</div><div class="cat-count">9部</div></a>
+        <a href="/#featured" class="cat-item"><span class="cat-icon">🚶</span><div class="cat-name">城市步行路线</div><div class="cat-count">23条</div></a>
+        <a href="/#featured" class="cat-item"><span class="cat-icon">🚴</span><div class="cat-name">骑行绿道</div><div class="cat-count">11条</div></a>
+        <a href="/#featured" class="cat-item"><span class="cat-icon">📷</span><div class="cat-name">纪实摄影集</div><div class="cat-count">7本</div></a>
+        <a href="/#featured" class="cat-item"><span class="cat-icon">📖</span><div class="cat-name">独立杂志书</div><div class="cat-count">5本</div></a>
+        <a href="/#updates" class="cat-item"><span class="cat-icon">📱</span><div class="cat-name">竖屏短剧</div><div class="cat-count">6部</div></a>
+        <a href="/#news" class="cat-item"><span class="cat-icon">🎧</span><div class="cat-name">播客与放映</div><div class="cat-count">8场</div></a>
+      </div>
+    </section>
+
+    <!-- 5. 深度解析 -->
+    <section class="section" id="deep-dive">
+      <div class="section-head">
+        <h2>多时间线叙事的观看门槛与判断依据</h2>
+        <div class="sub">以《雾港来信》《第七个夏天》为例，拆解三种常见叙事结构的识别方法</div>
+      </div>
+      <div class="article-body">
+        <h3>三条时间线怎么区分：以《雾港来信》第6集为例</h3>
+        <p>《雾港来信》把十二封信按收信人拆成母亲、长女、次子三条线，但编剧在前五集没有给出任何时间标注。第6集是关键转折点：同一场葬礼出现了三次，每次停在不同人的脸上。识别方法藏在道具里——长女线里母亲遗像前的白花是绢花，次子线里是鲜花，母亲线里没有花。</p>
+        <p>这个差异不是随便设计的。绢花出现在第2集长女去殡仪馆结账的场景中，鲜花出现在第4集次子从花店出来的镜头里。两条线在第6集交汇时，观众如果不记得这两个道具，就会误以为导演在重复使用同一场戏。<strong>可核对的中段</strong>：第6集播出后，豆瓣讨论区有人把三场葬礼的截图按白花材质排了时间顺序，获得3200多个赞，说明道具线索是可被观众复现的。</p>
+        <p>判断一部剧是否值得投入时间梳理时间线，看两个指标：每集是否至少有一个可被截图验证的道具或服装差异；编剧是否在采访中承认存在“故意不标注”的设计。两个指标都满足的，梳理成本可控；只满足第一个的，大概率是剪辑失误而非叙事设计。</p>
+
+        <h3>多视角重述的风险：为什么《第七个夏天》第3集让观众分成了两派</h3>
+        <p>第3集用四个人的视角重述同一场毕业聚会，四个版本在“谁先离开”这一点上互相矛盾。支持派认为这是青春记忆不可靠的精确呈现；反对派认为四个版本缺乏可交叉验证的锚点，导致观众无法判断哪个版本更接近事实。</p>
+        <table class="compare-table">
+          <thead><tr><th>版本</th><th>离开时间</th><th>可交叉验证的锚点</th><th>与其他版本的冲突</th></tr></thead>
+          <tbody>
+            <tr><td>男主视角</td><td>22:40</td><td>出租车发票时间</td><td>与女主版本差18分钟</td></tr>
+            <tr><td>女主视角</td><td>23:00</td><td>手机通话记录</td><td>与男主、男二版本均冲突</td></tr>
+            <tr><td>男二视角</td><td>22:35</td><td>便利店监控（未展示）</td><td>仅与男主版本接近</td></tr>
+            <tr><td>女二视角</td><td>未提及</td><td>无</td><td>不参与时间冲突</td></tr>
+          </tbody>
+        </table>
+        <p>这张表的信息来自第3集画面中出现的手机屏幕、发票特写和台词。冲突集中在18—25分钟的区间内，而编剧在采访中只说“记忆本来就不准”，没有给出哪个版本是基准。这就把判断责任完全交给了观众。<strong>可被反驳的判断</strong>：多视角叙事成立的前提是至少存在一个可交叉验证的锚点，否则观众不是在做判断，而是在猜编剧的意图。</p>
+
+        <h3>道具线索的可信度分层：哪些细节值得截图</h3>
+        <p>不是所有道具都承担叙事功能。按可核对程度，可以分成三层：</p>
+        <ul>
+          <li><strong>第一层：画面内出现两次以上且材质、位置有明确差异的物件。</strong>《雾港来信》的白花属于这一层，截图可验证，且与角色经济状况对应。</li>
+          <li><strong>第二层：只出现一次但有明确时间戳的物件。</strong>《第七个夏天》的出租车发票属于这一层，单独看可信，但需要与其他版本对照才有意义。</li>
+          <li><strong>第三层：只出现在台词里、没有画面佐证的细节。</strong>这类线索的可靠性最低，第5集男二提到“我记得是十点半”，但没有画面支撑，只能算角色说法，不能算事实。</li>
+        </ul>
+        <div class="note-box">把道具线索按层级分开之后，时间线梳理的效率会明显提高。第一层优先截图存档，第二层做时间对照表，第三层只作为参考，不纳入判断依据。</div>
+        <p>《暗河漂流》第4集的加油站监控时间戳属于第二层偏第一层的线索——画面出现两次，一次在背景电视里，一次在片尾彩蛋。这种设计说明制作方在刻意给观众留可核对的入口，而不是靠台词灌输。观众如果习惯在片尾停一下，能比只看正片多拿到一层信息。</p>
+      </div>
+    </section>
+
+    <!-- 6. 体验指南 -->
+    <section class="section" id="guide">
+      <div class="section-head">
+        <h2>内容消费的顺序与判断依据</h2>
+        <div class="sub">从类型筛选到单集投入，四个可操作的步骤</div>
+      </div>
+      <div class="guide-steps">
+        <div class="guide-step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>先按单集时长筛一轮</h4>
+            <p>悬疑剧单集低于40分钟的，信息密度通常靠剪辑撑，容易在中期泄气；45—55分钟是常规区间，适合连续看两集；超过60分钟的，先确认是否有前情提要，否则补看成本会翻倍。《雾港来信》单集52分钟，属于需要预留整块时间的类型。</p>
+          </div>
+        </div>
+        <div class="guide-step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>看前三集的评分走势，不看总分</h4>
+            <p>总分容易被后期拉高。更可靠的指标是第1集到第3集的评分变化：上升超过0.3分的，说明观众在适应叙事节奏后给出了正向反馈；下降超过0.3分的，通常是叙事结构在第2—3集出了问题。《第七个夏天》前3集从7.9升到8.3，属于前者。</p>
+          </div>
+        </div>
+        <div class="guide-step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>城市路线先看点位密度，再看总长</h4>
+            <p>一条5公里的路线如果只标8个点，平均600多米才有一个停留处，走起来容易变成纯赶路。苏州河段5.6公里标17个点，平均330米一个，节奏更接近边走边看。锦江绿道8.2公里标15个点，适合骑行，步行会偏累。</p>
+          </div>
+        </div>
+        <div class="guide-step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>独立出版物先查印次和库存，再决定渠道</h4>
+            <p>首印往往在装帧上更讲究，但溢价高、流通少。第二印次价格通常低10%—20%，代价是纸张或印刷精度有调整。《白夜行路》第二印比首印贵了20元但多了16页，属于加量加价；《河岸手记》第二印改用轻涂纸，色彩饱和度下降，适合对图片精度要求不高的读者。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. FAQ -->
+    <section class="section" id="faq">
+      <div class="section-head">
+        <h2>围绕条目与规则的常见问题</h2>
+        <div class="sub">六个高频疑问，答案指向具体作品和判断方法</div>
+      </div>
+      <div class="faq-list">
+        <details>
+          <summary>《雾港来信》的三条时间线需要自己做笔记吗？</summary>
+          <div class="faq-answer">第6集之前建议截图白花材质和遗像位置，这两样东西是区分时间线最稳定的线索。第6集之后三条线开始交汇，道具差异减少，靠对话内容就能分辨。不需要全程做笔记，但第2、4、6集值得回看一遍。</div>
+        </details>
+        <details>
+          <summary>苏州河路线现在还能按旧版走吗？</summary>
+          <div class="faq-answer">昌化路桥下穿通道于11月5日恢复通行，旧版标注的绕行方案已经失效。按11月7日更新后的版本走，总长缩短约400米，17个点位的顺序有微调。从河口出发的话，第9个点位从“绕行天桥”改回了“桥下通道”。</div>
+        </details>
+        <details>
+          <summary>《白夜行路》第二印和首印的差别值20元吗？</summary>
+          <div class="faq-answer">第二印多了16页摄影师后记，开本做了调整，纸张换了更高克重的哑粉纸。代价是部分暗部细节被压缩，夜景照片的层次比首印略平。对文字和后记更感兴趣的，第二印划算；冲着夜景照片印刷质量去的，首印仍更优。</div>
+        </details>
+        <details>
+          <summary>竖屏短剧《电梯间》第5集的时间循环设定有必要吗？</summary>
+          <div class="faq-answer">前4集是单场景日常冲突，第5集引入循环后，同一段对话重拍了7次，每次细节递减。这个设定把8集的体量撑出了结构感，但也让第6—7集的信息增量变少。如果只看冲突和表演，前4集加第8集已经能成立。</div>
+        </details>
+        <details>
+          <summary>《第七个夏天》四个版本的矛盾是编剧失误还是设计？</summary>
+          <div class="faq-answer">编剧在11月3日的采访中提到“记忆本来就不准”，没有确认哪个版本是基准。从画面看，出租车发票和手机通话记录是仅有的两个可核验锚点，其余靠台词。倾向于设计，但设计得不够严密——女二版本完全没有参与时间冲突，削弱了四视角的对称性。</div>
+        </details>
+        <details>
+          <summary>城市漫游路线的“点位”到底指什么？</summary>
+          <div class="faq-answer">点位是路线中标注了具体停留理由的位置，通常包含一个可观察的对象（建筑立面、桥梁结构、河道转弯）和一句说明。苏州河段17个点位里有4个是可进入的历史建筑，其余是外部观察点。点位密度比总长度更能反映一条路线的实际信息量。</div>
+        </details>
+      </div>
+    </section>
+
+    <!-- 8. 用户评论 -->
+    <section class="section" id="comments">
+      <div class="section-head">
+        <h2>读者在说什么</h2>
+        <div class="sub">近期评论中关于具体条目和类型的真实反馈</div>
+      </div>
+      <div class="comment-grid">
+        <div class="comment-item">
+          <div class="comment-head"><span class="avatar">林</span><span class="comment-name">林间小路</span><span class="comment-time">11-08</span></div>
+          《暗河漂流》第4集片尾那个监控时间戳，我倒了三遍才看清是加油站电视里的。这种细节比台词解释强多了，但前提是观众得愿意停一下。
+        </div>
+        <div class="comment-item">
+          <div class="comment-head"><span class="avatar">陈</span><span class="comment-name">陈默</span><span class="comment-time">11-08</span></div>
+          《雾港来信》看到第6集才反应过来白花有讲究，前面完全没注意。回头翻第2集，绢花那个镜头就两秒，难怪漏掉。
+        </div>
+        <div class="comment-item">
+          <div class="comment-head"><span class="avatar">周</span><span class="comment-name">周末不加班</span><span class="comment-time">11-07</span></div>
+          苏州河那段上周日走的，桥下通道确实通了，但路牌还没更新，跟着旧地图绕了一圈。点位说明挺细，就是现场标识跟不上。
+        </div>
+        <div class="comment-item">
+          <div class="comment-head"><span class="avatar">吴</span><span class="comment-name">吴桐</span><span class="comment-time">11-07</span></div>
+          《第七个夏天》四视角那集，女二版本什么都没说，感觉像凑数。前三个版本互相打架还挺有意思，第四个直接退出，节奏就塌了。
+        </div>
+        <div class="comment-item">
+          <div class="comment-head"><span class="avatar">赵</span><span class="comment-name">赵四</span><span class="comment-time">11-07</span></div>
+          《白夜行路》第二印到了，后记值得看，但夜景照片确实不如首印锐。有首印的没必要换，没有的买第二印也行。
+        </div>
+        <div class="comment-item">
+          <div class="comment-head"><span class="avatar">孙</span><span class="comment-name">孙一舟</span><span class="comment-time">11-06</span></div>
+          锦江绿道施工那段绕行多走了一公里多，补给点倒是开着。骑行的可以忍，步行的建议等25号以后再去。
+        </div>
+        <div class="comment-item">
+          <div class="comment-head"><span class="avatar">李</span><span class="comment-name">李不白</span><span class="comment-time">11-06</span></div>
+          《电梯间》第5集开始循环，看到第6集有点疲。单场景加循环，前四集的新鲜感被消耗得很快，第8集收得还行。
+        </div>
+        <div class="comment-item">
+          <div class="comment-head"><span class="avatar">郑</span><span class="comment-name">郑小满</span><span class="comment-time">11-06</span></div>
+          评分走势那个说法有点道理。《雾港来信》前3集我打7分，第6集之后改到8.5。总分确实会骗人。
+        </div>
+        <div class="comment-item">
+          <div class="comment-head"><span class="avatar">王</span><span class="comment-name">王二</span><span class="comment-time">11-05</span></div>
+          《河岸手记》第二印的纸确实偏亮，翻的时候有点反光。内容没得说，图片印刷还是首印好。
+        </div>
+        <div class="comment-item">
+          <div class="comment-head"><span class="avatar">冯</span><span class="comment-name">冯春晓</span><span class="comment-time">11-05</span></div>
+          《暗河漂流》前三集节奏快，第4集突然慢下来，一开始不适应。后来想想沉船案讲完了，转向家庭线也合理，就是转得有点硬。
+        </div>
+        <div class="comment-item">
+          <div class="comment-head"><span class="avatar">何</span><span class="comment-name">何叶</span><span class="comment-time">11-04</span></div>
+          城市漫游的点位密度这个说法第一次见，仔细想想确实。之前走过一条8公里的路线只标了6个点，全程在赶路。
+        </div>
+        <div class="comment-item">
+          <div class="comment-head"><span class="avatar">许</span><span class="comment-name">许三三</span><span class="comment-time">11-04</span></div>
+          《雾港来信》三条线到第7集同一场对话拍三遍，这个设计过了。看第一遍还新鲜，第二遍开始注意道具，第三遍只想快进。
+        </div>
+        <div class="comment-item">
+          <div class="comment-head"><span class="avatar">褚</span><span class="comment-name">褚明</span><span class="comment-time">11-03</span></div>
+          买《白夜行路》之前查了印次，首印溢价太高，第二印后记值回差价。就是哑粉纸反光，晚上看要调角度。
+        </div>
+        <div class="comment-item">
+          <div class="comment-head"><span class="avatar">卫</span><span class="comment-name">卫然</span><span class="comment-time">11-03</span></div>
+          苏州河路线第9个点位从绕行天桥改回桥下通道，这个调整很实在。上次走天桥绕了十几分钟，风景还不如桥下。
+        </div>
+        <div class="comment-item">
+          <div class="comment-head"><span class="avatar">蒋</span><span class="comment-name">蒋小梅</span><span class="comment-time">11-02</span></div>
+          《第七个夏天》的发票时间戳和通话记录是仅有的硬线索，编剧采访里也没给准话。这种留白可以接受，但别每部剧都这么搞。
+        </div>
+        <div class="comment-item">
+          <div class="comment-head"><span class="avatar">沈</span><span class="comment-name">沈默</span><span class="comment-time">11-02</span></div>
+          《电梯间》前四集最好，第5集循环设定一出来，反而把单场景的优势削弱了。8集里第2集和第8集最稳。
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. 相关资讯 -->
+    <section class="section" id="news">
+      <div class="section-head">
+        <h2>近期动态与公告</h2>
+        <div class="sub">11月2日至8日，涉及上线、施工、印次与评分变动</div>
+      </div>
+      <div class="news-list">
+        <div class="news-item">
+          <div class="news-title">《暗河漂流》第5集预告释出，新角色出现在沉船打捞现场</div>
+          <div class="news-meta">2026-11-08 · 剧集</div>
+          <div class="news-summary">预告片时长1分12秒，第4集片尾彩蛋中的加油站店员出现在打捞现场，台词只有一句“那天晚上不止一辆车”。</div>
+        </div>
+        <div class="news-item">
+          <div class="news-title">苏州河路线现场标识预计11月15日前完成更新</div>
+          <div class="news-meta">2026-11-07 · 城市漫游</div>
+          <div class="news-summary">负责维护的志愿者团队在11月7日的更新说明中提到，桥下通道的旧标识尚未撤除，新标识牌已制作完成，计划在15日前替换。</div>
+        </div>
+        <div class="news-item">
+          <div class="news-title">《白夜行路》第二印次剩余库存约200册，出版社确认不再加印</div>
+          <div class="news-meta">2026-11-06 · 独立出版</div>
+          <div class="news-summary">出版社在11月6日的发货通知中说明，第二印次总量为2000册，目前电商渠道合计剩余约200册，售完即止。</div>
+        </div>
+        <div class="news-item">
+          <div class="news-title">锦江绿道施工方公告：东湖至九眼桥段11月25日恢复通行</div>
+          <div class="news-meta">2026-11-05 · 城市漫游</div>
+          <div class="news-summary">公告显示施工内容为护栏更换和路面修补，绕行路线增加约1.1公里，沿途两个补给点正常开放。</div>
+        </div>
+        <div class="news-item">
+          <div class="news-title">《雾港来信》导演采访回应三版本结局争议</div>
+          <div class="news-meta">2026-11-04 · 剧集</div>
+          <div class="news-summary">导演在11月4日的线上访谈中表示，三个版本没有“正确”答案，但承认第7集的三个版本中，长女版本的道具连续性做得最完整。</div>
+        </div>
+        <div class="news-item">
+          <div class="news-title">竖屏短剧《电梯间》单集平均播放完成率78%</div>
+          <div class="news-meta">2026-11-03 · 竖屏短剧</div>
+          <div class="news-summary">平台方在11月3日的内容周报中披露，该剧第1集完成率91%，第5集降至74%，第8集回升至82%，循环设定对留存的影响集中在第5—6集。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. 相关推荐 -->
+    <section class="section" id="related">
+      <div class="section-head">
+        <h2>按具体方向延伸</h2>
+        <div class="sub">与精选推荐角度不同，这里按类型和场景给入口</div>
+      </div>
+      <div class="related-tags">
+        <a href="/#featured">多时间线悬疑剧</a>
+        <a href="/#featured">单场景短剧</a>
+        <a href="/#featured">城市滨水步道</a>
+        <a href="/#featured">骑行绿道路线</a>
+        <a href="/#featured">纪实摄影集第二印</a>
+        <a href="/#featured">家庭伦理群像</a>
+        <a href="/#featured">竖屏通勤短剧</a>
+        <a href="/#featured">独立杂志书库存追踪</a>
+      </div>
+    </section>
+
+    <!-- 11. 补充板块：条目时间线 -->
+    <section class="section" id="timeline">
+      <div class="section-head">
+        <h2>11月条目推进节点</h2>
+        <div class="sub">按日期排列的上线、变更与公告</div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">2026-11-08</div>
+          <div class="timeline-text"><strong>《暗河漂流》第4集</strong>上线，片尾彩蛋出现加油站监控时间戳。</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2026-11-07</div>
+          <div class="timeline-text"><strong>苏州河路线更新</strong>，昌化路桥下穿通道恢复，点位顺序微调。</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2026-11-06</div>
+          <div class="timeline-text"><strong>评分榜换位</strong>，《第七个夏天》从第5升至第3，新增评分1240条。</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2026-11-05</div>
+          <div class="timeline-text"><strong>《河岸手记》</strong>新增条目，附首印与第二印纸张对比。</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2026-11-04</div>
+          <div class="timeline-text"><strong>《雾港来信》导演采访</strong>回应三版本结局，称长女版本道具连续性最完整。</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2026-11-02</div>
+          <div class="timeline-text"><strong>《电梯间》全8集</strong>上线完成，单集平均播放完成率78%。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 互动栏目 -->
+    <div class="interact-banner" id="interact">
+      <div>
+        <h3>投稿与条目补充</h3>
+        <p>走过哪条路线觉得点位标注不准，或者发现某本书的印次信息有出入，可以整理成一段说明发过来。附上日期和具体位置，核实后会更新到对应条目。</p>
+      </div>
+      <button class="btn-submit" type="button">提交条目补充</button>
+    </div>
+
+  </main>
+
+  <!-- 右辅助栏 -->
+  <aside class="sidebar-right" aria-label="辅助信息">
+    <div class="side-card">
+      <h3>本周评分榜</h3>
+      <ul class="rank-list">
+        <li><span class="rank-num">1</span><span class="rank-title">暗河漂流</span><span class="rank-meta">9.1</span></li>
+        <li><span class="rank-num">2</span><span class="rank-title">白夜行路</span><span class="rank-meta">8.9</span></li>
+        <li><span class="rank-num">3</span><span class="rank-title">苏州河路线</span><span class="rank-meta">8.8</span></li>
+        <li><span class="rank-num">4</span><span class="rank-title">锦江绿道</span><span class="rank-meta">8.7</span></li>
+        <li><span class="rank-num">5</span><span class="rank-title">雾港来信</span><span class="rank-meta">8.6</span></li>
+        <li><span class="rank-num">6</span><span class="rank-title">第七个夏天</span><span class="rank-meta">8.5</span></li>
+      </ul>
+    </div>
+    <div class="side-card">
+      <h3>热门标签</h3>
+      <div class="tag-cloud">
+        <a href="/#featured">多时间线</a>
+        <a href="/#featured">城市步行</a>
+        <a href="/#featured">纪实摄影</a>
+        <a href="/#featured">第二印次</a>
+        <a href="/#featured">单场景</a>
+        <a href="/#featured">滨水路线</a>
+        <a href="/#featured">评分走势</a>
+      </div>
+    </div>
+    <div class="side-card">
+      <h3>今日更新</h3>
+      <ul class="rank-list">
+        <li><span class="rank-num">·</span><span class="rank-title">《暗河漂流》第4集</span><span class="rank-meta">11-08</span></li>
+        <li><span class="rank-num">·</span><span class="rank-title">《白夜行路》库存更新</span><span class="rank-meta">11-08</span></li>
+        <li><span class="rank-num">·</span><span class="rank-title">苏州河路线通道说明</span><span class="rank-meta">11-07</span></li>
+      </ul>
+    </div>
+  </aside>
+
+</div>
+
+<!-- 回到顶部 -->
+<button class="back-top" id="backTop" aria-label="回到顶部">↑</button>
+
+<!-- 页脚 -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="logo-text">sejiejie</span>
+        <p>覆盖2026年秋季档剧集、长三角与珠三角城市漫游路线、独立出版物印次追踪三大类条目，更新节奏为每日晚间集中录入，每周日发布评分汇总。</p>
+      </div>
+      <div class="footer-col">
+        <h4>内容频道</h4>
+        <a href="/#overview">领域概览</a>
+        <a href="/#featured">精选推荐</a>
+        <a href="/#updates">最新更新</a>
+        <a href="/#categories">分类索引</a>
+      </div>
+      <div class="footer-col">
+        <h4>深度与问答</h4>
+        <a href="/#deep-dive">深度解析</a>
+        <a href="/#guide">体验指南</a>
+        <a href="/#faq">常见问答</a>
+        <a href="/#comments">读者评论</a>
+      </div>
+      <div class="footer-col">
+        <h4>互动与动态</h4>
+        <a href="/#news">相关资讯</a>
+        <a href="/#related">相关推荐</a>
+        <a href="/#timeline">条目时间线</a>
+        <a href="/#interact">投稿交流</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 sejiejie 内容聚合示例 · 条目信息为示例数据，更新以实际来源为准</span>
+      <div class="footer-links">
+        <a href="/#overview">关于内容</a>
+        <a href="/#interact">投稿说明</a>
+        <a href="/#faq">使用问答</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "sejiejie",
+  "description": "汇聚剧集、城市漫游路线与独立出版物的条目信息、评分走势与读者评论。",
+  "inLanguage": "zh-CN"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "《雾港来信》的三条时间线需要自己做笔记吗？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "第6集之前建议截图白花材质和遗像位置，这两样东西是区分时间线最稳定的线索。第6集之后三条线开始交汇，道具差异减少，靠对话内容就能分辨。不需要全程做笔记，但第2、4、6集值得回看一遍。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "苏州河路线现在还能按旧版走吗？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "昌化路桥下穿通道于11月5日恢复通行，旧版标注的绕行方案已经失效。按11月7日更新后的版本走，总长缩短约400米，17个点位的顺序有微调。从河口出发的话，第9个点位从“绕行天桥”改回了“桥下通道”。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "《白夜行路》第二印和首印的差别值20元吗？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "第二印多了16页摄影师后记，开本做了调整，纸张换了更高克重的哑粉纸。代价是部分暗部细节被压缩，夜景照片的层次比首印略平。对文字和后记更感兴趣的，第二印划算；冲着夜景照片印刷质量去的，首印仍更优。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "竖屏短剧《电梯间》第5集的时间循环设定有必要吗？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "前4集是单场景日常冲突，第5集引入循环后，同一段对话重拍了7次，每次细节递减。这个设定把8集的体量撑出了结构感，但也让第6—7集的信息增量变少。如果只看冲突和表演，前4集加第8集已经能成立。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "《第七个夏天》四个版本的矛盾是编剧失误还是设计？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "编剧在11月3日的采访中提到“记忆本来就不准”，没有确认哪个版本是基准。从画面看，出租车发票和手机通话记录是仅有的两个可核验锚点，其余靠台词。倾向于设计，但设计得不够严密——女二版本完全没有参与时间冲突，削弱了四视角的对称性。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "城市漫游路线的“点位”到底指什么？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "点位是路线中标注了具体停留理由的位置，通常包含一个可观察的对象（建筑立面、桥梁结构、河道转弯）和一句说明。苏州河段17个点位里有4个是可进入的历史建筑，其余是外部观察点。点位密度比总长度更能反映一条路线的实际信息量。"
+      }
+    }
+  ]
+}
+</script>
+
+<script>
+(function() {
+  var searchInput = document.getElementById('searchInput');
+  var searchFeedback = document.getElementById('searchFeedback');
+  var mainContent = document.querySelector('.main-content');
+  var backTop = document.getElementById('backTop');
+  var menuToggle = document.getElementById('menuToggle');
+  var headerNav = document.querySelector('.header-nav');
+
+  // 搜索筛选
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      var q = this.value.trim().toLowerCase();
+      var sections = mainContent.querySelectorAll('.section');
+      var found = 0;
+      sections.forEach(function(sec) {
+        var text = sec.textContent.toLowerCase();
+        if (!q) {
+          sec.style.display = '';
+          found++;
+        } else if (text.indexOf(q) !== -1) {
+          sec.style.display = '';
+          found++;
+        } else {
+          sec.style.display = 'none';
+        }
+      });
+      if (q) {
+        searchFeedback.style.display = 'block';
+        if (found === 0) {
+          searchFeedback.textContent = '没有找到包含“' + q + '”的条目，换个词试试。';
+        } else {
+          searchFeedback.textContent = '找到 ' + found + ' 个板块包含“' + q + '”。';
+        }
+      } else {
+        searchFeedback.style.display = 'none';
+      }
+    });
+  }
+
+  // 回到顶部
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > window.innerHeight * 0.8) {
+      backTop.classList.add('show');
+    } else {
+      backTop.classList.remove('show');
+    }
+  });
+  backTop.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // 移动端菜单
+  if (menuToggle && headerNav) {
+    menuToggle.addEventListener('click', function() {
+      var expanded = this.getAttribute('aria-expanded') === 'true';
+      this.setAttribute('aria-expanded', String(!expanded));
+      if (!expanded) {
+        headerNav.style.display = 'flex';
+        headerNav.style.position = 'absolute';
+        headerNav.style.top = '100%';
+        headerNav.style.left = '0';
+        headerNav.style.right = '0';
+        headerNav.style.background = 'var(--c-surface)';
+        headerNav.style.flexDirection = 'column';
+        headerNav.style.padding = '12px 16px';
+        headerNav.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)';
+        headerNav.style.borderBottom = '1px solid var(--c-border)';
+        headerNav.style.zIndex = '200';
+        headerNav.style.maxHeight = '70vh';
+        headerNav.style.overflowY = 'auto';
+      } else {
+        headerNav.style.display = '';
+        headerNav.removeAttribute('style');
+      }
+    });
+    // 点击导航后收起
+    headerNav.addEventListener('click', function(e) {
+      if (e.target.tagName === 'A' && window.innerWidth <= 740) {
+        headerNav.style.display = '';
+        headerNav.removeAttribute('style');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+    // Esc 关闭
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && menuToggle.getAttribute('aria-expanded') === 'true') {
+        headerNav.style.display = '';
+        headerNav.removeAttribute('style');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  // 侧栏高亮
+  var channelLinks = document.querySelectorAll('.channel-nav a');
+  var sections = document.querySelectorAll('.section');
+  if (channelLinks.length && sections.length) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var id = entry.target.id;
+          channelLinks.forEach(function(link) {
+            link.classList.toggle('active', link.getAttribute('href') === '/#' + id);
+          });
+        }
+      });
+    }, { rootMargin: '-20% 0px -60% 0px' });
+    sections.forEach(function(sec) { if (sec.id) observer.observe(sec); });
+  }
+})();
+</script>
+
+</body>
+                                                                                                                                      </html>
