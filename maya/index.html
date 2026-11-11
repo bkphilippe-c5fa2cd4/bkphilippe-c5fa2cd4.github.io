@@ -1,0 +1,1799 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAYA论坛 - 三维创作与视觉技术交流社区</title>
+  <meta name="description" content="MAYA论坛是三维创作者交流渲染、绑定、动画与特效的社区，汇聚Arnold渲染器设置、Rigging技巧、粒子特效案例、模型拓扑讨论及实时渲染作品展示，适合CG艺术家与动画学习者查阅。">
+  <meta name="keywords" content="MAYA论坛">
+  <style>
+    /* ---------- 设计系统变量 ---------- */
+    :root {
+      --color-primary: #1e6f5c;        /* 深青绿，符合三维创作的专业感 */
+      --color-primary-light: #2a8f78;
+      --color-primary-dark: #0f4a3d;
+      --color-bg: #f7f9f8;
+      --color-surface: #ffffff;
+      --color-text-primary: #1a2e2a;
+      --color-text-secondary: #4f6b63;
+      --color-text-tertiary: #7a9590;
+      --color-border: #e2e9e6;
+      --radius-card: 16px;
+      --radius-btn: 10px;
+      --radius-tag: 20px;
+      --radius-banner: 12px;
+      --shadow-default: 0 4px 12px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.02);
+      --shadow-hover: 0 12px 24px -8px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.04);
+      --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', sans-serif;
+      --spacing-section: 3.5rem;
+      --sticky-offset: 110px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: var(--sticky-offset);
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--color-bg);
+      color: var(--color-text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---------- 吸顶区域 ---------- */
+    .sticky-wrapper {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--color-border);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+
+    .announcement-bar {
+      background: var(--color-primary-dark);
+      color: #e0f0eb;
+      font-size: 0.85rem;
+      padding: 0.5rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem 2rem;
+      align-items: center;
+    }
+
+    .announcement-bar span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      white-space: nowrap;
+    }
+
+    .announcement-bar .badge {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 0.15rem 0.6rem;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .header-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.5rem;
+      max-width: 1440px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-svg {
+      width: 38px;
+      height: 38px;
+      display: block;
+    }
+
+    .brand-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--color-primary-dark);
+      text-decoration: none;
+      line-height: 1.2;
+    }
+
+    .brand-text:hover {
+      color: var(--color-primary);
+    }
+
+    /* 主导航 */
+    .main-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      flex-wrap: wrap;
+    }
+
+    .main-nav a {
+      text-decoration: none;
+      color: var(--color-text-secondary);
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 0.5rem 0.85rem;
+      border-radius: var(--radius-btn);
+      transition: background-color 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+
+    .main-nav a:hover,
+    .main-nav a:focus-visible {
+      background-color: var(--color-primary-light);
+      color: #fff;
+      outline: 2px solid transparent;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-outline {
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      border-radius: var(--radius-btn);
+      padding: 0.45rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .btn-outline:hover {
+      background: var(--color-bg);
+      border-color: var(--color-primary-light);
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-btn);
+      padding: 0.45rem 1.2rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .btn-primary:hover {
+      background: var(--color-primary-dark);
+    }
+
+    /* 搜索框 */
+    .search-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input {
+      padding: 0.45rem 2rem 0.45rem 1rem;
+      border-radius: 30px;
+      border: 1px solid var(--color-border);
+      font-size: 0.9rem;
+      width: 180px;
+      transition: width 0.2s, border-color 0.2s;
+      background: var(--color-surface);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      width: 220px;
+    }
+
+    .search-clear {
+      position: absolute;
+      right: 0.6rem;
+      background: none;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      color: var(--color-text-tertiary);
+      display: none;
+    }
+
+    /* 移动端菜单按钮 */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-btn);
+      padding: 0.5rem 0.75rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--color-text-primary);
+    }
+
+    /* ---------- 布局 ---------- */
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 180px 1fr 260px;
+      gap: 2rem;
+      align-items: start;
+      padding: 2rem 0 var(--spacing-section);
+    }
+
+    /* 左频道栏 */
+    .channel-sidebar {
+      position: sticky;
+      top: var(--sticky-offset);
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      padding: 1.25rem 1rem;
+      box-shadow: var(--shadow-default);
+      border: 1px solid var(--color-border);
+    }
+
+    .channel-sidebar h3 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-tertiary);
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .channel-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .channel-list a {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-btn);
+      text-decoration: none;
+      color: var(--color-text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .channel-list a:hover,
+    .channel-list a:focus-visible {
+      background: var(--color-bg);
+      color: var(--color-primary-dark);
+    }
+
+    .channel-list a.active {
+      background: var(--color-primary);
+      color: #fff;
+    }
+
+    .channel-icon {
+      font-size: 1rem;
+      width: 1.25rem;
+      text-align: center;
+    }
+
+    /* 主内容区 */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-section);
+      min-width: 0;
+    }
+
+    /* 右辅助栏 */
+    .sidebar-secondary {
+      position: sticky;
+      top: var(--sticky-offset);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .sidebar-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      padding: 1.25rem 1rem;
+      box-shadow: var(--shadow-default);
+      border: 1px solid var(--color-border);
+    }
+
+    .sidebar-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--color-text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar-card h3::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 16px;
+      background: var(--color-primary);
+      border-radius: 2px;
+    }
+
+    .hot-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .hot-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.9rem;
+    }
+
+    .hot-index {
+      font-weight: 700;
+      color: var(--color-primary-light);
+      font-size: 0.8rem;
+      min-width: 1.4rem;
+    }
+
+    .hot-list a {
+      text-decoration: none;
+      color: var(--color-text-primary);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .hot-list a:hover {
+      color: var(--color-primary);
+    }
+
+    .hot-meta {
+      font-size: 0.75rem;
+      color: var(--color-text-tertiary);
+      display: block;
+    }
+
+    .update-list {
+      list-style: none;
+      font-size: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .update-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px dashed var(--color-border);
+      padding-bottom: 0.4rem;
+    }
+
+    .update-list .title {
+      font-weight: 500;
+    }
+
+    .update-list .time {
+      color: var(--color-text-tertiary);
+      font-size: 0.75rem;
+      white-space: nowrap;
+    }
+
+    /* ---------- 首屏 ---------- */
+    .hero {
+      background: linear-gradient(135deg, #e8f3ef 0%, #d4e8e1 100%);
+      border-radius: var(--radius-card);
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 70%;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--color-primary-dark);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--color-text-secondary);
+      max-width: 600px;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-svg {
+      position: absolute;
+      right: 2rem;
+      bottom: 1rem;
+      width: 240px;
+      height: 240px;
+      opacity: 0.35;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ---------- 通用板块 ---------- */
+    .section {
+      scroll-margin-top: var(--sticky-offset);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .section-header h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .section-header .more-link {
+      font-size: 0.9rem;
+      color: var(--color-primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .section-header .more-link:hover {
+      text-decoration: underline;
+    }
+
+    /* 卡片网格 */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-default);
+      border: 1px solid var(--color-border);
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      display: block;
+      background: var(--color-bg);
+    }
+
+    .card-body {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      flex: 1;
+    }
+
+    .card-badge {
+      display: inline-block;
+      background: var(--color-primary-light);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-tag);
+      align-self: flex-start;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      line-height: 1.3;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .tag {
+      background: var(--color-bg);
+      padding: 0.2rem 0.7rem;
+      border-radius: var(--radius-tag);
+      font-size: 0.7rem;
+      color: var(--color-text-secondary);
+      font-weight: 500;
+    }
+
+    .card-desc {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--color-text-tertiary);
+      border-top: 1px dashed var(--color-border);
+      padding-top: 0.75rem;
+    }
+
+    /* 紧凑列表 */
+    .compact-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .compact-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .compact-item:last-child {
+      border-bottom: none;
+    }
+
+    .compact-item .item-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--color-text-primary);
+    }
+
+    .compact-item .item-desc {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+    }
+
+    .compact-item .item-date {
+      font-size: 0.75rem;
+      color: var(--color-text-tertiary);
+      white-space: nowrap;
+    }
+
+    /* 分类入口 */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .category-item {
+      background: var(--color-surface);
+      padding: 1rem;
+      border-radius: var(--radius-card);
+      border: 1px solid var(--color-border);
+      text-align: center;
+      text-decoration: none;
+      color: var(--color-text-primary);
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: background 0.2s, border-color 0.2s;
+      box-shadow: var(--shadow-default);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .category-item:hover {
+      background: var(--color-primary);
+      color: #fff;
+      border-color: var(--color-primary);
+    }
+
+    .category-item .cat-icon {
+      font-size: 1.4rem;
+    }
+
+    /* 深度解析 */
+    .deep-dive {
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      padding: 2rem;
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-default);
+    }
+
+    .deep-dive h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 1.5rem 0 0.75rem;
+      color: var(--color-primary-dark);
+    }
+
+    .deep-dive h3:first-of-type {
+      margin-top: 0;
+    }
+
+    .deep-dive p {
+      margin-bottom: 1rem;
+      color: var(--color-text-secondary);
+      line-height: 1.8;
+    }
+
+    .deep-dive ul {
+      margin: 0.75rem 0 1rem 1.5rem;
+      color: var(--color-text-secondary);
+    }
+
+    .deep-dive li {
+      margin-bottom: 0.4rem;
+    }
+
+    .deep-dive strong {
+      color: var(--color-text-primary);
+    }
+
+    /* FAQ */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    details {
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      border: 1px solid var(--color-border);
+      padding: 0.25rem 0;
+    }
+
+    summary {
+      font-weight: 600;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--color-text-primary);
+      font-size: 0.95rem;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::after {
+      content: '+';
+      font-size: 1.2rem;
+      color: var(--color-primary);
+      font-weight: 400;
+      transition: transform 0.2s;
+    }
+
+    details[open] summary::after {
+      content: '−';
+    }
+
+    details[open] summary {
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .faq-answer {
+      padding: 1rem 1.5rem 1.5rem;
+      color: var(--color-text-secondary);
+      line-height: 1.8;
+      font-size: 0.9rem;
+    }
+
+    /* 评论 */
+    .comment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .comment-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      padding: 1rem 1.2rem;
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-default);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .comment-user {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--color-primary-dark);
+    }
+
+    .comment-text {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+
+    .comment-meta {
+      font-size: 0.7rem;
+      color: var(--color-text-tertiary);
+    }
+
+    /* 资讯列表 */
+    .news-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .news-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .news-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .news-img {
+      width: 120px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: var(--radius-btn);
+      flex-shrink: 0;
+    }
+
+    .news-content {
+      flex: 1;
+    }
+
+    .news-content h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .news-content .news-date {
+      font-size: 0.7rem;
+      color: var(--color-text-tertiary);
+      margin-bottom: 0.3rem;
+      display: block;
+    }
+
+    .news-content p {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    /* 相关推荐标签 */
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .tag-cloud a {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-tag);
+      font-size: 0.85rem;
+      color: var(--color-text-primary);
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+      font-weight: 500;
+    }
+
+    .tag-cloud a:hover {
+      background: var(--color-primary);
+      color: #fff;
+      border-color: var(--color-primary);
+    }
+
+    /* 补充板块：榜单 */
+    .ranking-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .ranking-table th {
+      text-align: left;
+      padding: 0.75rem 0.5rem;
+      color: var(--color-text-tertiary);
+      font-weight: 500;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .ranking-table td {
+      padding: 0.75rem 0.5rem;
+      border-bottom: 1px dashed var(--color-border);
+      color: var(--color-text-secondary);
+    }
+
+    .ranking-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .ranking-table .rank-num {
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    /* 页尾 */
+    footer {
+      background: var(--color-primary-dark);
+      color: #cbdcd6;
+      padding: 2.5rem 1.5rem 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .footer-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .footer-brand h4 {
+      font-size: 1.2rem;
+      color: #fff;
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-brand p {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      max-width: 300px;
+    }
+
+    .footer-col h5 {
+      font-size: 0.9rem;
+      color: #fff;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .footer-col a {
+      color: #cbdcd6;
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+
+    .footer-col a:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    .footer-bottom {
+      max-width: 1440px;
+      margin: 2rem auto 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.8rem;
+    }
+
+    /* 回到顶部 */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--color-primary);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: var(--shadow-default);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, opacity 0.2s;
+      z-index: 90;
+    }
+
+    .back-to-top:hover {
+      background: var(--color-primary-dark);
+    }
+
+    .back-to-top.visible {
+      display: flex;
+    }
+
+    /* 无结果提示 */
+    .no-results {
+      display: none;
+      padding: 2rem;
+      text-align: center;
+      color: var(--color-text-tertiary);
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      border: 1px solid var(--color-border);
+    }
+
+    /* 响应式 */
+    @media (max-width: 1024px) {
+      .main-grid {
+        grid-template-columns: 160px 1fr;
+      }
+      .sidebar-secondary {
+        display: none;
+      }
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      .hero-content {
+        max-width: 100%;
+      }
+      .hero-svg {
+        display: none;
+      }
+      .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 740px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+      .channel-sidebar {
+        position: static;
+        display: none;
+      }
+      .channel-sidebar.mobile-open {
+        display: block;
+      }
+      .menu-toggle {
+        display: block;
+      }
+      .main-nav {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        padding-top: 0.5rem;
+      }
+      .main-nav.mobile-open {
+        display: flex;
+      }
+      .header-main {
+        justify-content: space-between;
+      }
+      .header-actions .search-wrapper {
+        display: none;
+      }
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+      .hero {
+        padding: 1.5rem;
+      }
+      .category-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .footer-inner {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      .comment-grid {
+        grid-template-columns: 1fr;
+      }
+      .news-item {
+        flex-direction: column;
+      }
+      .news-img {
+        width: 100%;
+        height: 140px;
+      }
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+      .sticky-wrapper {
+        position: relative;
+      }
+      .announcement-bar {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.75rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* 焦点可见 */
+    a:focus-visible,
+    button:focus-visible,
+    summary:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* 遮罩 */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 95;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+  </style>
+<script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+  <!-- 吸顶区域：公告条 + 页头 -->
+  <div class="sticky-wrapper">
+    <div class="announcement-bar">
+      <span><span class="badge">新</span> 11月7日 · Arnold 渲染器 5.4 版本 MtoA 插件更新说明</span>
+      <span><span class="badge">热</span> 11月6日 · 绑定大赛“Rig It Up”作品提交已开放</span>
+      <span><span class="badge">荐</span> 11月8日 · 实时渲染作品《锈湖》场景拆解直播回放</span>
+    </div>
+    <header class="header-main">
+      <div class="brand-area">
+        <svg class="logo-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#1e6f5c" />
+          <path d="M12 26V14l8 6 8-6v12" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+          <circle cx="20" cy="20" r="2" fill="#d4e8e1" />
+        </svg>
+        <a href="/" class="brand-text" aria-label="MAYA论坛首页">MAYA论坛</a>
+      </div>
+      <button class="menu-toggle" aria-label="打开导航菜单" aria-expanded="false" id="menuToggle">☰</button>
+      <nav class="main-nav" id="mainNav" aria-label="主导航">
+        <a href="/#overview">领域概览</a>
+        <a href="/#featured">精选推荐</a>
+        <a href="/#updates">最新动态</a>
+        <a href="/#categories">分类入口</a>
+        <a href="/#deep-dive">深度解析</a>
+        <a href="/#guide">体验指南</a>
+        <a href="/#faq">常见问题</a>
+        <a href="/#comments">用户评论</a>
+        <a href="/#news">相关资讯</a>
+        <a href="/#ranking">热门榜单</a>
+      </nav>
+      <div class="header-actions">
+        <div class="search-wrapper">
+          <input type="search" class="search-input" placeholder="搜索条目、类型…" aria-label="站内搜索" id="searchInput">
+          <button class="search-clear" id="searchClear" aria-label="清除搜索">×</button>
+        </div>
+        <a href="/#contribute" class="btn-outline">投稿</a>
+        <a href="/#featured" class="btn-primary">开始探索</a>
+      </div>
+    </header>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <div class="container">
+    <div class="main-grid">
+      <!-- 左频道栏 -->
+      <aside class="channel-sidebar" id="channelSidebar">
+        <h3>频道导航</h3>
+        <ul class="channel-list">
+          <li><a href="/#featured" class="active"><span class="channel-icon">🎬</span> 作品展示</a></li>
+          <li><a href="/#deep-dive"><span class="channel-icon">🔧</span> 技术讨论</a></li>
+          <li><a href="/#updates"><span class="channel-icon">📢</span> 版本动态</a></li>
+          <li><a href="/#comments"><span class="channel-icon">💬</span> 社区互动</a></li>
+          <li><a href="/#contribute"><span class="channel-icon">📤</span> 投稿上传</a></li>
+          <li><a href="/#ranking"><span class="channel-icon">🏆</span> 作品榜单</a></li>
+          <li><a href="/#guide"><span class="channel-icon">📘</span> 学习路径</a></li>
+          <li><a href="/#news"><span class="channel-icon">📰</span> 行业资讯</a></li>
+        </ul>
+      </aside>
+
+      <!-- 主内容区 -->
+      <main class="main-content">
+        <!-- 首屏 -->
+        <section class="hero" id="hero">
+          <div class="hero-content">
+            <h1>MAYA论坛</h1>
+            <p class="hero-desc">汇聚三维动画领域的渲染设置、绑定技巧、粒子特效与实时渲染作品，提供从建模到合成的全流程技术讨论与案例拆解，面向CG艺术家、动画学习者与视觉开发从业者。</p>
+            <div class="hero-actions">
+              <a href="/#featured" class="btn-primary">浏览精选作品</a>
+              <a href="/#deep-dive" class="btn-outline">查看深度解析</a>
+            </div>
+          </div>
+          <svg class="hero-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="100" cy="100" r="80" stroke="#1e6f5c" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.5"/>
+            <circle cx="100" cy="100" r="55" stroke="#1e6f5c" stroke-width="1" opacity="0.3"/>
+            <circle cx="100" cy="100" r="30" fill="#1e6f5c" opacity="0.1"/>
+            <path d="M60 100 L100 60 L140 100 L100 140 Z" stroke="#1e6f5c" stroke-width="1.5" fill="none" opacity="0.6"/>
+          </svg>
+        </section>
+
+        <!-- 领域概览 -->
+        <section class="section" id="overview">
+          <div class="section-header">
+            <h2>三维创作领域概览</h2>
+          </div>
+          <div style="background: var(--color-surface); border-radius: var(--radius-card); padding: 2rem; border: 1px solid var(--color-border); box-shadow: var(--shadow-default);">
+            <p style="margin-bottom: 1rem; color: var(--color-text-secondary); line-height: 1.8;">三维动画与视觉特效领域包含多个细分方向：模型拓扑与UV拆分、角色绑定与肌肉系统、动画曲线与运动规律、流体与粒子特效、灯光渲染与合成。每个方向都有独立的工具链与评价标准。以渲染为例，Arnold 5.4 版本对GPU渲染的显存管理做了重新设计，而Redshift 3.6 则强化了自适应采样在运动模糊场景下的稳定性。绑定方面，mGear 4.2 和 Advanced Skeleton 5.8 分别代表了开源与商业两套流程，前者在社区驱动下迭代较快，后者在影视项目中的骨骼预设更完整。</p>
+            <p style="margin-bottom: 1rem; color: var(--color-text-secondary); line-height: 1.8;">当前值得关注的具体内容：实时渲染领域，Unreal Engine 5.4 的Nanite与Lumen在短片《锈湖》中的应用案例引发讨论；动画短片《纸人》使用Maya 2024的Time Editor完成多角色调度；Bifrost 2.9 的MPM解算器在颗粒与布料混合场景中表现突出。社区中，关于“拓扑密度与变形效果”的对比测试帖在11月第一周获得超过300条回复。</p>
+            <p style="color: var(--color-text-secondary); line-height: 1.8;">工具链层面，USD 23.11 的引入让Maya与Houdini的资产交换更加标准化，但节点命名规范仍有争议。此外，中文教程的覆盖度在绑定与特效方向上仍低于建模与渲染，这也影响了新人的学习路径选择。</p>
+          </div>
+        </section>
+
+        <!-- 精选内容推荐 -->
+        <section class="section" id="featured">
+          <div class="section-header">
+            <h2>精选作品与案例</h2>
+            <a href="/#ranking" class="more-link">查看榜单 →</a>
+          </div>
+          <div class="card-grid">
+            <article class="card">
+              <img class="card-img" src="https://picsum.photos/seed/maya_rig01/400/300" width="400" height="300" alt="角色绑定作品《机械臂》的骨骼控制器展示" loading="lazy">
+              <div class="card-body">
+                <span class="card-badge">绑定</span>
+                <h3>《机械臂》mGear 4.2 全流程绑定</h3>
+                <div class="card-tags"><span class="tag">mGear</span><span class="tag">IK/FK</span><span class="tag">弹簧系统</span></div>
+                <p class="card-desc">使用mGear为六轴机械臂搭建可拉伸骨骼，重点解决了IK与FK切换时的关节弹跳问题，工程文件含完整控制器命名规范。</p>
+                <div class="card-meta"><span>🔥 2.3k 浏览</span><span>11月5日</span></div>
+              </div>
+            </article>
+            <article class="card">
+              <img class="card-img" src="https://picsum.photos/seed/maya_render02/400/300" width="400" height="300" alt="Arnold渲染的室内场景，光线透过百叶窗" loading="lazy">
+              <div class="card-body">
+                <span class="card-badge">渲染</span>
+                <h3>Arnold 5.4 室内日光与置换细节</h3>
+                <div class="card-tags"><span class="tag">Arnold</span><span class="tag">置换</span><span class="tag">GPU渲染</span></div>
+                <p class="card-desc">对比CPU与GPU渲染在置换贴图上的耗时差异，提供3种采样参数组合，GPU模式下时间从42分钟降到9分钟。</p>
+                <div class="card-meta"><span>⭐ 4.8</span><span>11月4日</span></div>
+              </div>
+            </article>
+            <article class="card">
+              <img class="card-img" src="https://picsum.photos/seed/maya_fx03/400/300" width="400" height="300" alt="Bifrost流体模拟的彩色烟雾效果" loading="lazy">
+              <div class="card-body">
+                <span class="card-badge">特效</span>
+                <h3>Bifrost 2.9 MPM 颗粒布料混合模拟</h3>
+                <div class="card-tags"><span class="tag">Bifrost</span><span class="tag">MPM</span><span class="tag">解算</span></div>
+                <p class="card-desc">沙粒落在布料上的交互模拟，调整了摩擦系数与屈服应力，最终解算时长2小时17分，附节点网络截图。</p>
+                <div class="card-meta"><span>🔥 1.8k 浏览</span><span>11月3日</span></div>
+              </div>
+            </article>
+            <article class="card">
+              <img class="card-img" src="https://picsum.photos/seed/maya_anim04/400/300" width="400" height="300" alt="动画短片《纸人》中的角色动作分解" loading="lazy">
+              <div class="card-body">
+                <span class="card-badge">动画</span>
+                <h3>《纸人》短片动作分解：Time Editor 调度</h3>
+                <div class="card-tags"><span class="tag">Time Editor</span><span class="tag">运动规律</span><span class="tag">剪辑</span></div>
+                <p class="card-desc">导演陈默分享如何用Time Editor管理6个角色的并行动画，解决非线性叙事下的动作衔接问题，含两个关键帧对比。</p>
+                <div class="card-meta"><span>⭐ 4.9</span><span>11月2日</span></div>
+              </div>
+            </article>
+            <article class="card">
+              <img class="card-img" src="https://picsum.photos/seed/maya_model05/400/300" width="400" height="300" alt="硬表面模型拓扑线框展示" loading="lazy">
+              <div class="card-body">
+                <span class="card-badge">模型</span>
+                <h3>硬表面拓扑密度对细分变形的影响</h3>
+                <div class="card-tags"><span class="tag">拓扑</span><span class="tag">细分</span><span class="tag">变形</span></div>
+                <p class="card-desc">测试了3种边流密度在角色肩部弯曲时的折痕差异，给出推荐布线间距：关节处保持1.2-1.5倍管径。</p>
+                <div class="card-meta"><span>🔥 3.1k 浏览</span><span>11月1日</span></div>
+              </div>
+            </article>
+            <article class="card">
+              <img class="card-img" src="https://picsum.photos/seed/maya_vfx06/400/300" width="400" height="300" alt="爆炸烟雾与火花的合成画面" loading="lazy">
+              <div class="card-body">
+                <span class="card-badge">合成</span>
+                <h3>爆炸烟雾与火花的Nuke合成技巧</h3>
+                <div class="card-tags"><span class="tag">Nuke</span><span class="tag">深度合成</span><span class="tag">AOV</span></div>
+                <p class="card-desc">利用Arnold的AOV分层在Nuke中重建爆炸的辉光与阴影，调整Z通道避免体积雾遮挡火花细节。</p>
+                <div class="card-meta"><span>⭐ 4.7</span><span>10月30日</span></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- 最新更新 / 动态 -->
+        <section class="section" id="updates">
+          <div class="section-header">
+            <h2>最新更新与社区动态</h2>
+          </div>
+          <ul class="compact-list" id="updateList">
+            <li class="compact-item"><div><span class="item-title">Arnold 5.4.1 发布</span> <span class="item-desc">修复了GPU渲染下置换贴图导致显存溢出的问题</span></div><span class="item-date">11月7日</span></li>
+            <li class="compact-item"><div><span class="item-title">mGear 4.2.1 更新</span> <span class="item-desc">IK弹簧系统新增阻尼曲线编辑，解决高速运动抖动</span></div><span class="item-date">11月6日</span></li>
+            <li class="compact-item"><div><span class="item-title">Bifrost 2.9.2 发布</span> <span class="item-desc">MPM解算器支持自适应子步，颗粒碰撞精度提升</span></div><span class="item-date">11月5日</span></li>
+            <li class="compact-item"><div><span class="item-title">Rig It Up 绑定大赛</span> <span class="item-desc">作品提交入口开放，主题“机械生物”，截止12月1日</span></div><span class="item-date">11月6日</span></li>
+            <li class="compact-item"><div><span class="item-title">《锈湖》场景拆解直播</span> <span class="item-desc">回放已上传，重点讲解Lumen室外光照与Nanite植被</span></div><span class="item-date">11月8日</span></li>
+            <li class="compact-item"><div><span class="item-title">USD 23.11 工作流测试</span> <span class="item-desc">社区成员分享Maya与Houdini资产交换的节点命名对照表</span></div><span class="item-date">11月4日</span></li>
+            <li class="compact-item"><div><span class="item-title">拓扑密度对比测试</span> <span class="item-desc">帖子回复超300条，补充了肩部与膝盖的布线间距数据</span></div><span class="item-date">11月2日</span></li>
+            <li class="compact-item"><div><span class="item-title">Redshift 3.6.2 更新</span> <span class="item-desc">运动模糊自适应采样优化，渲染时间缩短约18%</span></div><span class="item-date">11月1日</span></li>
+          </ul>
+          <div class="no-results" id="noResultsUpdates">没有匹配的更新条目，请尝试其他关键词。</div>
+        </section>
+
+        <!-- 分类入口 -->
+        <section class="section" id="categories">
+          <div class="section-header">
+            <h2>按内容类型查找</h2>
+          </div>
+          <div class="category-grid">
+            <a href="/#featured" class="category-item"><span class="cat-icon">🧊</span> 模型与拓扑</a>
+            <a href="/#featured" class="category-item"><span class="cat-icon">🦾</span> 绑定与肌肉</a>
+            <a href="/#featured" class="category-item"><span class="cat-icon">🎞️</span> 动画与运动</a>
+            <a href="/#featured" class="category-item"><span class="cat-icon">💥</span> 粒子与流体</a>
+            <a href="/#featured" class="category-item"><span class="cat-icon">💡</span> 灯光与渲染</a>
+            <a href="/#featured" class="category-item"><span class="cat-icon">🎛️</span> 合成与调色</a>
+            <a href="/#updates" class="category-item"><span class="cat-icon">📦</span> 版本与插件</a>
+            <a href="/#contribute" class="category-item"><span class="cat-icon">📚</span> 教程与文档</a>
+          </div>
+        </section>
+
+        <!-- 深度解析 -->
+        <section class="section" id="deep-dive">
+          <div class="section-header">
+            <h2>深度解析：渲染器选择与场景适配</h2>
+          </div>
+          <div class="deep-dive">
+            <h3>Arnold 与 Redshift 在复杂置换场景下的耗时对比</h3>
+            <p>11月4日社区成员“RenderLab”发布了一组对比测试数据：同一室内场景（约280万面、置换贴图8K）在Arnold 5.4 CPU与Redshift 3.6 GPU下渲染。Arnold CPU耗时42分17秒，GPU模式（RTX 4090）耗时9分08秒；Redshift在同一GPU下耗时7分52秒。差异主要来自置换细分级别：Arnold GPU对置换的细分上限为8，Redshift可到12但显存占用增加2.1GB。测试者指出，如果场景中置换贴图占比超过40%，Redshift的显存策略更容易触发降级。</p>
+            <h3>绑定系统中弹簧控制器的稳定性差异</h3>
+            <p>mGear 4.2.1 与 Advanced Skeleton 5.8 的弹簧系统在高速运动下的表现不同。在11月6日的更新说明中，mGear 新增阻尼曲线编辑，允许逐帧调整弹簧刚度；Advanced Skeleton 则通过骨骼的“动态父级”实现类似效果，但需要手动设置衰减范围。社区用户“RiggerLee”用一段3秒的快速挥拳动画测试：mGear在高速段出现约2帧的抖动，调整阻尼后消失；Advanced Skeleton未出现抖动，但动画曲线多出4个关键帧需要清理。</p>
+            <h3>实时渲染与传统离线渲染的混合流程</h3>
+            <p>短片《锈湖》的制作者在11月8日直播中拆解了混合渲染流程：使用UE5.4的Lumen完成基础光影，再将Nanite植被导出为USD，在Maya中通过Arnold渲染高精度置换细节，最后合成。其中的关键判断是：Lumen的间接光在室外场景中已足够，但室内近景的置换细节仍需离线渲染。该团队统计了时长分配：UE5实时预览占总制作时间的60%，Arnold离线渲染占30%，合成占10%。这种流程在11月第一周被社区讨论超过80次。</p>
+            <p>可核对的结构化对比：</p>
+            <ul>
+              <li><strong>置换细分上限</strong>：Arnold GPU 8级，Redshift 12级（显存+2.1GB）</li>
+              <li><strong>弹簧抖动帧数</strong>：mGear高速段约2帧，Advanced Skeleton 0帧但多4个关键帧</li>
+              <li><strong>混合流程时间占比</strong>：UE5实时预览60%，Arnold离线30%，合成10%</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 体验指南 -->
+        <section class="section" id="guide">
+          <div class="section-header">
+            <h2>内容消费路径与判断依据</h2>
+          </div>
+          <div style="background: var(--color-surface); border-radius: var(--radius-card); padding: 2rem; border: 1px solid var(--color-border); box-shadow: var(--shadow-default);">
+            <p style="margin-bottom: 1rem; color: var(--color-text-secondary); line-height: 1.8;">浏览三维技术内容时，先明确自己的当前阶段。初学者建议从“拓扑密度与变形效果”这类对比测试入手，因为结论直观、可复现；有绑定经验的用户可以直接看mGear与Advanced Skeleton的弹簧测试帖，重点观察高速运动下的抖动数据。判断一条技术帖是否值得投入时间，可以看三个要素：是否附带工程文件或节点截图、是否给出具体参数值、评论区是否有同行提出反例。例如11月2日的拓扑测试帖附带了3种边流密度的工程文件，评论区有用户用膝盖弯曲测试提出不同结论，这种帖子信息密度更高。</p>
+            <p style="margin-bottom: 1rem; color: var(--color-text-secondary); line-height: 1.8;">比较渲染器时，不要只看单张效果图。关注测试场景的面数、置换贴图尺寸、采样值设置。Arnold 5.4的GPU渲染在置换场景下与Redshift的差距主要来自显存策略，如果项目预算允许双GPU，Redshift的12级细分上限更有优势。实时渲染作品则要区分“引擎内录屏”与“引擎输出后合成”两种展示方式，后者往往掩盖了实时渲染的噪点问题。</p>
+            <p style="color: var(--color-text-secondary); line-height: 1.8;">对于教程类内容，优先选择带时间戳分段的视频，方便定位关键步骤。社区中“RiggerLee”的绑定系列教程共14集，每集标注了对应工程文件的版本号，这种标注方式可以减少因软件版本差异导致的重复调试。</p>
+          </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="section" id="faq">
+          <div class="section-header">
+            <h2>常见问题</h2>
+          </div>
+          <div class="faq-list">
+            <details>
+              <summary>Arnold 5.4 GPU渲染在置换场景下显存溢出怎么处理？</summary>
+              <div class="faq-answer">先检查置换贴图的分辨率与细分级别。Arnold GPU的置换细分上限为8，如果贴图是8K而场景面数超过200万，显存占用会快速上升。可以尝试将置换贴图降为4K，或在渲染设置中把“Subdivision Iterations”从默认值调低1级。社区测试数据显示，4K贴图配合7级细分在RTX 4090上可稳定运行，耗时增加约12%。</div>
+            </details>
+            <details>
+              <summary>mGear和Advanced Skeleton哪个更适合影视级角色绑定？</summary>
+              <div class="faq-answer">影视级项目通常涉及复杂的肌肉系统和次级运动。Advanced Skeleton 5.8的骨骼预设包含完整的脊柱与手指控制器，且弹簧系统默认不产生抖动；mGear 4.2.1在开源社区迭代快，IK/FK切换更灵活，但高速运动下需要手动调整阻尼。11月6日的测试中，mGear在3秒快速挥拳动画里出现2帧抖动，调整后解决。如果项目周期紧张且需要稳定预设，Advanced Skeleton更省时；如果追求自定义控制，mGear的灵活性更高。</div>
+            </details>
+            <details>
+              <summary>Bifrost 2.9的MPM解算器适合做哪些特效？</summary>
+              <div class="faq-answer">MPM（物质点法）适合模拟颗粒与布料的交互、沙土坍塌、粘性流体等场景。11月3日的社区案例中，用户模拟了沙粒落在布料上的效果，解算时长2小时17分，关键参数是摩擦系数0.35和屈服应力1200。如果场景需要高精度颗粒碰撞，MPM比传统粒子系统更稳定；但解算时间较长，建议先在低分辨率下测试参数。</div>
+            </details>
+            <details>
+              <summary>Maya与Houdini之间用USD交换资产要注意什么？</summary>
+              <div class="faq-answer">节点命名一致性是主要问题。USD 23.11引入后，Maya的材质节点与Houdini的材质节点在导出时可能产生重名。社区成员在11月4日分享了一份对照表，将Maya的“lambert”映射为Houdini的“principledshader”，并建议在导出前统一使用“mtl_”前缀。此外，置换贴图的UV集名称需要保持一致，否则在Houdini中会丢失。</div>
+            </details>
+            <details>
+              <summary>实时渲染作品展示时如何判断是否经过后期合成？</summary>
+              <div class="faq-answer">可以观察画面中的噪点分布和边缘抗锯齿。纯引擎内录屏通常有轻微的时域噪点（Lumen的屏幕空间反射），经过Nuke合成的画面噪点会被抹平，但边缘可能出现锐化痕迹。11月8日《锈湖》直播中，制作者展示了未合成的引擎画面，其中植被边缘有轻微闪烁，合成后消失。此外，可以询问是否提供引擎内截图或录屏原始文件。</div>
+            </details>
+            <details>
+              <summary>拓扑密度对角色变形的影响有多大？</summary>
+              <div class="faq-answer">影响集中在关节弯曲处。11月2日的测试帖对比了肩部布线间距1.2倍管径与1.5倍管径的变形效果：间距过密（1.0倍）在手臂抬起45度时出现挤压折痕，过疏（2.0倍）则产生平滑过渡但丢失体积感。推荐间距保持在1.2-1.5倍管径，膝盖处可适当加密到1.1倍。帖子附带了工程文件，可直接对比。</div>
+            </details>
+          </div>
+        </section>
+
+        <!-- 用户评论 -->
+        <section class="section" id="comments">
+          <div class="section-header">
+            <h2>社区评论</h2>
+          </div>
+          <div class="comment-grid">
+            <div class="comment-card"><span class="comment-user">RiggerLee</span><p class="comment-text">mGear那个弹簧测试我复现了，确实在挥拳第18帧有抖动，调阻尼曲线到0.7就没了。Advanced Skeleton不用调但关键帧太多，清理起来烦。</p><span class="comment-meta">11月6日</span></div>
+            <div class="comment-card"><span class="comment-user">渲染小张</span><p class="comment-text">Arnold GPU置换溢出我也遇到了，降了贴图分辨率就好了，不过时间比CPU还是快很多。</p><span class="comment-meta">11月7日</span></div>
+            <div class="comment-card"><span class="comment-user">拓扑爱好者</span><p class="comment-text">那个肩部布线间距1.2倍的数据挺实用，之前一直凭感觉，现在有参考了。</p><span class="comment-meta">11月3日</span></div>
+            <div class="comment-card"><span class="comment-user">FX_老猫</span><p class="comment-text">Bifrost MPM解算2小时17分，我这边机器差一点跑了3个多小时，参数还得微调。</p><span class="comment-meta">11月4日</span></div>
+            <div class="comment-card"><span class="comment-user">纸片人</span><p class="comment-text">《纸人》的Time Editor调度思路不错，但短片里第二个角色的动作衔接有点跳，不知道是不是剪辑问题。</p><span class="comment-meta">11月2日</span></div>
+            <div class="comment-card"><span class="comment-user">Nuke合成师</span><p class="comment-text">AOV分层那篇有用，Z通道调了之后火花确实清楚了。</p><span class="comment-meta">10月31日</span></div>
+            <div class="comment-card"><span class="comment-user">阿杰</span><p class="comment-text">Rig It Up比赛主题是机械生物，有点想参加但怕时间不够。</p><span class="comment-meta">11月6日</span></div>
+            <div class="comment-card"><span class="comment-user">USD折腾者</span><p class="comment-text">节点命名对照表救了我，之前Houdini里材质全丢了。</p><span class="comment-meta">11月4日</span></div>
+            <div class="comment-card"><span class="comment-user">周末画图</span><p class="comment-text">红移和Arnold对比那组数据挺细的，不过没提显卡驱动版本，可能有偏差。</p><span class="comment-meta">11月5日</span></div>
+            <div class="comment-card"><span class="comment-user">绑定萌新</span><p class="comment-text">mGear的教程太少了，Advanced Skeleton中文资料多，但看你们讨论感觉mGear更灵活？纠结。</p><span class="comment-meta">11月3日</span></div>
+            <div class="comment-card"><span class="comment-user">光影流年</span><p class="comment-text">《锈湖》直播回放看了两遍，Lumen室外光确实够用，但近景置换还是得Arnold。</p><span class="comment-meta">11月8日</span></div>
+            <div class="comment-card"><span class="comment-user">动画民工</span><p class="comment-text">拓扑密度测试帖的工程文件下载了，膝盖弯曲确实有差别，已改线。</p><span class="comment-meta">11月2日</span></div>
+            <div class="comment-card"><span class="comment-user">小晨</span><p class="comment-text">最近在学Bifrost，MPM的节点网络截图能多放几张吗？</p><span class="comment-meta">11月3日</span></div>
+            <div class="comment-card"><span class="comment-user">老K</span><p class="comment-text">Redshift 3.6.2更新后运动模糊好多了，以前车轮胎噪点明显。</p><span class="comment-meta">11月1日</span></div>
+          </div>
+        </section>
+
+        <!-- 相关资讯 -->
+        <section class="section" id="news">
+          <div class="section-header">
+            <h2>相关资讯</h2>
+          </div>
+          <div class="news-list">
+            <div class="news-item">
+              <img class="news-img" src="https://picsum.photos/seed/maya_news01/600/400" width="600" height="400" alt="Autodesk发布Maya 2024.2更新说明配图" loading="lazy">
+              <div class="news-content">
+                <h3>Autodesk发布Maya 2024.2更新</h3>
+                <span class="news-date">11月5日</span>
+                <p>新增USD 23.11支持，Time Editor增加多角色同步编辑模式，Bifrost MPM解算器稳定性提升。官方论坛已有用户反馈插件兼容性问题。</p>
+              </div>
+            </div>
+            <div class="news-item">
+              <img class="news-img" src="https://picsum.photos/seed/maya_news02/600/400" width="600" height="400" alt="Rig It Up绑定大赛宣传图" loading="lazy">
+              <div class="news-content">
+                <h3>Rig It Up 2026绑定大赛主题公布：机械生物</h3>
+                <span class="news-date">11月6日</span>
+                <p>比赛要求使用mGear或Advanced Skeleton完成绑定，评委包括《纸人》动画导演陈默。作品提交截止12月1日，目前已有47人报名。</p>
+              </div>
+            </div>
+            <div class="news-item">
+              <img class="news-img" src="https://picsum.photos/seed/maya_news03/600/400" width="600" height="400" alt="Arnold 5.4 GPU渲染性能测试图表" loading="lazy">
+              <div class="news-content">
+                <h3>Arnold 5.4.1修复GPU置换显存溢出</h3>
+                <span class="news-date">11月7日</span>
+                <p>Solid Angle在更新日志中确认该问题由置换细分缓存引起，补丁将GPU模式下的显存占用降低约1.3GB。Redshift用户同期反馈3.6.2自适应采样优化有效。</p>
+              </div>
+            </div>
+            <div class="news-item">
+              <img class="news-img" src="https://picsum.photos/seed/maya_news04/600/400" width="600" height="400" alt="Bifrost MPM颗粒布料模拟截图" loading="lazy">
+              <div class="news-content">
+                <h3>Bifrost 2.9.2发布：MPM自适应子步</h3>
+                <span class="news-date">11月5日</span>
+                <p>新版本允许解算器根据碰撞速度动态调整子步数，颗粒碰撞精度提升。社区测试显示沙粒落在布料上的解算时间减少约15%。</p>
+              </div>
+            </div>
+            <div class="news-item">
+              <img class="news-img" src="https://picsum.photos/seed/maya_news05/600/400" width="600" height="400" alt="Unreal Engine 5.4 Lumen室外光照演示" loading="lazy">
+              <div class="news-content">
+                <h3>《锈湖》短片技术拆解直播回放上线</h3>
+                <span class="news-date">11月8日</span>
+                <p>制作者详细讲解Lumen与Nanite在室外场景中的参数设置，并对比了纯实时渲染与混合渲染的耗时差异。回放时长1小时24分。</p>
+              </div>
+            </div>
+            <div class="news-item">
+              <img class="news-img" src="https://picsum.photos/seed/maya_news06/600/400" width="600" height="400" alt="Houdini与Maya的USD资产交换流程" loading="lazy">
+              <div class="news-content">
+                <h3>USD 23.11工作流对照表在社区发布</h3>
+                <span class="news-date">11月4日</span>
+                <p>社区成员整理的Maya与Houdini节点命名映射表已更新至v2，新增置换贴图UV集匹配规则。下载量超过800次。</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 相关推荐 -->
+        <section class="section" id="related">
+          <div class="section-header">
+            <h2>相关推荐</h2>
+          </div>
+          <div class="tag-cloud">
+            <a href="/#featured">mGear 4.2 弹簧阻尼</a>
+            <a href="/#featured">Arnold 置换细分上限</a>
+            <a href="/#featured">Bifrost MPM 颗粒碰撞</a>
+            <a href="/#featured">Time Editor 多角色调度</a>
+            <a href="/#featured">拓扑密度 1.2倍管径</a>
+            <a href="/#featured">Redshift 运动模糊自适应</a>
+            <a href="/#featured">USD 节点命名对照</a>
+            <a href="/#featured">Lumen 室外光照参数</a>
+          </div>
+        </section>
+
+        <!-- 补充板块：热门榜单 -->
+        <section class="section" id="ranking">
+          <div class="section-header">
+            <h2>本周热门条目榜</h2>
+            <span style="font-size:0.8rem;color:var(--color-text-tertiary);">统计截至11月8日</span>
+          </div>
+          <div style="background:var(--color-surface);border-radius:var(--radius-card);padding:1.5rem;border:1px solid var(--color-border);box-shadow:var(--shadow-default);">
+            <table class="ranking-table">
+              <thead><tr><th>排名</th><th>条目名称</th><th>类型</th><th>热度</th></tr></thead>
+              <tbody>
+                <tr><td class="rank-num">1</td><td>《机械臂》mGear全流程绑定</td><td>绑定</td><td>2.3k</td></tr>
+                <tr><td class="rank-num">2</td><td>Arnold 5.4 室内日光与置换细节</td><td>渲染</td><td>2.1k</td></tr>
+                <tr><td class="rank-num">3</td><td>拓扑密度对细分变形的影响</td><td>模型</td><td>3.1k</td></tr>
+                <tr><td class="rank-num">4</td><td>Bifrost 2.9 MPM颗粒布料模拟</td><td>特效</td><td>1.8k</td></tr>
+                <tr><td class="rank-num">5</td><td>《纸人》Time Editor调度</td><td>动画</td><td>1.6k</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 投稿互动 -->
+        <section class="section" id="contribute">
+          <div class="section-header">
+            <h2>投稿与交流</h2>
+          </div>
+          <div style="background: var(--color-surface); border-radius: var(--radius-card); padding: 2rem; border: 1px solid var(--color-border); box-shadow: var(--shadow-default); display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; justify-content: space-between;">
+            <div>
+              <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">分享你的工程文件与测试数据</h3>
+              <p style="color: var(--color-text-secondary); font-size: 0.9rem; max-width: 500px;">提交作品或技术测试帖，可参与每月“最佳拆解”评选。11月主题：置换场景优化。投稿请附带软件版本与关键参数。</p>
+            </div>
+            <a href="/#contribute" class="btn-primary">上传作品</a>
+          </div>
+        </section>
+      </main>
+
+      <!-- 右辅助栏 -->
+      <aside class="sidebar-secondary">
+        <div class="sidebar-card">
+          <h3>热榜</h3>
+          <ul class="hot-list">
+            <li><span class="hot-index">1</span><div><a href="/#featured">《机械臂》mGear绑定</a><span class="hot-meta">2.3k 浏览</span></div></li>
+            <li><span class="hot-index">2</span><div><a href="/#featured">拓扑密度测试</a><span class="hot-meta">3.1k 浏览</span></div></li>
+            <li><span class="hot-index">3</span><div><a href="/#featured">Arnold 5.4 置换</a><span class="hot-meta">2.1k 浏览</span></div></li>
+            <li><span class="hot-index">4</span><div><a href="/#featured">Bifrost MPM 模拟</a><span class="hot-meta">1.8k 浏览</span></div></li>
+            <li><span class="hot-index">5</span><div><a href="/#featured">《纸人》调度</a><span class="hot-meta">1.6k 浏览</span></div></li>
+          </ul>
+        </div>
+        <div class="sidebar-card">
+          <h3>最近更新</h3>
+          <ul class="update-list">
+            <li><span class="title">Arnold 5.4.1</span><span class="time">11月7日</span></li>
+            <li><span class="title">mGear 4.2.1</span><span class="time">11月6日</span></li>
+            <li><span class="title">Bifrost 2.9.2</span><span class="time">11月5日</span></li>
+            <li><span class="title">Rig It Up 报名</span><span class="time">11月6日</span></li>
+            <li><span class="title">USD 23.11 对照表</span><span class="time">11月4日</span></li>
+          </ul>
+        </div>
+        <div class="sidebar-card">
+          <h3>热门标签</h3>
+          <div class="tag-cloud" style="gap:0.5rem;">
+            <a href="/#featured" style="font-size:0.75rem;padding:0.3rem 0.7rem;">Arnold</a>
+            <a href="/#featured" style="font-size:0.75rem;padding:0.3rem 0.7rem;">mGear</a>
+            <a href="/#featured" style="font-size:0.75rem;padding:0.3rem 0.7rem;">Bifrost</a>
+            <a href="/#featured" style="font-size:0.75rem;padding:0.3rem 0.7rem;">拓扑</a>
+            <a href="/#featured" style="font-size:0.75rem;padding:0.3rem 0.7rem;">Redshift</a>
+            <a href="/#featured" style="font-size:0.75rem;padding:0.3rem 0.7rem;">USD</a>
+            <a href="/#featured" style="font-size:0.75rem;padding:0.3rem 0.7rem;">Time Editor</a>
+            <a href="/#featured" style="font-size:0.75rem;padding:0.3rem 0.7rem;">MPM</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- 页尾 -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h4>MAYA论坛</h4>
+        <p>三维创作与视觉技术交流社区。覆盖模型、绑定、动画、特效、渲染与合成全流程，提供技术测试数据、工程文件与行业动态。内容更新截至2026年11月8日，每周发布3-5篇深度测试帖。</p>
+      </div>
+      <div class="footer-col">
+        <h5>内容</h5>
+        <ul>
+          <li><a href="/#featured">作品展示</a></li>
+          <li><a href="/#deep-dive">深度解析</a></li>
+          <li><a href="/#guide">体验指南</a></li>
+          <li><a href="/#news">相关资讯</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>社区</h5>
+        <ul>
+          <li><a href="/#contribute">投稿</a></li>
+          <li><a href="/#comments">评论</a></li>
+          <li><a href="/#ranking">榜单</a></li>
+          <li><a href="/#faq">常见问题</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>分类</h5>
+        <ul>
+          <li><a href="/#categories">模型与拓扑</a></li>
+          <li><a href="/#categories">绑定与肌肉</a></li>
+          <li><a href="/#categories">粒子与流体</a></li>
+          <li><a href="/#categories">灯光与渲染</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 MAYA论坛 · 内容均为社区示例条目，用于展示信息架构</span>
+      <span>最近更新：2026年11月8日 · 条目数据为示例</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">↑</button>
+
+  <script>
+    (function() {
+      // 移动端菜单
+      const menuToggle = document.getElementById('menuToggle');
+      const mainNav = document.getElementById('mainNav');
+      const channelSidebar = document.getElementById('channelSidebar');
+      const overlay = document.getElementById('overlay');
+
+      function closeMenu() {
+        mainNav.classList.remove('mobile-open');
+        if (channelSidebar) channelSidebar.classList.remove('mobile-open');
+        overlay.classList.remove('active');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.textContent = '☰';
+      }
+
+      menuToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const isOpen = mainNav.classList.contains('mobile-open');
+        if (isOpen) {
+          closeMenu();
+        } else {
+          mainNav.classList.add('mobile-open');
+          if (channelSidebar) channelSidebar.classList.add('mobile-open');
+          overlay.classList.add('active');
+          menuToggle.setAttribute('aria-expanded', 'true');
+          menuToggle.textContent = '✕';
+        }
+      });
+
+      overlay.addEventListener('click', closeMenu);
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeMenu();
+        }
+      });
+
+      // 点击导航项后收起菜单
+      mainNav.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', function() {
+          if (window.innerWidth <= 740) {
+            closeMenu();
+          }
+        });
+      });
+
+      // 搜索功能
+      const searchInput = document.getElementById('searchInput');
+      const searchClear = document.getElementById('searchClear');
+      const updateList = document.getElementById('updateList');
+      const noResultsUpdates = document.getElementById('noResultsUpdates');
+      const allUpdateItems = Array.from(updateList.children);
+
+      function filterUpdates() {
+        const query = searchInput.value.trim().toLowerCase();
+        let visibleCount = 0;
+        allUpdateItems.forEach(item => {
+          const text = item.textContent.toLowerCase();
+          if (query === '' || text.includes(query)) {
+            item.style.display = '';
+            visibleCount++;
+          } else {
+            item.style.display = 'none';
+          }
+        });
+        if (visibleCount === 0 && query !== '') {
+          noResultsUpdates.style.display = 'block';
+        } else {
+          noResultsUpdates.style.display = 'none';
+        }
+        if (searchInput.value.length > 0) {
+          searchClear.style.display = 'block';
+        } else {
+          searchClear.style.display = 'none';
+        }
+      }
+
+      searchInput.addEventListener('input', filterUpdates);
+      searchClear.addEventListener('click', function() {
+        searchInput.value = '';
+        filterUpdates();
+        searchInput.focus();
+      });
+
+      // 回到顶部
+      const backToTop = document.getElementById('backToTop');
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > window.innerHeight) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // 频道导航高亮
+      const sections = document.querySelectorAll('section[id]');
+      const channelLinks = document.querySelectorAll('.channel-list a');
+      
+      function highlightChannel() {
+        let current = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop - 120;
+          if (window.scrollY >= sectionTop) {
+            current = section.getAttribute('id');
+          }
+        });
+        channelLinks.forEach(link => {
+          link.classList.remove('active');
+          const href = link.getAttribute('href');
+          if (href && href.includes(current)) {
+            link.classList.add('active');
+          }
+        });
+      }
+      window.addEventListener('scroll', highlightChannel);
+      highlightChannel();
+    })();
+  </script>
+
+  <!-- 结构化数据 -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "MAYA论坛",
+    "description": "三维创作与视觉技术交流社区，涵盖渲染、绑定、动画、特效与合成。",
+    "url": "https://example.com/maya-forum",
+    "inLanguage": "zh-CN"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Arnold 5.4 GPU渲染在置换场景下显存溢出怎么处理？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "先检查置换贴图的分辨率与细分级别。Arnold GPU的置换细分上限为8，如果贴图是8K而场景面数超过200万，显存占用会快速上升。可以尝试将置换贴图降为4K，或在渲染设置中把“Subdivision Iterations”从默认值调低1级。社区测试数据显示，4K贴图配合7级细分在RTX 4090上可稳定运行，耗时增加约12%。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "mGear和Advanced Skeleton哪个更适合影视级角色绑定？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "影视级项目通常涉及复杂的肌肉系统和次级运动。Advanced Skeleton 5.8的骨骼预设包含完整的脊柱与手指控制器，且弹簧系统默认不产生抖动；mGear 4.2.1在开源社区迭代快，IK/FK切换更灵活，但高速运动下需要手动调整阻尼。11月6日的测试中，mGear在3秒快速挥拳动画里出现2帧抖动，调整后解决。如果项目周期紧张且需要稳定预设，Advanced Skeleton更省时；如果追求自定义控制，mGear的灵活性更高。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Bifrost 2.9的MPM解算器适合做哪些特效？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "MPM（物质点法）适合模拟颗粒与布料的交互、沙土坍塌、粘性流体等场景。11月3日的社区案例中，用户模拟了沙粒落在布料上的效果，解算时长2小时17分，关键参数是摩擦系数0.35和屈服应力1200。如果场景需要高精度颗粒碰撞，MPM比传统粒子系统更稳定；但解算时间较长，建议先在低分辨率下测试参数。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Maya与Houdini之间用USD交换资产要注意什么？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "节点命名一致性是主要问题。USD 23.11引入后，Maya的材质节点与Houdini的材质节点在导出时可能产生重名。社区成员在11月4日分享了一份对照表，将Maya的“lambert”映射为Houdini的“principledshader”，并建议在导出前统一使用“mtl_”前缀。此外，置换贴图的UV集名称需要保持一致，否则在Houdini中会丢失。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "实时渲染作品展示时如何判断是否经过后期合成？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "可以观察画面中的噪点分布和边缘抗锯齿。纯引擎内录屏通常有轻微的时域噪点（Lumen的屏幕空间反射），经过Nuke合成的画面噪点会被抹平，但边缘可能出现锐化痕迹。11月8日《锈湖》直播中，制作者展示了未合成的引擎画面，其中植被边缘有轻微闪烁，合成后消失。此外，可以询问是否提供引擎内截图或录屏原始文件。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "拓扑密度对角色变形的影响有多大？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "影响集中在关节弯曲处。11月2日的测试帖对比了肩部布线间距1.2倍管径与1.5倍管径的变形效果：间距过密（1.0倍）在手臂抬起45度时出现挤压折痕，过疏（2.0倍）则产生平滑过渡但丢失体积感。推荐间距保持在1.2-1.5倍管径，膝盖处可适当加密到1.1倍。帖子附带了工程文件，可直接对比。"
+        }
+      }
+    ]
+  }
+  </script>
+</body>
+                </html>
